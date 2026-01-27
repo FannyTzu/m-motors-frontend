@@ -1,13 +1,16 @@
 :root {
   /* font */
-  --font: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-  
+  --font:
+    "Segoe UI", -apple-system, BlinkMacSystemFont, "Roboto", "Helvetica Neue",
+    Arial, sans-serif;
+
   /* colors */
   --color-blue: #0ea5e9;
+  --color-blue-dark: #0052a3;
   --color-gray: #64748b;
   --color-gray-light: #cdd6e4;
   --color-black: #0f172a;
-  --color-white: #FFFFFF;
+  --color-white: #ffffff;
 }
 
 html,
@@ -16,7 +19,7 @@ body {
   overflow-x: hidden;
   font-family: var(--font);
   font-weight: 400;
-  background-color: #E2e8f0;
+  background-color: #e2e8f0;
 }
 
 * {
@@ -38,4 +41,4 @@ body {
 .font-italic {
   font-family: var(--font);
   font-style: italic;
-} 
+}

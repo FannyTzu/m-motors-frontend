@@ -1,3 +1,4 @@
+import VehiclesGrid from "@/@components/VehiclesGrid/VehiclesGrid";
 import s from "./page.module.css";
 
 export default function Home() {
@@ -14,6 +15,8 @@ export default function Home() {
         <div>Roulez en sécurité avec notre nouvelle offre.</div>
       </div>
 
+
+      <VehiclesGrid />
     </div>
   );
 }
