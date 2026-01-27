@@ -3,6 +3,46 @@
   height: 184px;
   background-color: var(--color-black);
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: space-between;
+  color: var(--color-gray-light);
+  padding-top: 8 px;
+  padding-bottom: 8px;
+}
+
+.title {
+  font-weight: 600;
+  margin-bottom: 8px;
+
+}
+
+.detailsContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.firstContainer {
+  width: 20%;
+  margin-left: 8px;
+}
+
+.lastContainer {
+  display: flex;
+  flex-direction: column;
+  margin-right: 16px;
+  gap: 4px;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.copyright {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  text-align: center;
 }
