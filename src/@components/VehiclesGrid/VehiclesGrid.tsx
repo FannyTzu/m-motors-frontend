@@ -9,6 +9,7 @@ function VehiclesGrid() {
         <CardVehicle
           key={vehicle.id}
           image={vehicle.image}
+          status={vehicle.status}
           brand={vehicle.brand}
           model={vehicle.model}
           location={vehicle.location}

@@ -34,18 +34,32 @@
   transform: scale(1.04);
 }
 
-.statusBadge {
+.statusRental {
   position: absolute;
   top: 12px;
   right: 12px;
-  background: var(--color-white);
-  color: var(--color-black);
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
-  text-transform: uppercase;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  background: var(--color-green-status);
+  color: var(--color-green-status-dark);
+  border: 1px solid var(--color-green-status-dark);
+}
+
+.statusSale {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  background: var(--color-blue-status);
+  color: var(--color-blue-status-dark);
+  border: 1px solid var(--color-blue-status-dark);
 }
 
 .title {

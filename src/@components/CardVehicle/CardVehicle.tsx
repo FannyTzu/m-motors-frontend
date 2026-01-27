@@ -4,7 +4,7 @@ import s from "./styles.module.css";
 
 interface CardVehicleProps {
   image: string;
-  status?: "Location LD" | "À vendre";
+  status: string;
   brand: string;
   model: string;
   location: string;
@@ -25,6 +25,16 @@ function CardVehicle({
   energy,
   price,
 }: CardVehicleProps) {
+
+  const statusLabel =
+    status === "rental"
+      ? "Location LLD"
+      : status === "sale"
+        ? "Vente"
+        : status;
+
+  const isRental = status === "rental" || statusLabel === "Location LLD";
+
   return (
     <div className={s.container}>
 
@@ -36,7 +46,7 @@ function CardVehicle({
           className={s.image}
         />
 
-        {status && <div className={s.statusBadge}>{status}</div>}
+        {statusLabel && <div className={isRental ? s.statusRental : s.statusSale}>{statusLabel}</div>}
       </div>
 
       <h3 className={s.title}>
@@ -60,7 +70,10 @@ function CardVehicle({
       <div className={s.priceSection}>
         <div>
           <p className={s.priceLabel}>À partir de</p>
-          <p className={s.price}> {price.toLocaleString("fr-FR")} €</p>
+          <p className={s.price}>
+            {price.toLocaleString("fr-FR")} €
+            {isRental && <span> / mois</span>}
+          </p>
         </div>
 
         <button className={s.button}>  <ArrowBigRight size={16} />
