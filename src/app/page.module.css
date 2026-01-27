@@ -1,8 +1,7 @@
 .page {
   display: flex;
+  flex-direction: column;
   min-height: 100vh;
-  align-items: center;
-  justify-content: center;
   font-family: var(--font);
 }
 
@@ -15,4 +14,39 @@
   align-items: flex-start;
   justify-content: space-between;
   padding: 120px 60px;
+}
+
+.banner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  height: 92px;
+  margin-left: 8px;
+}
+
+.title {
+  font-size: xx-large;
+  font-weight: 600;
+}
+
+.subtitle {
+  font-size: large;
+  color: var(--color-gray);
+}
+
+.newOffers {
+  color: var(--color-white);
+  height: 92px;
+  background-color: var(--color-blue);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.titleNewOffers {
+  font-size: x-large;
+  font-weight: 600;
 }
