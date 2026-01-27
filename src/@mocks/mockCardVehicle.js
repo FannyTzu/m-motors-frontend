@@ -67,7 +67,7 @@ export const mockVehicles = [
     model: "Série 4",
     location: "Bordeaux",
     year: 2022,
-    km: 32000,
+    km: 532590,
     energy: "GPL",
     price: 15000,
   },
