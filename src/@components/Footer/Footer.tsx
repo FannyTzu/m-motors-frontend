@@ -9,20 +9,20 @@ function Footer() {
           <div className={s.title}>M-Motors</div>
           <>Votre partenaire de confiance pour tous vos véhicules</>
         </div>
-        <>
+        <div>
           <div className={s.title}>Nos services</div>
-          <>Véhicules d&apos;occasions</>
-          <>Locations longue durée</>
-          <>Financements</>
-          <>Entretien SAV et dépannage</>
-          <>Contrôle techniques et assurances</>
-        </>
-        <>
+          <div>Véhicules d&apos;occasions</div>
+          <div>Locations longue durée</div>
+          <div>Financements</div>
+          <div>Entretien SAV et dépannage</div>
+          <div>Contrôle techniques et assurances</div>
+        </div>
+        <div>
           <div className={s.title}>Support</div>
-          <>FAQ</>
-          <>Conditions générales</>
-          <>Mentions légales</>
-        </>
+          <div>FAQ</div>
+          <div>Conditions générales</div>
+          <div>Mentions légales</div>
+        </div>
         <div className={s.lastContainer}>
           <div className={s.title}>Contact</div>
           <div className={s.icon}><MapPin size={20} />478 chemin des pins <br /> 33000 BORDEAUX</div>
