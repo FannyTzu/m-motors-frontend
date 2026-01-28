@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { AuthProvider } from "@/@features/Auth/AuthContext";
 import Footer from "@/@features/Homepage/Footer/Footer";
 import Navbar from "@/@features/Homepage/Navbar/Navbar";
 import "./globals.css";
@@ -18,7 +19,7 @@ export default function RootLayout({
     <html lang="fr">
       <body>
         <Navbar />
-        {children}
+        <AuthProvider>{children}</AuthProvider>
         <Footer />
       </body>
     </html>
