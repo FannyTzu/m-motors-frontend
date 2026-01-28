@@ -4,9 +4,10 @@ import s from './styles.module.css'
 
 interface AuthComponentProps {
   type: 'login' | 'register'
+  onSubmit?: (email: string, password: string) => void
 }
 
-function AuthComponent({ type }: AuthComponentProps) {
+function AuthComponent({ type, onSubmit }: AuthComponentProps) {
 
   const isRegister = type === 'register'
 
@@ -19,7 +20,9 @@ function AuthComponent({ type }: AuthComponentProps) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleAuth = () => { }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+  }
 
   return (
     <div className={s.container}>
@@ -27,7 +30,7 @@ function AuthComponent({ type }: AuthComponentProps) {
         <div className={s.title}>{title}</div>
         <div className={s.subtitle}>{subtitle}</div>
       </div>
-      <div>
+      <form onSubmit={handleSubmit}>
         <div className={s.containerInput}>
           <span>EMAIL</span>
           <input
@@ -48,15 +51,16 @@ function AuthComponent({ type }: AuthComponentProps) {
             className={s.input}
           />
         </div>
-        <button onClick={handleAuth} className={s.button}> {buttonText}</button>
 
-        <div className={s.redirectionContainer}>
-          <div>{description}</div>
-          <div className={s.redirection}>{redirection}</div>
-        </div>
+        <button onClick={() => onSubmit && onSubmit(email, password)} className={s.button}> {buttonText}</button>
+      </form>
 
+      <div className={s.redirectionContainer}>
+        <div>{description}</div>
+        <div className={s.redirection}>{redirection}</div>
       </div>
-    </div>)
+    </div>
+  )
 }
 
 export default AuthComponent

@@ -1,10 +1,9 @@
-export const fetcher = async (url: string) => {
-  const response = await fetch(url);
+export const fetcher = async (url: string, options?: RequestInit) => {
+  const response = await fetch(url, options);
 
   if (!response.ok) {
-    throw new Error('An error occurred while fetching the data.');
+    throw new Error("An error occurred while fetching the data.");
   }
 
   return response.json();
-
-}
+};
