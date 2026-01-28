@@ -1,5 +1,7 @@
+'use client'
 import { ArrowBigRight, CalendarDays, Fuel, Gauge } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import s from "./styles.module.css";
 
 interface CardVehicleProps {
@@ -25,6 +27,13 @@ function CardVehicle({
   energy,
   price,
 }: CardVehicleProps) {
+
+  const router = useRouter();
+
+  //  todo add vehicle id to the route
+  const handleDetails = () => {
+    router.replace('/details');
+  }
 
   const statusLabel =
     status === "rental"
@@ -75,8 +84,7 @@ function CardVehicle({
             {isRental && <span> / mois</span>}
           </p>
         </div>
-
-        <button className={s.button}>  <ArrowBigRight size={16} />
+        <button className={s.button} onClick={handleDetails}>  <ArrowBigRight size={16} />
         </button>
       </div>
     </div>
