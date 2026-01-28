@@ -1,16 +1,21 @@
 .container {
-background-color: #ffffff;
-height: 72px;
-color: var(--color-gray);
-display: flex;
+  background-color: #ffffff;
+  height: 72px;
+  color: var(--color-gray);
+  display: flex;
 }
 
 .containerName {
-display: flex;
-align-items:flex-start;
-justify-content: center;
-flex-direction: column;
-margin-left: 8px; 
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.containerName:hover {
+  transform: scale(1.05);
 }
 
 .name {

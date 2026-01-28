@@ -1,4 +1,4 @@
-import VehiclesGrid from "@/@components/VehiclesGrid/VehiclesGrid";
+import VehiclesGrid from "@/@features/Vehicles/VehiclesGrid/VehiclesGrid";
 import s from "./page.module.css";
 
 export default function Home() {
