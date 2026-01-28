@@ -1,0 +1,45 @@
+.container {
+  background-color: #ffffff;
+  height: 72px;
+  color: var(--color-gray);
+  display: flex;
+}
+
+.containerName {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.containerName:hover {
+  transform: scale(1.05);
+}
+
+.name {
+  color: var(--color-black);
+  font-size: medium;
+}
+
+.containerButtons {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  margin-left: auto;
+  margin-right: 8px;
+}
+
+.buttons {
+  all: unset;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-gray);
+  cursor: pointer;
+}
+
+.buttons:hover {
+  color: var(--color-black);
+}
