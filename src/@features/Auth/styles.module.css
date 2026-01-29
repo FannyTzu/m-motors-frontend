@@ -20,6 +20,10 @@
   margin-top: 8px;
 }
 
+.label {
+  padding-left: 4px;
+}
+
 .title {
   color: var(--color-black);
   font-size: xx-large;
@@ -60,4 +64,5 @@
 
 .redirection {
   color: var(--color-black);
+  cursor: pointer;
 }

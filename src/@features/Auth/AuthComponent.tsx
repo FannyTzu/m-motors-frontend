@@ -1,28 +1,32 @@
-"use client"
-import { useState } from 'react'
-import s from './styles.module.css'
+"use client";
+import { useState } from "react";
+import s from "./styles.module.css";
 
 interface AuthComponentProps {
-  type: 'login' | 'register'
-  onSubmit?: (email: string, password: string) => void
+  type: "login" | "register";
+  onSubmit?: (email: string, password: string) => void;
+  redirectionUrl?: () => void;
 }
 
-function AuthComponent({ type, onSubmit }: AuthComponentProps) {
+function AuthComponent({ type, onSubmit, redirectionUrl }: AuthComponentProps) {
+  const isRegister = type === "register";
 
-  const isRegister = type === 'register'
+  const title = isRegister ? "Créer un compte" : "Connexion";
+  const subtitle = isRegister
+    ? "Et trouver votre prochain véhicule !"
+    : "Accédez à votre espace";
+  const buttonText = isRegister ? "S'INSCRIRE" : "SE CONNECTER";
+  const description = isRegister
+    ? "Déjà un compte ?"
+    : "Pas encore de compte ?";
+  const redirection = isRegister ? "Se connecter" : "S'inscrire";
 
-  const title = isRegister ? 'Créer un compte' : 'Connexion'
-  const subtitle = isRegister ? 'Et trouver votre prochain véhicule !' : 'Accédez à votre espace'
-  const buttonText = isRegister ? 'S\'INSCRIRE' : 'SE CONNECTER'
-  const description = isRegister ? 'Pas encore de compte ?' : 'Déjà un compte ?'
-  const redirection = isRegister ? 'Se connecter' : 'S\'inscrire'
-
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-  }
+    e.preventDefault();
+  };
 
   return (
     <div className={s.container}>
@@ -32,7 +36,7 @@ function AuthComponent({ type, onSubmit }: AuthComponentProps) {
       </div>
       <form onSubmit={handleSubmit}>
         <div className={s.containerInput}>
-          <span>EMAIL</span>
+          <span className={s.label}>EMAIL</span>
           <input
             type="email"
             placeholder="exemple@gmail.com"
@@ -42,7 +46,7 @@ function AuthComponent({ type, onSubmit }: AuthComponentProps) {
           />
         </div>
         <div className={s.containerInput}>
-          <span>MOT DE PASSE</span>
+          <span className={s.label}>MOT DE PASSE</span>
           <input
             type="password"
             placeholder="*******"
@@ -52,15 +56,23 @@ function AuthComponent({ type, onSubmit }: AuthComponentProps) {
           />
         </div>
 
-        <button onClick={() => onSubmit && onSubmit(email, password)} className={s.button}> {buttonText}</button>
+        <button
+          onClick={() => onSubmit && onSubmit(email, password)}
+          className={s.button}
+        >
+          {" "}
+          {buttonText}
+        </button>
       </form>
 
       <div className={s.redirectionContainer}>
         <div>{description}</div>
-        <div className={s.redirection}>{redirection}</div>
+        <div className={s.redirection} onClick={redirectionUrl}>
+          {redirection}
+        </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default AuthComponent
+export default AuthComponent;

@@ -17,9 +17,17 @@ function LoginPage() {
     }
   };
 
+  const handleRegister = () => {
+    router.replace("/register");
+  };
+
   return (
     <div className={s.container}>
-      <AuthComponent type="login" onSubmit={handleLogin} />
+      <AuthComponent
+        type="login"
+        onSubmit={handleLogin}
+        redirectionUrl={handleRegister}
+      />
     </div>
   );
 }
