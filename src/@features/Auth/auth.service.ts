@@ -37,3 +37,21 @@ export const loginRequest = async (email: string, password: string) => {
   }
   return response.json();
 };
+
+export const getMeRequest = async () => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Not authenticated");
+  }
+  return response.json();
+};
+
+export const logoutRequest = async () => {
+  await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
+    method: "POST",
+    credentials: "include",
+  });
+};

@@ -1,6 +1,6 @@
 "use client";
 import React, { createContext, useContext, useState } from "react";
-import { loginRequest, registerRequest } from "./auth.service";
+import { loginRequest, logoutRequest, registerRequest } from "./auth.service";
 
 type User = {
   id: number;
@@ -14,6 +14,7 @@ type AuthContextType = {
   isAuthenticated: boolean;
   register: (email: string, password: string) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -34,11 +35,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setAccessToken(accessToken);
   };
 
+  const logout = async () => {
+    await logoutRequest();
+    setUser(null);
+  };
+
   const isAuthenticated = !!user;
 
   return (
     <AuthContext.Provider
-      value={{ user, accessToken, isAuthenticated, register, login }}
+      value={{ user, accessToken, isAuthenticated, register, login, logout }}
     >
       {children}
     </AuthContext.Provider>

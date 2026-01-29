@@ -18,8 +18,10 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body>
-        <Navbar />
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <Navbar />
+          {children}
+        </AuthProvider>
         <Footer />
       </body>
     </html>
