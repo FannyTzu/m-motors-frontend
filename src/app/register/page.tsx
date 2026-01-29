@@ -3,17 +3,29 @@ import AuthComponent from "@/@features/Auth/AuthComponent";
 import { useAuth } from "@/@features/Auth/useAuth";
 import { useRouter } from "next/navigation";
 import s from "./styles.module.css";
+import { useState } from "react";
 
 function RegisterPage() {
   const router = useRouter();
   const { register } = useAuth();
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleRegister = async (email: string, password: string) => {
     try {
+      setError("");
+      setSuccess("");
       await register(email, password);
-      router.replace("/login");
+      setSuccess("Compte créé avec succès !");
+      setTimeout(() => {
+        router.replace("/login");
+      }, 2000);
     } catch (err) {
-      console.error(err);
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Erreur lors de l'inscription");
+      }
     }
   };
 
@@ -27,6 +39,8 @@ function RegisterPage() {
         type="register"
         onSubmit={handleRegister}
         redirectionUrl={handleLogin}
+        error={error}
+        success={success}
       />
     </div>
   );

@@ -1,13 +1,14 @@
 "use client";
 import { useState } from "react";
 import s from "./styles.module.css";
-import { TriangleAlert } from "lucide-react";
+import { TriangleAlert, CheckCircle } from "lucide-react";
 
 interface AuthComponentProps {
   type: "login" | "register";
   onSubmit?: (email: string, password: string) => void;
   redirectionUrl?: () => void;
   error?: string;
+  success?: string;
 }
 
 function AuthComponent({
@@ -15,6 +16,7 @@ function AuthComponent({
   onSubmit,
   redirectionUrl,
   error,
+  success,
 }: AuthComponentProps) {
   const isRegister = type === "register";
 
@@ -66,6 +68,11 @@ function AuthComponent({
         {error && (
           <div className={s.error}>
             <TriangleAlert size={16} /> {error}
+          </div>
+        )}
+        {success && (
+          <div className={s.success}>
+            <CheckCircle size={16} /> {success}
           </div>
         )}
 

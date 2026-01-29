@@ -52,7 +52,7 @@
   width: 100%;
   background-color: var(--color-black);
   color: var(--color-white);
-  margin: 16px 0;
+  margin: 8px 0;
 }
 
 .error {
@@ -60,10 +60,21 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  color: rgb(214, 31, 31);
+  color: var(--color-red-info);
   font-size: 14px;
-  margin-top: 8px;
   text-align: center;
+  margin-top: 8px;
+}
+
+.succes {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--color-green-status-dark);
+  font-size: 14px;
+  text-align: center;
+  margin-top: 8px;
 }
 
 .redirectionContainer {

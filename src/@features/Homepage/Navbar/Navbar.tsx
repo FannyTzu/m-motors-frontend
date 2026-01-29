@@ -27,6 +27,10 @@ function Navbar() {
   const handleLogin = () => {
     router.replace("/login");
   };
+  const handleLogout = async () => {
+    await logout();
+    router.replace("/");
+  };
 
   return (
     <div className={s.container}>
@@ -40,7 +44,6 @@ function Navbar() {
           <>Vente</>
         </button>
         <button className={s.buttons} onClick={handleRental}>
-          {" "}
           <>Location</>
         </button>
         {isAuthenticated ? (
@@ -51,7 +54,7 @@ function Navbar() {
             <button className={s.buttons} onClick={handleBusiness}>
               <Briefcase size={20} /> <div>Espace Pro</div>
             </button>
-            <button className={s.buttons} onClick={logout}>
+            <button className={s.buttons} onClick={handleLogout}>
               <LogOut size={20} />
               <div>Déconnexion</div>
             </button>
