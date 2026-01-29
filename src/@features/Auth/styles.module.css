@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  height: 275px;
+  height: 300px;
   width: 450px;
   border: 1px solid var(--color-gray-light);
   color: var(--color-gray);
@@ -53,6 +53,17 @@
   background-color: var(--color-black);
   color: var(--color-white);
   margin: 16px 0;
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: rgb(214, 31, 31);
+  font-size: 14px;
+  margin-top: 8px;
+  text-align: center;
 }
 
 .redirectionContainer {

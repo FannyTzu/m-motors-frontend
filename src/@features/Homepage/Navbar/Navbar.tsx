@@ -27,9 +27,6 @@ function Navbar() {
   const handleLogin = () => {
     router.replace("/login");
   };
-  const handleRegister = () => {
-    router.replace("/register");
-  };
 
   return (
     <div className={s.container}>

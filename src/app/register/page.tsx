@@ -11,7 +11,7 @@ function RegisterPage() {
   const handleRegister = async (email: string, password: string) => {
     try {
       await register(email, password);
-      router.replace("/");
+      router.replace("/login");
     } catch (err) {
       console.error(err);
     }

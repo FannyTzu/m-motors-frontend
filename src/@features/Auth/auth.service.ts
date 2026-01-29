@@ -33,7 +33,9 @@ export const loginRequest = async (email: string, password: string) => {
 
   if (!response.ok) {
     const err = await response.json();
-    throw new Error(err.message || "Login failed");
+    throw new Error(
+      err.message || "L'identifiant ou le mot de passe est incorrect"
+    );
   }
   return response.json();
 };
