@@ -1,13 +1,27 @@
-import AuthComponent from "@/@features/Auth/AuthComponent"
-import s from "./styles.module.css"
-
+"use client";
+import AuthComponent from "@/@features/Auth/AuthComponent";
+import s from "./styles.module.css";
+import { useAuth } from "@/@features/Auth/useAuth";
+import { useRouter } from "next/navigation";
 
 function LoginPage() {
+  const router = useRouter();
+  const { login } = useAuth();
+
+  const handleLogin = async (email: string, password: string) => {
+    try {
+      await login(email, password);
+      router.replace("/");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div className={s.container}>
-      <AuthComponent type="login" />
+      <AuthComponent type="login" onSubmit={handleLogin} />
     </div>
-  )
+  );
 }
 
-export default LoginPage
+export default LoginPage;

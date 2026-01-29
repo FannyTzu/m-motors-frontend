@@ -17,3 +17,23 @@ export const registerRequest = async (email: string, password: string) => {
   }
   return response.json();
 };
+
+export const loginRequest = async (email: string, password: string) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ email, password }),
+    }
+  );
+
+  if (!response.ok) {
+    const err = await response.json();
+    throw new Error(err.message || "Login failed");
+  }
+  return response.json();
+};
