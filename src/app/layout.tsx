@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { AuthProvider } from "@/@features/Auth/AuthContext";
+import { AuthProvider } from "@/@features/Auth/context/AuthContext";
 import Footer from "@/@features/Homepage/Footer/Footer";
 import Navbar from "@/@features/Homepage/Navbar/Navbar";
 import "./globals.css";

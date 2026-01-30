@@ -1,6 +1,6 @@
 "use client";
-import AuthComponent from "@/@features/Auth/AuthComponent";
-import { useAuth } from "@/@features/Auth/useAuth";
+import AuthComponent from "@/@features/Auth/component/AuthComponent";
+import { useAuth } from "@/@features/Auth/hook/useAuth";
 import { useRouter } from "next/navigation";
 import s from "./styles.module.css";
 import { useState } from "react";
