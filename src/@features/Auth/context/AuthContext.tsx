@@ -1,6 +1,10 @@
 "use client";
 import React, { createContext, useContext, useState } from "react";
-import { loginRequest, logoutRequest, registerRequest } from "./auth.service";
+import {
+  loginRequest,
+  logoutRequest,
+  registerRequest,
+} from "../service/auth.service";
 
 type User = {
   id: number;

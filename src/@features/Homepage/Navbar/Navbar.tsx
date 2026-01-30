@@ -2,7 +2,7 @@
 import { Briefcase, LogOut, User, CircleUser } from "lucide-react";
 import { useRouter } from "next/navigation";
 import s from "./styles.module.css";
-import { useAuth } from "@/@features/Auth/useAuth";
+import { useAuth } from "@/@features/Auth/hook/useAuth";
 
 function Navbar() {
   const router = useRouter();
