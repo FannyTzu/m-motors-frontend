@@ -1,4 +1,9 @@
-import { getMeRequest, loginRequest, registerRequest } from "./auth.service";
+import {
+  getMeRequest,
+  loginRequest,
+  refreshTokenRequest,
+  registerRequest,
+} from "./auth.service";
 
 const mockFetch = fetch as jest.Mock;
 
@@ -66,8 +71,36 @@ describe("registerRequest", () => {
   it("throw une erreur si le user n'est pas authentifié", async () => {
     mockFetch.mockResolvedValue({
       ok: false,
+      status: 401,
       json: async () => ({ message: "Non authentifié" }),
     });
     await expect(getMeRequest()).rejects.toThrow("Not authenticated");
+  });
+  it("retourne les données si le refresh token réussit", async () => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: async () => ({ accessToken: "new-token" }),
+    });
+
+    const result = await refreshTokenRequest();
+
+    expect(fetch).toHaveBeenCalledWith(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
+      expect.objectContaining({
+        method: "POST",
+        credentials: "include",
+      })
+    );
+    expect(result).toEqual({ accessToken: "new-token" });
+  });
+  it("throw une erreur si le refresh token échoue", async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      json: async () => ({ message: "Refresh failed" }),
+    });
+
+    await expect(refreshTokenRequest()).rejects.toThrow(
+      "Failed to refresh token"
+    );
   });
 });
