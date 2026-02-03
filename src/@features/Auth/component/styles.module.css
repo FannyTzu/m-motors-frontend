@@ -1,0 +1,90 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 300px;
+  width: 450px;
+  border: 1px solid var(--color-gray-light);
+  color: var(--color-gray);
+}
+
+.containerTitle {
+  text-align: center;
+}
+
+.containerInput {
+  display: flex;
+  flex-direction: column;
+  width: 450px;
+  margin-top: 8px;
+}
+
+.label {
+  padding-left: 4px;
+}
+
+.title {
+  color: var(--color-black);
+  font-size: xx-large;
+  font-weight: 350;
+}
+
+.subtitle {
+  color: var(--color-gray);
+}
+
+.input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--color-gray-light);
+  padding: 8px 0;
+  background-color: transparent;
+  outline: none;
+  font-size: 16px;
+}
+
+.input:focus {
+  border-bottom-color: var(--color-black);
+}
+
+.button {
+  width: 100%;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  margin: 8px 0;
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--color-red-info);
+  font-size: 14px;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.succes {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--color-green-status-dark);
+  font-size: 14px;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.redirectionContainer {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.redirection {
+  color: var(--color-black);
+  cursor: pointer;
+}
