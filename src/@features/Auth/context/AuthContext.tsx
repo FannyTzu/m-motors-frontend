@@ -1,9 +1,11 @@
 "use client";
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import {
   loginRequest,
   logoutRequest,
   registerRequest,
+  getMeRequest,
+  refreshTokenRequest,
 } from "../service/auth.service";
 
 type User = {
@@ -16,9 +18,11 @@ type AuthContextType = {
   user: User | null;
   accessToken: string | null;
   isAuthenticated: boolean;
+  isLoading: boolean;
   register: (email: string, password: string) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  refreshToken: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -26,6 +30,22 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const restoreSession = async () => {
+      try {
+        const userData = await getMeRequest();
+        setUser(userData);
+      } catch {
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    restoreSession();
+  }, []);
 
   const register = async (email: string, password: string) => {
     const { user, accessToken } = await registerRequest(email, password);
@@ -42,13 +62,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = async () => {
     await logoutRequest();
     setUser(null);
+    setAccessToken(null);
+  };
+
+  const refreshToken = async () => {
+    try {
+      const { accessToken } = await refreshTokenRequest();
+      setAccessToken(accessToken);
+    } catch (error) {
+      setUser(null);
+      setAccessToken(null);
+      throw error;
+    }
   };
 
   const isAuthenticated = !!user;
 
   return (
     <AuthContext.Provider
-      value={{ user, accessToken, isAuthenticated, register, login, logout }}
+      value={{
+        user,
+        accessToken,
+        isAuthenticated,
+        isLoading,
+        register,
+        login,
+        logout,
+        refreshToken,
+      }}
     >
       {children}
     </AuthContext.Provider>

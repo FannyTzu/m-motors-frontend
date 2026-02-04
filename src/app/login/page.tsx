@@ -7,14 +7,16 @@ import { useState } from "react";
 
 function LoginPage() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const [error, setError] = useState("");
+
+  const isUser = user?.role === "user";
 
   const handleLogin = async (email: string, password: string) => {
     try {
       setError("");
       await login(email, password);
-      router.replace("/user-space");
+      router.replace(isUser ? "/user-space" : "/business-space");
     } catch (err) {
       if (err instanceof Error) {
         if (err.message.includes("fetch") || err.message.includes("Network")) {
