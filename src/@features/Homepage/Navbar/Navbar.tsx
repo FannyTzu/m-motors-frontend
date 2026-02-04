@@ -7,7 +7,9 @@ import { useAuth } from "@/@features/Auth/hook/useAuth";
 function Navbar() {
   const router = useRouter();
 
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
+
+  const isClient = user?.role === "client";
 
   const handleSale = () => {
     router.replace("/sale");
@@ -48,12 +50,16 @@ function Navbar() {
         </button>
         {isAuthenticated ? (
           <>
-            <button className={s.buttons} onClick={handleUser}>
-              <User size={20} /> <div>Mon espace</div>
-            </button>
-            <button className={s.buttons} onClick={handleBusiness}>
-              <Briefcase size={20} /> <div>Espace Pro</div>
-            </button>
+            {isClient ? (
+              <button className={s.buttons} onClick={handleUser}>
+                <User size={20} /> <div>Mon espace</div>
+              </button>
+            ) : (
+              <button className={s.buttons} onClick={handleBusiness}>
+                <Briefcase size={20} /> <div>Espace Pro</div>
+              </button>
+            )}
+
             <button className={s.buttons} onClick={handleLogout}>
               <LogOut size={20} />
               <div>Déconnexion</div>
