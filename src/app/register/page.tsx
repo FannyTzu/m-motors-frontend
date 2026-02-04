@@ -18,7 +18,7 @@ function RegisterPage() {
       await register(email, password);
       setSuccess("Compte créé avec succès !");
       setTimeout(() => {
-        router.replace("/login");
+        router.replace("/");
       }, 2000);
     } catch (err) {
       if (err instanceof Error) {
@@ -29,7 +29,7 @@ function RegisterPage() {
     }
   };
 
-  const handleLogin = () => {
+  const handleRedirect = () => {
     router.replace("/login");
   };
 
@@ -38,7 +38,7 @@ function RegisterPage() {
       <AuthComponent
         type="register"
         onSubmit={handleRegister}
-        redirectionUrl={handleLogin}
+        redirectionUrl={handleRedirect}
         error={error}
         success={success}
       />
