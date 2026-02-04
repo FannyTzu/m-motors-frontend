@@ -9,7 +9,7 @@ function Navbar() {
 
   const { isAuthenticated, logout, user } = useAuth();
 
-  const isClient = user?.role === "client";
+  const isUser = user?.role === "user";
 
   const handleSale = () => {
     router.replace("/sale");
@@ -50,7 +50,7 @@ function Navbar() {
         </button>
         {isAuthenticated ? (
           <>
-            {isClient ? (
+            {isUser ? (
               <button className={s.buttons} onClick={handleUser}>
                 <User size={20} /> <div>Mon espace</div>
               </button>

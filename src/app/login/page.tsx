@@ -10,13 +10,13 @@ function LoginPage() {
   const { login, user } = useAuth();
   const [error, setError] = useState("");
 
-  const isClient = user?.role === "client";
+  const isUser = user?.role === "user";
 
   const handleLogin = async (email: string, password: string) => {
     try {
       setError("");
       await login(email, password);
-      router.replace(isClient ? "/user-space" : "/business-space");
+      router.replace(isUser ? "/user-space" : "/business-space");
     } catch (err) {
       if (err instanceof Error) {
         if (err.message.includes("fetch") || err.message.includes("Network")) {
