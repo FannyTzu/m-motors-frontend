@@ -11,7 +11,7 @@ interface CardVehicleProps {
   year: number;
   km: number;
   energy: string;
-  transmission: "manuelle" | "automatique";
+  transmission?: "manual" | "automatic";
   price: number;
 }
 
@@ -28,6 +28,12 @@ function CardVehicleBusiness({
 }: CardVehicleProps) {
   return (
     <div className={s.card}>
+      <div className={s.imageSection}>
+        <Image src={image} alt={`${brand} ${model}`} fill className={s.image} />
+        <div className={s.priceSection}>
+          <p className={s.price}>{price.toLocaleString("fr-FR")} €</p>
+        </div>
+      </div>
       <div className={s.centerContent}>
         <div className={s.titleSection}>
           <h3 className={s.title}>
@@ -55,12 +61,6 @@ function CardVehicleBusiness({
             <span>{transmission}</span>
           </div>
         </div>
-      </div>
-      <div className={s.imageSection}>
-        <Image src={image} alt={`${brand} ${model}`} fill className={s.image} />
-      </div>
-      <div className={s.priceSection}>
-        <p className={s.price}>{price.toLocaleString("fr-FR")} €</p>
       </div>
     </div>
   );

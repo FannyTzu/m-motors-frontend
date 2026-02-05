@@ -2,6 +2,7 @@ import { useRouter } from "next/navigation";
 import s from "./styles.module.css";
 import React from "react";
 import { Plus } from "lucide-react";
+import DisplayCardVehicle from "../DisplayCardVehicle/DisplayCardVehicle";
 
 function BusinessComponent() {
   const router = useRouter();
@@ -15,6 +16,7 @@ function BusinessComponent() {
       <button onClick={handleCreate} className={s.button}>
         <Plus size={18} /> Ajouter un véhicule
       </button>
+      <DisplayCardVehicle />
     </div>
   );
 }
