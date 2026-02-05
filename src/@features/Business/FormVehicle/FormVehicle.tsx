@@ -12,10 +12,10 @@ interface FormVehicleProps {
   color: string;
   place: number;
   door: number;
-  type: string;
+  type: "sale" | "rental";
   price: number;
   image?: string;
-  status: string;
+  status: "available" | "reserved" | "sold";
 }
 
 function FormVehicle() {
@@ -240,7 +240,7 @@ function FormVehicle() {
 
           <div className={s.formGroup}>
             <label htmlFor="price" className={s.label}>
-              Prix {formData.status === "rental" ? "(€/mois)" : "(€)"} *
+              Prix {formData.type === "rental" ? "(€/mois)" : "(€)"} *
             </label>
             <input
               type="number"
@@ -260,6 +260,7 @@ function FormVehicle() {
             <label htmlFor="image" className={s.label}>
               Image
             </label>
+            {/* TODO import ImageUploader component */}
             <input
               type="url"
               id="image"
