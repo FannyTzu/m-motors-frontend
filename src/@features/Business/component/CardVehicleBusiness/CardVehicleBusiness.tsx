@@ -57,6 +57,10 @@ function CardVehicleBusiness({
             <Settings size={18} />
             <span>{transmission}</span>
           </div>
+          <div className={s.buttonSection}>
+            <button className={s.updateButton}>Modifier</button>
+            <button className={s.deleteButton}>Supprimer</button>
+          </div>
         </div>
       </div>
       <div className={s.priceSection}>
