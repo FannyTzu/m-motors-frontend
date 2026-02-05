@@ -1,7 +1,7 @@
 export const mockVehicles = [
   {
     id: 1,
-    image: "/carpix.jpg",
+    image: "/carpix.png",
     status: "rental",
     brand: "Oxalys",
     model: "Série 4",
@@ -13,7 +13,7 @@ export const mockVehicles = [
   },
   {
     id: 2,
-    image: "/carpix.jpg",
+    image: "/carpix3.png",
     status: "rental",
     brand: "Oxalys",
     model: "Série 4",
@@ -25,7 +25,7 @@ export const mockVehicles = [
   },
   {
     id: 3,
-    image: "/carpix.jpg",
+    image: "/carpix.png",
     status: "sale",
     brand: "Oxalys",
     model: "Série 4",
@@ -37,7 +37,7 @@ export const mockVehicles = [
   },
   {
     id: 4,
-    image: "/carpix.jpg",
+    image: "/carpix3.png",
     status: "sale",
     brand: "Oxalys",
     model: "Série 4",
@@ -49,7 +49,7 @@ export const mockVehicles = [
   },
   {
     id: 5,
-    image: "/carpix.jpg",
+    image: "/carpix.png",
     status: "rental",
     brand: "Oxalys",
     model: "Série 4",
@@ -61,7 +61,7 @@ export const mockVehicles = [
   },
   {
     id: 6,
-    image: "/carpix.jpg",
+    image: "/carpix3.png",
     status: "rental",
     brand: "Oxalys",
     model: "Série 4",
