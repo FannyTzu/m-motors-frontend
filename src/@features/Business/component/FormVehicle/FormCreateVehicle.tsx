@@ -9,6 +9,7 @@ import { CircleX } from "lucide-react";
 interface FormCreateVehicleProps {
   brand: string;
   model: string;
+  transmission: "manual" | "automatic";
   year: number;
   energy: string;
   kms: number;
@@ -29,6 +30,7 @@ function FormCreateVehicle() {
   const [formData, setFormData] = useState<FormCreateVehicleProps>({
     brand: "",
     model: "",
+    transmission: "automatic",
     year: new Date().getFullYear(),
     energy: "",
     kms: 0,
@@ -125,6 +127,24 @@ function FormCreateVehicle() {
               placeholder="Ex: série sports"
               required
             />
+          </div>
+
+          <div className={s.formGroup}>
+            <label htmlFor="transmission" className={s.label}>
+              Transmission *
+            </label>
+            <select
+              id="transmission"
+              name="transmission"
+              value={formData.transmission}
+              onChange={handleChange}
+              className={s.input}
+              required
+            >
+              <option value="">Sélectionner</option>
+              <option value="manuelle">Manuelle</option>
+              <option value="automatique">Automatique</option>
+            </select>
           </div>
 
           <div className={s.formGroup}>
