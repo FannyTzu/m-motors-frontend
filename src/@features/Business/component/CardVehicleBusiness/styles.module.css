@@ -8,6 +8,7 @@
   align-items: center;
   gap: 8px;
   margin-bottom: 8px;
+  position: relative;
 }
 
 .centerContent {
@@ -51,11 +52,11 @@
 
 .priceSection {
   position: absolute;
-  bottom: 0;
-  right: 0;
-  background-color: var(--color-black);
-  color: var(--color-white);
-  border-radius: 8px 0 8px 0;
+  top: 8px;
+  right: 8px;
+  color: var(--color-black);
+  border-radius: 8px;
+  padding: 4px;
 }
 
 .price {

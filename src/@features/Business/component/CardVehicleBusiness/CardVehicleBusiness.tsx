@@ -30,9 +30,6 @@ function CardVehicleBusiness({
     <div className={s.card}>
       <div className={s.imageSection}>
         <Image src={image} alt={`${brand} ${model}`} fill className={s.image} />
-        <div className={s.priceSection}>
-          <p className={s.price}>{price.toLocaleString("fr-FR")} €</p>
-        </div>
       </div>
       <div className={s.centerContent}>
         <div className={s.titleSection}>
@@ -61,6 +58,9 @@ function CardVehicleBusiness({
             <span>{transmission}</span>
           </div>
         </div>
+      </div>
+      <div className={s.priceSection}>
+        <p className={s.price}>{price.toLocaleString("fr-FR")} €</p>
       </div>
     </div>
   );
