@@ -1,5 +1,7 @@
 "use client";
+import BusinessComponent from "@/@features/Business/BusinessComponent/BusinessComponent";
 import { useState } from "react";
+import s from "./styles.module.css";
 
 function BusinessPage() {
   const [activeTab, setActiveTab] = useState<"vehicles" | "clients">(
@@ -7,17 +9,31 @@ function BusinessPage() {
   );
 
   return (
-    <div>
-      <h1>Espace professionnel</h1>
-      <h4>Gérez vos véhicules et les dossiers clients</h4>
-
-      <button onClick={() => setActiveTab("vehicles")}>VEHICULES</button>
-      <button onClick={() => setActiveTab("clients")}>Dossiers clients</button>
-
+    <div className={s.container}>
+      <div className={s.containerTitle}>
+        <h1 className={s.title}>Espace professionnel</h1>
+        <h4 className={s.subtitle}>
+          Gérez vos véhicules et les dossiers clients
+        </h4>
+        <div className={s.containerButton}>
+          <button
+            onClick={() => setActiveTab("vehicles")}
+            className={`${s.tabButton} ${activeTab === "vehicles" ? s.tabButtonActive : ""}`}
+          >
+            VEHICULES
+          </button>
+          <button
+            onClick={() => setActiveTab("clients")}
+            className={`${s.tabButton} ${activeTab === "clients" ? s.tabButtonActive : ""}`}
+          >
+            Dossiers clients
+          </button>
+        </div>
+      </div>
       <div>
         {activeTab === "vehicles" && (
           <div>
-            <h3>COMPOSANT VEHICULES à mettre ici</h3>
+            <BusinessComponent />
           </div>
         )}
         {activeTab === "clients" && (
