@@ -2,8 +2,11 @@
 import React from "react";
 import s from "./styles.module.css";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { createVehicles } from "@/@features/Business/service/vehicle.service";
+import { CircleX } from "lucide-react";
 
-interface FormVehicleProps {
+interface FormCreateVehicleProps {
   brand: string;
   model: string;
   year: number;
@@ -18,8 +21,12 @@ interface FormVehicleProps {
   status: "available" | "reserved" | "sold";
 }
 
-function FormVehicle() {
-  const [formData, setFormData] = useState<FormVehicleProps>({
+function FormCreateVehicle() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const [formData, setFormData] = useState<FormCreateVehicleProps>({
     brand: "",
     model: "",
     year: new Date().getFullYear(),
@@ -38,6 +45,7 @@ function FormVehicle() {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
+    setError(null);
     setFormData((prev) => ({
       ...prev,
       [name]:
@@ -51,9 +59,25 @@ function FormVehicle() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form data:", formData);
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await createVehicles(formData);
+      console.log("Véhicule créé:", response);
+      router.push("/business-space");
+    } catch (err) {
+      console.error("Erreur:", err);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Erreur lors de la création du véhicule"
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleBack = () => {
@@ -64,6 +88,12 @@ function FormVehicle() {
     <div className={s.container}>
       <form onSubmit={handleSubmit} className={s.form}>
         <h2 className={s.formTitle}>Ajouter un véhicule</h2>
+        {error && (
+          <div className={s.errorMessage}>
+            <CircleX /> {error}
+          </div>
+        )}
+
         <div className={s.formGrid}>
           <div className={s.formGroup}>
             <label htmlFor="brand" className={s.label}>
@@ -274,10 +304,15 @@ function FormVehicle() {
         </div>
 
         <div className={s.buttonGroup}>
-          <button type="submit" className={s.submitButton}>
-            Enregistrer le véhicule
+          <button type="submit" className={s.submitButton} disabled={loading}>
+            {loading ? "Enregistrement..." : "Enregistrer le véhicule"}
           </button>
-          <button type="button" className={s.cancelButton} onClick={handleBack}>
+          <button
+            type="button"
+            className={s.cancelButton}
+            onClick={handleBack}
+            disabled={loading}
+          >
             Annuler
           </button>
         </div>
@@ -286,4 +321,4 @@ function FormVehicle() {
   );
 }
 
-export default FormVehicle;
+export default FormCreateVehicle;

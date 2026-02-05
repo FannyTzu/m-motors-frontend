@@ -1,10 +1,9 @@
-import FormVehicle from "@/@features/Business/FormVehicle/FormVehicle";
-import React from "react";
+import FormCreateVehicle from "@/@features/Business/component/FormVehicle/FormCreateVehicle";
 
 function createPage() {
   return (
     <div>
-      <FormVehicle />
+      <FormCreateVehicle />
     </div>
   );
 }

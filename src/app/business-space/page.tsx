@@ -1,5 +1,5 @@
 "use client";
-import BusinessComponent from "@/@features/Business/BusinessComponent/BusinessComponent";
+import BusinessComponent from "@/@features/Business/component/BusinessComponent/BusinessComponent";
 import { useState } from "react";
 import s from "./styles.module.css";
 
