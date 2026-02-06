@@ -39,7 +39,13 @@
   gap: 8px;
 }
 
-.label {
+.formGroupDescription {
+  display: grid;
+  grid-column: span 2;
+
+  gap: 8px;
+}
+² .label {
   font-size: 14px;
   font-weight: 600;
   color: var(--color-black);

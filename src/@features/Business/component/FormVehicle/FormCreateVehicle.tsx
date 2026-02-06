@@ -19,6 +19,7 @@ interface FormCreateVehicleProps {
   type: "sale" | "rental";
   price: number;
   image?: string;
+  description?: string;
   status: "available" | "reserved" | "sold";
 }
 
@@ -302,6 +303,22 @@ function FormCreateVehicle() {
               min="0"
               step="0.01"
               placeholder="Ex: 25000"
+              required
+            />
+          </div>
+
+          <div className={s.formGroupDescription}>
+            <label htmlFor="description" className={s.label}>
+              Description
+            </label>
+            <input
+              type="text"
+              id="description"
+              name="description"
+              value={formData.description || ""}
+              onChange={handleChange}
+              className={s.input}
+              placeholder="Ex: ceci est une description plutot courte du véhicule mais vous pouvez en mettre une plus longue"
               required
             />
           </div>
