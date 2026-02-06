@@ -15,6 +15,7 @@ function DisplayCardVehicle() {
           year={vehicle.year}
           km={vehicle.km}
           energy={vehicle.energy}
+          transmission={vehicle.transmission}
           price={vehicle.price}
         />
       ))}

@@ -9,6 +9,7 @@ export const mockVehicles = [
     year: 2022,
     km: 32000,
     energy: "GPL",
+    transmission: "Automatique",
     price: 250,
   },
   {
@@ -21,6 +22,7 @@ export const mockVehicles = [
     year: 2022,
     km: 32000,
     energy: "GPL",
+    transmission: "Automatique",
     price: 150,
   },
   {
@@ -32,6 +34,7 @@ export const mockVehicles = [
     location: "Bordeaux",
     year: 2022,
     km: 32000,
+    transmission: "Automatique",
     energy: "GPL",
     price: 15000,
   },
@@ -44,6 +47,7 @@ export const mockVehicles = [
     location: "Bordeaux",
     year: 2022,
     km: 32000,
+    transmission: "Manuelle",
     energy: "GPL",
     price: 15000,
   },
@@ -57,6 +61,7 @@ export const mockVehicles = [
     year: 2022,
     km: 32000,
     energy: "GPL",
+    transmission: "Automatique",
     price: 150,
   },
   {
@@ -68,6 +73,7 @@ export const mockVehicles = [
     location: "Bordeaux",
     year: 2022,
     km: 532590,
+    transmission: "Manuelle",
     energy: "GPL",
     price: 150,
   },

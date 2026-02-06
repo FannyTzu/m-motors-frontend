@@ -11,7 +11,7 @@ interface CardVehicleProps {
   year: number;
   km: number;
   energy: string;
-  transmission?: "manual" | "automatic";
+  transmission?: string;
   price: number;
 }
 
