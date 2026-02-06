@@ -5,6 +5,7 @@
     Arial, sans-serif;
 
   /* colors */
+  --color-theme: #e2e8f0;
   --color-blue: #0ea5e9;
   --color-blue-dark: #0052a3;
   --color-gray: #64748b;
@@ -24,7 +25,7 @@ body {
   overflow-x: hidden;
   font-family: var(--font);
   font-weight: 400;
-  background-color: #e2e8f0;
+  background-color: var(--color-theme);
 }
 
 * {
