@@ -20,7 +20,7 @@ function BusinessPage() {
             onClick={() => setActiveTab("vehicles")}
             className={`${s.tabButton} ${activeTab === "vehicles" ? s.tabButtonActive : ""}`}
           >
-            VEHICULES
+            Véhicules
           </button>
           <button
             onClick={() => setActiveTab("clients")}

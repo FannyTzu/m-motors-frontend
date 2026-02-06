@@ -193,7 +193,7 @@ function FormCreateVehicle() {
               type="number"
               id="kms"
               name="kms"
-              value={formData.kms}
+              value={formData.kms || ""}
               onChange={handleChange}
               className={s.input}
               min="0"
@@ -296,7 +296,7 @@ function FormCreateVehicle() {
               type="number"
               id="price"
               name="price"
-              value={formData.price}
+              value={formData.price || ""}
               onChange={handleChange}
               className={s.input}
               min="0"
