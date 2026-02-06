@@ -38,3 +38,55 @@ export const createVehicles = async (vehicleData: {
     throw error;
   }
 };
+
+export const getVehicles = async () => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/vehicle/`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
+
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.message || "Failed to fetch vehicles");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching vehicles:", error);
+    throw error;
+  }
+};
+
+export const getVehicleById = async (id: number) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/vehicle/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
+
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.message || "Failed to fetch vehicle");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching vehicle:", error);
+    throw error;
+  }
+};
