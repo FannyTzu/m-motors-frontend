@@ -16,14 +16,84 @@
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   max-width: 1200px;
-  height: 700px;
+  height: auto;
   margin: 0 auto 24px auto;
+  gap: 24px;
+}
+
+.container h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
+}
+
+.container h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 12px 0;
 }
 
 .imageSection {
-  height: 50%;
+  height: 400px;
   width: 100%;
   position: relative;
   overflow: hidden;
   border-radius: 12px;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.sectionDetails {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: var(--color-blue);
+}
+
+.details {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.sectionDescription {
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.sectionPrice {
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.sectionPrice > div {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-blue);
+}
+
+.container button {
+  padding: 12px 24px;
+  background-color: var(--color-blue);
+  color: var(--color-white);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  align-self: center;
+}
+
+.container button:hover {
+  background-color: var(--color-blue-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+.container button:active {
+  transform: translateY(0);
 }

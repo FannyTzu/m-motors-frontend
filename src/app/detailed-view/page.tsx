@@ -61,29 +61,39 @@ function DetailsViewPage({
           />
         </div>
         <div className={s.sectionDetails}>
-          <div className={s.details}>
-            <div>
-              <CalendarDays /> Année
+          <div>
+            <div className={s.details}>
+              <div>
+                <CalendarDays />
+              </div>
+              <div>Année</div>
             </div>
             <div>{year}</div>
           </div>
-          <div className={s.details}>
-            <div>
-              {" "}
-              <Gauge /> Kilométrage
+          <div>
+            <div className={s.details}>
+              <div>
+                <Gauge />
+              </div>
+              <div>Kilométrage</div>
             </div>
             <div>{kms}</div>
           </div>
-          <div className={s.details}>
-            <div>
-              <Fuel /> Carburant
+          <div>
+            <div className={s.details}>
+              <div>
+                <Fuel />
+              </div>
+              <div>Carburant</div>
             </div>
             <div>{energy}</div>
           </div>
-          <div className={s.details}>
-            <div>
-              {" "}
-              <Settings /> Transmission
+          <div>
+            <div className={s.details}>
+              <div>
+                <Settings />
+              </div>
+              <div>Transmission</div>
             </div>
             <div>{transmission}</div>
           </div>
@@ -93,23 +103,30 @@ function DetailsViewPage({
           <div>{description}</div>
         </div>
         <div className={s.sectionDetails}>
-          <div className={s.details}>
-            <div>
-              {" "}
-              <Brush /> Couleur
+          <div>
+            <div className={s.details}>
+              <div>
+                <Brush />
+              </div>
+              <div>Couleur</div>
             </div>
             <div>{color}</div>
           </div>
-          <div className={s.details}>
-            <div>
-              <DoorOpen /> Portes
+          <div>
+            <div className={s.details}>
+              <div>
+                <DoorOpen />
+              </div>
+              <div>Portes</div>
             </div>
             <div>{door}</div>
           </div>
-          <div className={s.details}>
-            <div>
-              <UserPlus />
-              Places
+          <div>
+            <div className={s.details}>
+              <div>
+                <UserPlus />
+              </div>
+              <div>Places</div>
             </div>
             <div>{places}</div>
           </div>
