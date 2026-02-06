@@ -10,35 +10,38 @@ import {
   DoorOpen,
 } from "lucide-react";
 import Image from "next/image";
+import { mockVehicleDetailedView } from "@/@mocks/mockVehicleDetailedView";
 
-interface VehicleProps {
-  image: string;
-  brand: string;
-  model: string;
-  year: number;
-  kms: number;
-  energy: string;
-  transmission: string;
-  color: string;
-  door: number;
-  places: number;
-  description: string;
-  price: number;
-}
-function DetailsViewPage({
-  image,
-  brand,
-  model,
-  year,
-  kms,
-  energy,
-  transmission,
-  color,
-  door,
-  places,
-  description,
-  price,
-}: VehicleProps) {
+// interface VehicleProps {
+//   image: string;
+//   brand: string;
+//   model: string;
+//   year: number;
+//   kms: number;
+//   energy: string;
+//   transmission: string;
+//   color: string;
+//   door: number;
+//   places: number;
+//   description: string;
+//   price: number;
+// }
+
+function DetailsViewPage() {
+  const {
+    image,
+    brand,
+    model,
+    year,
+    kms,
+    energy,
+    transmission,
+    color,
+    door,
+    places,
+    description,
+    price,
+  } = mockVehicleDetailedView;
   return (
     <>
       <button className={s.backButton}>
@@ -61,74 +64,74 @@ function DetailsViewPage({
           />
         </div>
         <div className={s.sectionDetails}>
-          <div>
-            <div className={s.details}>
+          <div className={s.details}>
+            <div className={s.icon}>
               <div>
-                <CalendarDays />
+                <CalendarDays size={16} />
               </div>
               <div>Année</div>
             </div>
-            <div>{year}</div>
+            <div className={s.textIcon}>{year}</div>
           </div>
-          <div>
-            <div className={s.details}>
+          <div className={s.details}>
+            <div className={s.icon}>
               <div>
-                <Gauge />
+                <Gauge size={16} />
               </div>
               <div>Kilométrage</div>
             </div>
-            <div>{kms}</div>
+            <div className={s.textIcon}>{kms}</div>
           </div>
-          <div>
-            <div className={s.details}>
+          <div className={s.details}>
+            <div className={s.icon}>
               <div>
-                <Fuel />
+                <Fuel size={16} />
               </div>
               <div>Carburant</div>
             </div>
-            <div>{energy}</div>
+            <div className={s.textIcon}>{energy}</div>
           </div>
-          <div>
-            <div className={s.details}>
+          <div className={s.details}>
+            <div className={s.icon}>
               <div>
-                <Settings />
+                <Settings size={16} />
               </div>
               <div>Transmission</div>
             </div>
-            <div>{transmission}</div>
+            <div className={s.textIcon}>{transmission}</div>
           </div>
         </div>
-        <div className={s.sectionDescription}>
+        <div>
           <h2>Description</h2>
           <div>{description}</div>
         </div>
         <div className={s.sectionDetails}>
-          <div>
-            <div className={s.details}>
+          <div className={s.details}>
+            <div className={s.icon}>
               <div>
-                <Brush />
+                <Brush size={16} />
               </div>
               <div>Couleur</div>
             </div>
-            <div>{color}</div>
+            <div className={s.textIcon}>{color}</div>
           </div>
-          <div>
-            <div className={s.details}>
+          <div className={s.details}>
+            <div className={s.icon}>
               <div>
-                <DoorOpen />
+                <DoorOpen size={16} />
               </div>
               <div>Portes</div>
             </div>
-            <div>{door}</div>
+            <div className={s.textIcon}>{door}</div>
           </div>
-          <div>
-            <div className={s.details}>
+          <div className={s.details}>
+            <div className={s.icon}>
               <div>
-                <UserPlus />
+                <UserPlus size={16} />
               </div>
               <div>Places</div>
             </div>
-            <div>{places}</div>
+            <div className={s.textIcon}>{places}</div>
           </div>
         </div>
         <div className={s.sectionPrice}>
