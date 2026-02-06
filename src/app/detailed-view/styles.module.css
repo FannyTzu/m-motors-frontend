@@ -1,0 +1,29 @@
+.backButton {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  color: var(--color-gray);
+  margin-left: 4px;
+  cursor: pointer;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background: var(--color-white);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  height: 700px;
+  margin: 0 auto 24px auto;
+}
+
+.imageSection {
+  height: 50%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+}
