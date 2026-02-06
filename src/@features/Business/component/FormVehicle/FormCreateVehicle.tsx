@@ -142,8 +142,8 @@ function FormCreateVehicle() {
               required
             >
               <option value="">Sélectionner</option>
-              <option value="manuelle">Manuelle</option>
-              <option value="automatique">Automatique</option>
+              <option value="manual">Manuelle</option>
+              <option value="automatic">Automatique</option>
             </select>
           </div>
 
