@@ -3,8 +3,21 @@ import React, { useEffect, useState } from "react";
 import CardVehicleBusiness from "../CardVehicleBusiness/CardVehicleBusiness";
 import { getVehicles } from "@/@features/Business/service/vehicle.service";
 
+interface Vehicle {
+  id: number;
+  image: string;
+  status: string;
+  brand: string;
+  model: string;
+  year: number;
+  kms: number;
+  energy: string;
+  transmission: string;
+  price: number;
+}
+
 function DisplayCardVehicle() {
-  const [vehicles, setVehicles] = useState([]);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,7 +44,7 @@ function DisplayCardVehicle() {
 
   return (
     <div>
-      {vehicles.map((vehicle: any) => (
+      {vehicles.map((vehicle) => (
         <CardVehicleBusiness
           key={vehicle.id}
           image={vehicle.image || "/carpix.png"}
