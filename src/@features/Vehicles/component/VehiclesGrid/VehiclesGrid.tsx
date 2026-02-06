@@ -46,6 +46,7 @@ function VehiclesGrid() {
       {vehicles.map((vehicle) => (
         <CardVehicle
           key={vehicle.id}
+          id={vehicle.id}
           image={vehicle.image || "/carpix.png"}
           type={vehicle.type}
           brand={vehicle.brand}

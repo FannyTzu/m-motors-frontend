@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import s from "./styles.module.css";
 
 interface CardVehicleProps {
+  id: number;
   image: string;
   type: string;
   brand: string;
@@ -16,6 +17,7 @@ interface CardVehicleProps {
 }
 
 function CardVehicle({
+  id,
   image,
   type,
   brand,
@@ -27,9 +29,8 @@ function CardVehicle({
 }: CardVehicleProps) {
   const router = useRouter();
 
-  //  todo add vehicle id to the route
   const handleDetails = () => {
-    router.replace("/detailed-view");
+    router.push(`/detailed-view?id=${id}`);
   };
 
   const typeLabel =

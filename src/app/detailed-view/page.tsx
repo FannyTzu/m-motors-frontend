@@ -1,3 +1,5 @@
+"use client";
+
 import s from "./styles.module.css";
 import {
   ArrowLeft,
@@ -10,24 +12,76 @@ import {
   DoorOpen,
 } from "lucide-react";
 import Image from "next/image";
-import { mockVehicleDetailedView } from "@/@mocks/mockVehicleDetailedView";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getVehicleById } from "@/@features/Vehicles/service/vehicle.service";
 
-// interface VehicleProps {
-//   image: string;
-//   brand: string;
-//   model: string;
-//   year: number;
-//   km: number;
-//   energy: string;
-//   transmission: string;
-//   color: string;
-//   door: number;
-//   places: number;
-//   description: string;
-//   price: number;
-// }
+interface Vehicle {
+  image: string;
+  brand: string;
+  model: string;
+  year: number;
+  km: number;
+  energy: string;
+  transmission: string;
+  color: string;
+  door: number;
+  place: number;
+  description: string;
+  price: number;
+}
 
 function DetailsViewPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [vehicle, setVehicle] = useState<Vehicle | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const id = searchParams.get("id");
+
+    if (!id) {
+      setError("ID du véhicule non fourni");
+      setLoading(false);
+      return;
+    }
+
+    const fetchVehicle = async () => {
+      try {
+        const data = await getVehicleById(Number(id));
+        setVehicle(data);
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Erreur lors du chargement du véhicule"
+        );
+        console.error("Error fetching vehicle:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVehicle();
+  }, [searchParams]);
+
+  const handleBack = () => {
+    router.back();
+  };
+
+  if (loading) {
+    return <div className={s.loading}>Chargement...</div>;
+  }
+
+  if (error) {
+    return <div className={s.error}>Erreur : {error}</div>;
+  }
+
+  if (!vehicle) {
+    return <div className={s.error}>Véhicule non trouvé</div>;
+  }
+
   const {
     image,
     brand,
@@ -38,13 +92,13 @@ function DetailsViewPage() {
     transmission,
     color,
     door,
-    places,
+    place,
     description,
     price,
-  } = mockVehicleDetailedView;
+  } = vehicle;
   return (
     <>
-      <button className={s.backButton}>
+      <button className={s.backButton} onClick={handleBack}>
         <ArrowLeft />
         Retour
       </button>
@@ -57,7 +111,7 @@ function DetailsViewPage() {
         </div>
         <div className={s.imageSection}>
           <Image
-            src={image}
+            src={image || "/carpix.png"}
             alt={`${brand} ${model}`}
             fill
             className={s.image}
@@ -131,7 +185,7 @@ function DetailsViewPage() {
               </div>
               <div>Places</div>
             </div>
-            <div className={s.textIcon}>{places}</div>
+            <div className={s.textIcon}>{place}</div>
           </div>
         </div>
         <div className={s.sectionPrice}>
