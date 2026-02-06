@@ -103,7 +103,7 @@ function DetailsViewPage() {
         </div>
         <div>
           <h2>Description</h2>
-          <div>{description}</div>
+          <div className={s.description}>{description}</div>
         </div>
         <div className={s.sectionDetails}>
           <div className={s.details}>
