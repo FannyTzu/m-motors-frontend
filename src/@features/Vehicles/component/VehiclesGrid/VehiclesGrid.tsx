@@ -2,7 +2,7 @@
 import CardVehicle from "../CardVehicle/CardVehicle";
 import s from "./styles.module.css";
 import { useEffect, useState } from "react";
-import { getVehicles } from "@/@features/Business/service/vehicle.service";
+import { getVehicles } from "@/@features/Vehicles/service/vehicle.service";
 
 interface Vehicle {
   id: number;

@@ -76,7 +76,6 @@ function CardVehicle({
           </p>
         </div>
         <button className={s.button} onClick={handleDetails}>
-          {" "}
           <ArrowBigRight size={16} />
         </button>
       </div>

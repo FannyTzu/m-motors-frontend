@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import CardVehicleBusiness from "../CardVehicleBusiness/CardVehicleBusiness";
-import { getVehicles } from "@/@features/Business/service/vehicle.service";
+import { getVehicles } from "@/@features/Vehicles/service/vehicle.service";
 
 interface Vehicle {
   id: number;

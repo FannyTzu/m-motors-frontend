@@ -3,7 +3,7 @@ import React from "react";
 import s from "./styles.module.css";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createVehicles } from "@/@features/Business/service/vehicle.service";
+import { createVehicles } from "@/@features/Vehicles/service/vehicle.service";
 import { CircleX } from "lucide-react";
 
 interface FormCreateVehicleProps {
