@@ -3,7 +3,7 @@ export const mockVehicleDetailedView = {
   brand: "Oxalys",
   model: "Série 4",
   year: 2022,
-  kms: 32000,
+  km: 32000,
   energy: "GPL",
   transmission: "Automatique",
   color: "Bleu",

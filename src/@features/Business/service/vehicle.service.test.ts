@@ -9,7 +9,7 @@ const mockVehicleData = {
   transmission: "automatic" as const,
   year: 2023,
   energy: "Essence",
-  kms: 5000,
+  km: 5000,
   color: "Noir métallisé",
   place: 5,
   door: 4,

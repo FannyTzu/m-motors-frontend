@@ -10,7 +10,7 @@ interface Vehicle {
   brand: string;
   model: string;
   year: number;
-  kms: number;
+  km: number;
   energy: string;
   transmission: string;
   price: number;
@@ -52,7 +52,7 @@ function DisplayCardVehicle() {
           brand={vehicle.brand}
           model={vehicle.model}
           year={vehicle.year}
-          km={vehicle.kms}
+          km={vehicle.km}
           energy={vehicle.energy}
           transmission={vehicle.transmission}
           price={vehicle.price}

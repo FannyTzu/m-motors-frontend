@@ -12,7 +12,7 @@ interface FormCreateVehicleProps {
   transmission: "manual" | "automatic";
   year: number;
   energy: string;
-  kms: number;
+  km: number;
   color: string;
   place: number;
   door: number;
@@ -33,7 +33,7 @@ function FormCreateVehicle() {
     transmission: "automatic",
     year: new Date().getFullYear(),
     energy: "",
-    kms: 0,
+    km: 0,
     color: "",
     place: 5,
     door: 4,
@@ -52,7 +52,7 @@ function FormCreateVehicle() {
       ...prev,
       [name]:
         name === "year" ||
-        name === "kms" ||
+        name === "km" ||
         name === "place" ||
         name === "door" ||
         name === "price"
@@ -186,14 +186,14 @@ function FormCreateVehicle() {
           </div>
 
           <div className={s.formGroup}>
-            <label htmlFor="kms" className={s.label}>
+            <label htmlFor="km" className={s.label}>
               Kilométrage (km) *
             </label>
             <input
               type="number"
-              id="kms"
-              name="kms"
-              value={formData.kms || ""}
+              id="km"
+              name="km"
+              value={formData.km || ""}
               onChange={handleChange}
               className={s.input}
               min="0"

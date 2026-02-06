@@ -17,7 +17,7 @@ import { mockVehicleDetailedView } from "@/@mocks/mockVehicleDetailedView";
 //   brand: string;
 //   model: string;
 //   year: number;
-//   kms: number;
+//   km: number;
 //   energy: string;
 //   transmission: string;
 //   color: string;
@@ -33,7 +33,7 @@ function DetailsViewPage() {
     brand,
     model,
     year,
-    kms,
+    km,
     energy,
     transmission,
     color,
@@ -80,7 +80,7 @@ function DetailsViewPage() {
               </div>
               <div>Kilométrage</div>
             </div>
-            <div className={s.textIcon}>{kms}</div>
+            <div className={s.textIcon}>{km}</div>
           </div>
           <div className={s.details}>
             <div className={s.icon}>
