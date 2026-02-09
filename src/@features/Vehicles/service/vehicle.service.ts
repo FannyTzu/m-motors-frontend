@@ -135,3 +135,26 @@ export const updateVehicle = async (
     throw error;
   }
 };
+
+export const deleteVehicleById = async (id: number) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/vehicle/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
+
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.message || "Failed to delete vehicle");
+    }
+  } catch (error) {
+    console.error("Error deleting vehicle:", error);
+    throw error;
+  }
+};

@@ -20,6 +20,7 @@ function DisplayCardVehicle() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -37,7 +38,11 @@ function DisplayCardVehicle() {
     };
 
     fetchVehicles();
-  }, []);
+  }, [refresh]);
+
+  const handleVehicleDeleted = () => {
+    setRefresh(!refresh);
+  };
 
   if (loading) return <div>Chargement...</div>;
   if (error) return <div>Erreur: {error}</div>;
@@ -57,6 +62,7 @@ function DisplayCardVehicle() {
           energy={vehicle.energy}
           transmission={vehicle.transmission}
           price={vehicle.price}
+          onDelete={handleVehicleDeleted}
         />
       ))}
     </div>
