@@ -1,5 +1,5 @@
-import VehiclesGrid from "@/@features/Vehicles/component/VehiclesGrid/VehiclesGrid";
 import s from "./page.module.css";
+import DisplayCardVehicle from "@/@features/Vehicles/component/DisplayCardVehicle/DisplayCardVehicle";
 
 export default function Home() {
   return (
@@ -18,7 +18,7 @@ export default function Home() {
         <div>Roulez en sécurité avec notre nouvelle offre.</div>
       </div>
 
-      <VehiclesGrid />
+      <DisplayCardVehicle />
     </div>
   );
 }

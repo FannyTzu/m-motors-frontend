@@ -4,7 +4,7 @@
   background: var(--color-white);
   border-radius: 12px;
   overflow: hidden;
-  height: 390px;
+  height: 380px;
   width: 300px;
 }
 
@@ -68,6 +68,7 @@
   font-weight: 700;
   color: var(--color-black);
   line-height: 1.4;
+  text-transform: capitalize;
 }
 
 .location {
@@ -86,6 +87,7 @@
   padding: 4px;
   background: whitesmoke;
   border-radius: 8px;
+  margin-bottom: 16px;
 }
 
 .infoItem {
@@ -117,9 +119,18 @@
 
 .price {
   margin: 4px 0 0 0;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--color-blue);
+}
+
+.detailsButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: x-small;
+  color: var(--color-gray);
+  gap: 4px;
 }
 
 .button {

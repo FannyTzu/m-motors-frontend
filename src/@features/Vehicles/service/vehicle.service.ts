@@ -91,6 +91,31 @@ export const getVehicleById = async (id: number) => {
   }
 };
 
+export const getVehiclesByType = async (type: "sale" | "rental") => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/vehicle/type/${type}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.message || "Failed to display vehicle by type");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching vehicles by type:", error);
+    throw error;
+  }
+};
+
 export const updateVehicle = async (
   id: number,
   vehicleData: {

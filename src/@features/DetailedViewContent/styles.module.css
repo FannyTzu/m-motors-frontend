@@ -57,6 +57,7 @@
 .textIcon {
   color: var(--color-black);
   font-weight: 450;
+  text-transform: capitalize;
 }
 
 .description {
@@ -64,15 +65,44 @@
   font-style: italic;
 }
 
-.sectionPrice {
-  padding: 16px;
-  border-radius: 8px;
+.financementSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.sectionPrice > div {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--color-blue);
+.sectionPriceTitle {
+  font-size: x-large;
+  font-weight: 700;
+  color: var(--color-black);
+}
+
+.sectionPrice {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 2px solid var(--color-blue);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(14, 165, 233, 0.1);
+}
+
+.priceLabel {
+  color: var(--color-gray);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.priceAmount {
+  font-size: large;
+  font-weight: 700;
+  color: var(--color-blue-dark);
+}
+
+.priceUnit {
+  font-weight: 500;
+  color: var(--color-gray);
 }
 
 .container button {

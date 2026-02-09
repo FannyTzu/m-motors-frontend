@@ -76,9 +76,12 @@ function CardVehicle({
             {price.toLocaleString("fr-FR")} €{isRental && <span> / mois</span>}
           </p>
         </div>
-        <button className={s.button} onClick={handleDetails}>
-          <ArrowBigRight size={16} />
-        </button>
+        <div className={s.detailsButton}>
+          <div>En savoir plus</div>
+          <button className={s.button} onClick={handleDetails}>
+            <ArrowBigRight size={16} />
+          </button>
+        </div>
       </div>
     </div>
   );

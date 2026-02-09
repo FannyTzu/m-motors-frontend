@@ -4,8 +4,8 @@ import Image from "next/image";
 import s from "./styles.module.css";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Modal from "@/@features/Component/Modal/Modal";
 import { deleteVehicleById } from "@/@features/Vehicles/service/vehicle.service";
+import Modal from "@/@Component/Modal/Modal";
 
 interface CardVehicleProps {
   id: number;
@@ -69,6 +69,17 @@ function CardVehicleBusiness({
 
   const isRental = type === "rental";
 
+  const transmissionLabels: Record<string, string> = {
+    automatic: "Automatique",
+    manual: "Manuelle",
+  };
+
+  const statusLabels: Record<string, string> = {
+    available: "Disponible",
+    reserved: "Réservé",
+    sold: "Vendu",
+  };
+
   return (
     <>
       {showModal && (
@@ -97,7 +108,7 @@ function CardVehicleBusiness({
             </h3>
           </div>
           <div className={s.statusSection}>
-            <span className={s.status}>{status}</span>
+            <span className={s.status}>{statusLabels[status] || status}</span>
           </div>
           <div className={s.detailsSection}>
             <div className={s.infoItem}>
@@ -114,7 +125,7 @@ function CardVehicleBusiness({
             </div>
             <div className={s.infoItem}>
               <Settings size={18} />
-              <span>{transmission}</span>
+              <span>{transmissionLabels[transmission] || transmission}</span>
             </div>
             <div className={s.buttonSection}>
               <button
