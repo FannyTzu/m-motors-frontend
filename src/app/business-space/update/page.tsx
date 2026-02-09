@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-function DetailsViewPage() {
+function BusinessSpaceUpdate() {
   const router = useRouter();
 
   useEffect(() => {
@@ -13,4 +13,4 @@ function DetailsViewPage() {
   return null;
 }
 
-export default DetailsViewPage;
+export default BusinessSpaceUpdate;
