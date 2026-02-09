@@ -11,7 +11,7 @@ import {
   DoorOpen,
 } from "lucide-react";
 import Image from "next/image";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getVehicleById } from "@/@features/Vehicles/service/vehicle.service";
 
@@ -30,25 +30,20 @@ interface Vehicle {
   price: number;
 }
 
-function DetailsViewContent() {
-  const searchParams = useSearchParams();
+interface DetailsViewContentProps {
+  vehicleId: number;
+}
+
+function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
   const router = useRouter();
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const id = searchParams.get("id");
-
-    if (!id) {
-      setError("ID du véhicule non fourni");
-      setLoading(false);
-      return;
-    }
-
     const fetchVehicle = async () => {
       try {
-        const data = await getVehicleById(Number(id));
+        const data = await getVehicleById(vehicleId);
         setVehicle(data);
       } catch (err) {
         setError(
@@ -63,7 +58,7 @@ function DetailsViewContent() {
     };
 
     fetchVehicle();
-  }, [searchParams]);
+  }, [vehicleId]);
 
   const handleBack = () => {
     router.back();

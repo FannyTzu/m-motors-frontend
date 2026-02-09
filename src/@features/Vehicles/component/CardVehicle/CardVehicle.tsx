@@ -30,7 +30,7 @@ function CardVehicle({
   const router = useRouter();
 
   const handleDetails = () => {
-    router.push(`/detailed-view?id=${id}`);
+    router.push(`/detailed-view/${id}`);
   };
 
   const typeLabel =

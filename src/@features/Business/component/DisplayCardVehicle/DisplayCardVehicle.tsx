@@ -47,6 +47,7 @@ function DisplayCardVehicle() {
       {vehicles.map((vehicle) => (
         <CardVehicleBusiness
           key={vehicle.id}
+          id={vehicle.id}
           image={vehicle.image || "/carpix.png"}
           status={vehicle.status}
           brand={vehicle.brand}
