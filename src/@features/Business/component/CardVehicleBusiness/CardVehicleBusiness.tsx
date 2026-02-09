@@ -19,6 +19,7 @@ interface CardVehicleProps {
   transmission: string;
   price: number;
   onDelete?: () => void;
+  type: string;
 }
 
 function CardVehicleBusiness({
@@ -33,6 +34,7 @@ function CardVehicleBusiness({
   transmission,
   price,
   onDelete,
+  type,
 }: CardVehicleProps) {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
@@ -64,6 +66,8 @@ function CardVehicleBusiness({
       setIsDeleting(false);
     }
   };
+
+  const isRental = type === "rental";
 
   return (
     <>
@@ -131,7 +135,7 @@ function CardVehicleBusiness({
           </div>
         </div>
         <div className={s.priceSection}>
-          <p className={s.price}>{price.toLocaleString("fr-FR")} €</p>
+          {price.toLocaleString("fr-FR")} €{isRental && <span> / mois</span>}
         </div>
       </div>
     </>

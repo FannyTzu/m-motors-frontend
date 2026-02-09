@@ -14,6 +14,7 @@ interface Vehicle {
   energy: string;
   transmission: string;
   price: number;
+  type: string;
 }
 
 function DisplayCardVehicle() {
@@ -63,6 +64,7 @@ function DisplayCardVehicle() {
           transmission={vehicle.transmission}
           price={vehicle.price}
           onDelete={handleVehicleDeleted}
+          type={vehicle.type}
         />
       ))}
     </div>
