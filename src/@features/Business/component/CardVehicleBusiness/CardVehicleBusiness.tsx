@@ -4,8 +4,8 @@ import Image from "next/image";
 import s from "./styles.module.css";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Modal from "@/@features/Component/Modal/Modal";
 import { deleteVehicleById } from "@/@features/Vehicles/service/vehicle.service";
+import Modal from "@/@Component/Modal/Modal";
 
 interface CardVehicleProps {
   id: number;
