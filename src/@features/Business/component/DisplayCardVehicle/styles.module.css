@@ -1,0 +1,15 @@
+.loading {
+  display: flex;
+  justify-content: start;
+  color: var(--color-gray);
+  margin: 8px;
+  height: 100vh;
+}
+
+.error {
+  display: flex;
+  justify-content: start;
+  color: var(--color-red-info);
+  margin: 8px;
+  height: 100vh;
+}
