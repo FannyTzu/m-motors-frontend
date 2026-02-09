@@ -16,7 +16,7 @@ interface Vehicle {
   price: number;
 }
 
-function VehiclesGrid() {
+function DisplayCardVehicle() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -61,4 +61,4 @@ function VehiclesGrid() {
   );
 }
 
-export default VehiclesGrid;
+export default DisplayCardVehicle;
