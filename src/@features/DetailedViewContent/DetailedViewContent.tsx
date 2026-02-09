@@ -194,21 +194,23 @@ function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
             <div className={s.textIcon}>{place}</div>
           </div>
         </div>
-        <div>
+        <div className={s.financementSection}>
           <h2 className={s.sectionPriceTitle}>Financement</h2>
-          <div>
-            {isRental ? (
-              <div className={s.sectionPrice}>
-                <p>Location longue durée</p>
-                <p>{price} € / mois</p>
+          {isRental ? (
+            <div className={s.sectionPrice}>
+              <div className={s.priceLabel}>Location longue durée</div>
+              <div className={s.priceAmount}>
+                {price.toLocaleString('fr-FR')} €<span className={s.priceUnit}> / mois</span>
               </div>
-            ) : (
-              <div className={s.sectionPrice}>
-                <p>Paiement comptant</p>
-                <p>{price} €</p>
+            </div>
+          ) : (
+            <div className={s.sectionPrice}>
+              <div className={s.priceLabel}>Paiement comptant</div>
+              <div className={s.priceAmount}>
+                {price.toLocaleString('fr-FR')} €
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
         <button>Déposer mon dossier pour ce véhicule</button>
       </div>
