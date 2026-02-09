@@ -74,6 +74,12 @@ function CardVehicleBusiness({
     manual: "Manuelle",
   };
 
+  const statusLabels: Record<string, string> = {
+    available: "Disponible",
+    reserved: "Réservé",
+    sold: "Vendu",
+  };
+
   return (
     <>
       {showModal && (
@@ -102,7 +108,7 @@ function CardVehicleBusiness({
             </h3>
           </div>
           <div className={s.statusSection}>
-            <span className={s.status}>{status}</span>
+            <span className={s.status}>{statusLabels[status] || status}</span>
           </div>
           <div className={s.detailsSection}>
             <div className={s.infoItem}>

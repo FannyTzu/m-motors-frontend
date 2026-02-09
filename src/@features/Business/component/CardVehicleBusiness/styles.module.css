@@ -23,6 +23,7 @@
 .title {
   margin: 0;
   font-weight: 600;
+  text-transform: capitalize;
 }
 
 .detailsSection {

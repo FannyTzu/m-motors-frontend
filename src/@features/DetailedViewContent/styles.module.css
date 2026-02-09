@@ -57,6 +57,7 @@
 .textIcon {
   color: var(--color-black);
   font-weight: 450;
+  text-transform: capitalize;
 }
 
 .description {
