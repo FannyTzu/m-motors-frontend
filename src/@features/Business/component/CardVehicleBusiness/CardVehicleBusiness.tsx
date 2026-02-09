@@ -69,6 +69,11 @@ function CardVehicleBusiness({
 
   const isRental = type === "rental";
 
+  const transmissionLabels: Record<string, string> = {
+    automatic: "Automatique",
+    manual: "Manuelle",
+  };
+
   return (
     <>
       {showModal && (
@@ -114,7 +119,7 @@ function CardVehicleBusiness({
             </div>
             <div className={s.infoItem}>
               <Settings size={18} />
-              <span>{transmission}</span>
+              <span>{transmissionLabels[transmission] || transmission}</span>
             </div>
             <div className={s.buttonSection}>
               <button

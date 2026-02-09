@@ -28,6 +28,7 @@ interface Vehicle {
   place: number;
   description: string;
   price: number;
+  type: string;
 }
 
 interface DetailsViewContentProps {
@@ -64,6 +65,11 @@ function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
     router.back();
   };
 
+  const transmissionLabels: Record<string, string> = {
+    automatic: "Automatique",
+    manual: "Manuelle",
+  };
+
   if (loading) {
     return <div className={s.loading}>Chargement...</div>;
   }
@@ -89,7 +95,11 @@ function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
     place,
     description,
     price,
+    type,
   } = vehicle;
+
+  const isRental = type === "rental";
+
   return (
     <>
       <button className={s.backButton} onClick={handleBack}>
@@ -146,7 +156,9 @@ function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
               </div>
               <div>Transmission</div>
             </div>
-            <div className={s.textIcon}>{transmission}</div>
+            <div className={s.textIcon}>
+              {transmissionLabels[transmission] || transmission}
+            </div>
           </div>
         </div>
         <div>
@@ -182,9 +194,21 @@ function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
             <div className={s.textIcon}>{place}</div>
           </div>
         </div>
-        <div className={s.sectionPrice}>
-          <h2>Financement</h2>
-          <div>paiement comptant ou location longue duréee {price}</div>
+        <div>
+          <h2 className={s.sectionPriceTitle}>Financement</h2>
+          <div>
+            {isRental ? (
+              <div className={s.sectionPrice}>
+                <p>Location longue durée</p>
+                <p>{price} € / mois</p>
+              </div>
+            ) : (
+              <div className={s.sectionPrice}>
+                <p>Paiement comptant</p>
+                <p>{price} €</p>
+              </div>
+            )}
+          </div>
         </div>
         <button>Déposer mon dossier pour ce véhicule</button>
       </div>

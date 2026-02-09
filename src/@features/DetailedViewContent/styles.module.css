@@ -64,15 +64,16 @@
   font-style: italic;
 }
 
-.sectionPrice {
-  padding: 16px;
-  border-radius: 8px;
+.sectionPriceTitle {
+  display: flex;
+  justify-content: center;
+  font-size: x-large;
+  font-weight: 700;
 }
 
-.sectionPrice > div {
-  font-size: 1.2rem;
+.sectionPrice {
+  font-size: large;
   font-weight: 600;
-  color: var(--color-blue);
 }
 
 .container button {
