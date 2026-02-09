@@ -4,7 +4,7 @@ export const createVehicles = async (vehicleData: {
   transmission: "manual" | "automatic";
   year: number;
   energy: string;
-  kms: number;
+  km: number;
   color: string;
   place: number;
   door: number;

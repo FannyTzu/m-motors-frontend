@@ -1,22 +1,22 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import CardVehicleBusiness from "../CardVehicleBusiness/CardVehicleBusiness";
+import CardVehicle from "../CardVehicle/CardVehicle";
+import s from "./styles.module.css";
+import { useEffect, useState } from "react";
 import { getVehicles } from "@/@features/Vehicles/service/vehicle.service";
 
 interface Vehicle {
   id: number;
   image: string;
-  status: string;
+  type: string;
   brand: string;
   model: string;
   year: number;
   km: number;
   energy: string;
-  transmission: string;
   price: number;
 }
 
-function DisplayCardVehicle() {
+function VehiclesGrid() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,20 +41,19 @@ function DisplayCardVehicle() {
 
   if (loading) return <div>Chargement...</div>;
   if (error) return <div>Erreur: {error}</div>;
-
   return (
-    <div>
+    <div className={s.grid}>
       {vehicles.map((vehicle) => (
-        <CardVehicleBusiness
+        <CardVehicle
           key={vehicle.id}
+          id={vehicle.id}
           image={vehicle.image || "/carpix.png"}
-          status={vehicle.status}
+          type={vehicle.type}
           brand={vehicle.brand}
           model={vehicle.model}
           year={vehicle.year}
           km={vehicle.km}
           energy={vehicle.energy}
-          transmission={vehicle.transmission}
           price={vehicle.price}
         />
       ))}
@@ -62,4 +61,4 @@ function DisplayCardVehicle() {
   );
 }
 
-export default DisplayCardVehicle;
+export default VehiclesGrid;

@@ -1,0 +1,7 @@
+.loading {
+  display: flex;
+  justify-content: start;
+  color: var(--color-gray);
+  margin: 8px;
+  height: 100vh;
+}

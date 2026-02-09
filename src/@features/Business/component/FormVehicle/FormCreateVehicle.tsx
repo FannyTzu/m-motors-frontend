@@ -3,7 +3,7 @@ import React from "react";
 import s from "./styles.module.css";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createVehicles } from "@/@features/Business/service/vehicle.service";
+import { createVehicles } from "@/@features/Vehicles/service/vehicle.service";
 import { CircleX } from "lucide-react";
 
 interface FormCreateVehicleProps {
@@ -12,13 +12,14 @@ interface FormCreateVehicleProps {
   transmission: "manual" | "automatic";
   year: number;
   energy: string;
-  kms: number;
+  km: number;
   color: string;
   place: number;
   door: number;
   type: "sale" | "rental";
   price: number;
   image?: string;
+  description?: string;
   status: "available" | "reserved" | "sold";
 }
 
@@ -33,7 +34,7 @@ function FormCreateVehicle() {
     transmission: "automatic",
     year: new Date().getFullYear(),
     energy: "",
-    kms: 0,
+    km: 0,
     color: "",
     place: 5,
     door: 4,
@@ -52,7 +53,7 @@ function FormCreateVehicle() {
       ...prev,
       [name]:
         name === "year" ||
-        name === "kms" ||
+        name === "km" ||
         name === "place" ||
         name === "door" ||
         name === "price"
@@ -186,14 +187,14 @@ function FormCreateVehicle() {
           </div>
 
           <div className={s.formGroup}>
-            <label htmlFor="kms" className={s.label}>
+            <label htmlFor="km" className={s.label}>
               Kilométrage (km) *
             </label>
             <input
               type="number"
-              id="kms"
-              name="kms"
-              value={formData.kms || ""}
+              id="km"
+              name="km"
+              value={formData.km || ""}
               onChange={handleChange}
               className={s.input}
               min="0"
@@ -302,6 +303,22 @@ function FormCreateVehicle() {
               min="0"
               step="0.01"
               placeholder="Ex: 25000"
+              required
+            />
+          </div>
+
+          <div className={s.formGroupDescription}>
+            <label htmlFor="description" className={s.label}>
+              Description
+            </label>
+            <input
+              type="text"
+              id="description"
+              name="description"
+              value={formData.description || ""}
+              onChange={handleChange}
+              className={s.input}
+              placeholder="Ex: ceci est une description plutot courte du véhicule mais vous pouvez en mettre une plus longue"
               required
             />
           </div>
