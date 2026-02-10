@@ -1,0 +1,137 @@
+.backButton {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  color: var(--color-gray);
+  margin-left: 4px;
+  cursor: pointer;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background: var(--color-white);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  height: auto;
+  margin: 0 auto 24px auto;
+  gap: 24px;
+}
+
+.imageSection {
+  height: 500px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.sectionDetails {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: var(--color-blue);
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.textIcon {
+  color: var(--color-black);
+  font-weight: 450;
+  text-transform: capitalize;
+}
+
+.description {
+  color: var(--color-gray);
+  font-style: italic;
+}
+
+.financementSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sectionPriceTitle {
+  font-size: x-large;
+  font-weight: 700;
+  color: var(--color-black);
+}
+
+.sectionPrice {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 2px solid var(--color-blue);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(14, 165, 233, 0.1);
+}
+
+.priceLabel {
+  color: var(--color-gray);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.priceAmount {
+  font-size: large;
+  font-weight: 700;
+  color: var(--color-blue-dark);
+}
+
+.priceUnit {
+  font-weight: 500;
+  color: var(--color-gray);
+}
+
+.container button {
+  padding: 12px 24px;
+  background-color: var(--color-blue);
+  color: var(--color-white);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  align-self: center;
+  width: 100%;
+}
+
+.container button:hover {
+  background-color: var(--color-blue-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+.container button:active {
+  transform: translateY(0);
+}
+
+.loading {
+  display: flex;
+  justify-content: start;
+  color: var(--color-gray);
+  margin: 8px;
+  height: 100vh;
+}

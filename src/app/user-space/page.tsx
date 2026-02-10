@@ -1,8 +1,7 @@
+import ProtectedRoute from "@/@lib/ProtectedRoute";
 
 function UserPage() {
-  return (
-    <div>UserPage</div>
-  )
+  return <ProtectedRoute allowedRoles={["user"]}>UserPage</ProtectedRoute>;
 }
 
-export default UserPage
+export default UserPage;

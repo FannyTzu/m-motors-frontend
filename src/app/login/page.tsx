@@ -7,15 +7,14 @@ import { useState } from "react";
 
 function LoginPage() {
   const router = useRouter();
-  const { login, user } = useAuth();
+  const { login } = useAuth();
   const [error, setError] = useState("");
-
-  const isUser = user?.role === "user";
 
   const handleLogin = async (email: string, password: string) => {
     try {
       setError("");
-      await login(email, password);
+      const { user } = await login(email, password);
+      const isUser = user?.role === "user";
       router.replace(isUser ? "/user-space" : "/business-space");
     } catch (err) {
       if (err instanceof Error) {

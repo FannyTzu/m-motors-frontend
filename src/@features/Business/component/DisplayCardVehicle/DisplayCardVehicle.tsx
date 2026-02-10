@@ -1,65 +1,74 @@
 "use client";
-import CardVehicle from "@/@features/Vehicles/component/CardVehicle/CardVehicle";
-import { getVehiclesByType } from "@/@features/Vehicles/service/vehicle.service";
-import { useEffect, useState } from "react";
-import s from "./styles.module.css";
+import React, { useEffect, useState } from "react";
+import CardVehicleBusiness from "../CardVehicleBusiness/CardVehicleBusiness";
+import { getVehicles } from "@/@features/Vehicles/service/vehicle.service";
 
 interface Vehicle {
   id: number;
   image: string;
-  type: string;
+  status: string;
   brand: string;
   model: string;
   year: number;
   km: number;
   energy: string;
+  transmission: string;
   price: number;
+  type: string;
 }
 
-function RentalPage() {
+function DisplayCardVehicle() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     const fetchVehicles = async () => {
       try {
-        const data = await getVehiclesByType("rental");
+        const data = await getVehicles();
         setVehicles(data);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Erreur lors du chargement"
         );
-        console.error("Error fetching vehicles by type:", err);
+        console.error("Error fetching vehicles:", err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchVehicles();
-  }, []);
+  }, [refresh]);
+
+  const handleVehicleDeleted = () => {
+    setRefresh(!refresh);
+  };
 
   if (loading) return <div>Chargement...</div>;
   if (error) return <div>Erreur: {error}</div>;
 
   return (
-    <div className={s.grid}>
+    <div>
       {vehicles.map((vehicle) => (
-        <CardVehicle
+        <CardVehicleBusiness
           key={vehicle.id}
           id={vehicle.id}
           image={vehicle.image || "/carpix.png"}
-          type={vehicle.type}
+          status={vehicle.status}
           brand={vehicle.brand}
           model={vehicle.model}
           year={vehicle.year}
           km={vehicle.km}
           energy={vehicle.energy}
+          transmission={vehicle.transmission}
           price={vehicle.price}
+          onDelete={handleVehicleDeleted}
+          type={vehicle.type}
         />
       ))}
     </div>
   );
 }
 
-export default RentalPage;
+export default DisplayCardVehicle;
