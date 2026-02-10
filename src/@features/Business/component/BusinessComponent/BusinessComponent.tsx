@@ -1,6 +1,5 @@
 import { useRouter } from "next/navigation";
 import s from "./styles.module.css";
-import React from "react";
 import { Plus } from "lucide-react";
 import DisplayCardVehicle from "../DisplayCardVehicle/DisplayCardVehicle";
 
