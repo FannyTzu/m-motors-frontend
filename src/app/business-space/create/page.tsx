@@ -1,10 +1,11 @@
 import FormCreateVehicle from "@/@features/Business/component/FormVehicle/FormCreateVehicle";
+import ProtectedRoute from "@/@lib/ProtectedRoute";
 
 function createPage() {
   return (
-    <div>
+    <ProtectedRoute allowedRoles={["admin"]}>
       <FormCreateVehicle />
-    </div>
+    </ProtectedRoute>
   );
 }
 
