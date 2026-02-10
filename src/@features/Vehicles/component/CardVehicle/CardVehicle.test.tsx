@@ -10,11 +10,12 @@ jest.mock("next/navigation", () => ({
 type NextImageProps = ImgHTMLAttributes<HTMLImageElement> & {
   src: string;
   alt: string;
+  fill?: boolean;
 };
 
 jest.mock("next/image", () => ({
   __esModule: true,
-  default: ({ src, alt, ...props }: NextImageProps) => {
+  default: ({ src, alt, fill, ...props }: NextImageProps) => {
     // eslint-disable-next-line @next/next/no-img-element
     return <img src={src} alt={alt} {...props} />;
   },
