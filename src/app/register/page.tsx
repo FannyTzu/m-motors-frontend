@@ -15,10 +15,11 @@ function RegisterPage() {
     try {
       setError("");
       setSuccess("");
-      await register(email, password);
+      const { user } = await register(email, password);
       setSuccess("Compte créé avec succès !");
       setTimeout(() => {
-        router.replace("/");
+        const isUser = user?.role === "user";
+        router.replace(isUser ? "/user-space" : "/business-space");
       }, 2000);
     } catch (err) {
       if (err instanceof Error) {
