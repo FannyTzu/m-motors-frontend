@@ -97,7 +97,7 @@ describe("FormEditVehicle", () => {
     });
   });
 
-  it("affiche un chargement au debut", () => {
+  it("display shows a loading state at first", () => {
     mockGetVehicleById.mockImplementation(() => new Promise(() => {}));
 
     render(<FormEditVehicle vehicleId={1} />);
@@ -105,7 +105,7 @@ describe("FormEditVehicle", () => {
     expect(screen.getByText(/Chargement/)).toBeInTheDocument();
   });
 
-  it("prefill le formulaire apres chargement", async () => {
+  it("prefill the form after loading", async () => {
     mockGetVehicleById.mockResolvedValueOnce(mockVehicle);
 
     render(<FormEditVehicle vehicleId={1} />);
@@ -119,17 +119,17 @@ describe("FormEditVehicle", () => {
     expect(screen.getByLabelText(/Année/)).toHaveValue(2020);
   });
 
-  it("affiche une erreur si le chargement echoue", async () => {
-    mockGetVehicleById.mockRejectedValueOnce(new Error("Erreur API"));
+  it("displays an error if loading fails", async () => {
+    mockGetVehicleById.mockRejectedValueOnce(new Error("API Error"));
 
     render(<FormEditVehicle vehicleId={1} />);
 
     await waitFor(() => {
-      expect(screen.getByText(/Erreur API/)).toBeInTheDocument();
+      expect(screen.getByText(/API Error/)).toBeInTheDocument();
     });
   });
 
-  it("soumet les modifications et redirige", async () => {
+  it("submits changes and redirects", async () => {
     mockGetVehicleById.mockResolvedValueOnce(mockVehicle);
     mockUpdateVehicle.mockResolvedValueOnce({ id: 1 });
 
@@ -165,9 +165,9 @@ describe("FormEditVehicle", () => {
     });
   });
 
-  it("affiche une erreur si la sauvegarde echoue", async () => {
+  it("displays an error if saving fails", async () => {
     mockGetVehicleById.mockResolvedValueOnce(mockVehicle);
-    mockUpdateVehicle.mockRejectedValueOnce(new Error("Erreur maj"));
+    mockUpdateVehicle.mockRejectedValueOnce(new Error("Update Error"));
 
     render(<FormEditVehicle vehicleId={1} />);
 
@@ -181,13 +181,13 @@ describe("FormEditVehicle", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/Erreur maj/)).toBeInTheDocument();
+      expect(screen.getByText(/Update Error/)).toBeInTheDocument();
     });
 
     expect(mockPush).not.toHaveBeenCalled();
   });
 
-  it("revient en arriere sur Annuler", async () => {
+  it("go back on Cancel", async () => {
     const backSpy = jest
       .spyOn(window.history, "back")
       .mockImplementation(() => {});

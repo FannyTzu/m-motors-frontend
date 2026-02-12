@@ -20,7 +20,7 @@ describe("AuthContext", () => {
   const wrapper = ({ children }: { children: React.ReactNode }) => (
     <AuthProvider>{children}</AuthProvider>
   );
-  it("le contexte doit se lancer correctement", async () => {
+  it("context must run correctly", async () => {
     const { result } = renderHook(() => useAuthContext(), { wrapper });
     expect(result.current.isLoading).toBe(true);
 
@@ -32,7 +32,7 @@ describe("AuthContext", () => {
     expect(result.current.accessToken).toBeNull();
     expect(result.current.isAuthenticated).toBe(false);
   });
-  it("register met à jour la valeur de user et accessToken", async () => {
+  it("register updates value user and accessToken", async () => {
     mockRegister.mockResolvedValue({
       user: { id: 1, mail: "test@mail.com", role: "user" },
       accessToken: "token123",
@@ -55,7 +55,7 @@ describe("AuthContext", () => {
     expect(result.current.accessToken).toBe("token123");
     expect(result.current.isAuthenticated).toBe(true);
   });
-  it("le login met à jour la valeur user et accessToken", async () => {
+  it("login updates value user and accessToken", async () => {
     mockLogin.mockResolvedValue({
       user: { id: 2, mail: "login@mail.com", role: "admin" },
       accessToken: "token456",
@@ -79,7 +79,7 @@ describe("AuthContext", () => {
     expect(result.current.accessToken).toBe("token456");
     expect(result.current.isAuthenticated).toBe(true);
   });
-  it("logout réinitialise la valeur de user", async () => {
+  it("logout resets the user value", async () => {
     mockLogout.mockResolvedValue({});
 
     const { result } = renderHook(() => useAuthContext(), { wrapper });
@@ -103,7 +103,7 @@ describe("AuthContext", () => {
     expect(result.current.isAuthenticated).toBe(false);
   });
 
-  it("refreshToken met à jour accessToken", async () => {
+  it("refreshToken updates accessToken", async () => {
     mockRefresh.mockResolvedValue({ accessToken: "new-token" });
 
     const { result } = renderHook(() => useAuthContext(), { wrapper });
@@ -119,7 +119,7 @@ describe("AuthContext", () => {
     expect(result.current.accessToken).toBe("new-token");
   });
 
-  it("refreshToken échoue et réinitialise la session", async () => {
+  it("refreshToken fails and resets the session", async () => {
     mockRefresh.mockRejectedValue(new Error("Refresh failed"));
 
     const { result } = renderHook(() => useAuthContext(), { wrapper });
@@ -139,7 +139,7 @@ describe("AuthContext", () => {
     expect(result.current.isAuthenticated).toBe(false);
   });
 
-  it("utiliser le hook sans le contexte remonte une erreur", () => {
+  it("using hook without context throws an error", () => {
     expect(() => {
       renderHook(() => useAuthContext());
     }).toThrow("useAuthContext must be used inside AuthProvider");

@@ -12,7 +12,7 @@ describe("registerRequest", () => {
     jest.clearAllMocks();
   });
 
-  it("retourne les données si l'inscription réussit", async () => {
+  it("returns data if registration succeeds", async () => {
     mockFetch.mockResolvedValue({
       ok: true,
       json: async () => ({ id: 1, email: "test@example.com" }),
@@ -30,7 +30,7 @@ describe("registerRequest", () => {
 
     expect(result).toEqual({ id: 1, email: "test@example.com" });
   });
-  it("throw une erreur si l'API retourne une erreur", async () => {
+  it("throws an error if API returns an error", async () => {
     mockFetch.mockResolvedValue({
       ok: false,
       json: async () => ({ message: "Email déjà utilisé" }),
@@ -40,7 +40,7 @@ describe("registerRequest", () => {
       registerRequest("test@example.com", "password")
     ).rejects.toThrow("Email déjà utilisé");
   });
-  it("retourne les données si le login réussit", async () => {
+  it("return data if login success", async () => {
     mockFetch.mockResolvedValue({
       ok: true,
       json: async () => ({ id: 1 }),
@@ -50,7 +50,7 @@ describe("registerRequest", () => {
 
     expect(result).toEqual({ id: 1 });
   });
-  it("throw une erreur par défaut si aucun message n'est retourné", async () => {
+  it("throws a default error if no message is returned", async () => {
     mockFetch.mockResolvedValue({
       ok: false,
       json: async () => ({}),
@@ -60,7 +60,7 @@ describe("registerRequest", () => {
       loginRequest("test@example.com", "badpassword")
     ).rejects.toThrow("L'identifiant ou le mot de passe est incorrect");
   });
-  it("retourne le user si authenification réussit", async () => {
+  it("returns user if authentication succeeds", async () => {
     mockFetch.mockResolvedValue({
       ok: true,
       json: async () => ({ id: 1, email: "test@example.com" }),
@@ -68,7 +68,7 @@ describe("registerRequest", () => {
     const result = await getMeRequest();
     expect(result).toEqual({ id: 1, email: "test@example.com" });
   });
-  it("throw une erreur si le user n'est pas authentifié", async () => {
+  it("throws an error if user is not authenticated", async () => {
     mockFetch.mockResolvedValue({
       ok: false,
       status: 401,
@@ -76,7 +76,7 @@ describe("registerRequest", () => {
     });
     await expect(getMeRequest()).rejects.toThrow("Not authenticated");
   });
-  it("retourne les données si le refresh token réussit", async () => {
+  it("returns data if refresh token success", async () => {
     mockFetch.mockResolvedValue({
       ok: true,
       json: async () => ({ accessToken: "new-token" }),
@@ -93,7 +93,7 @@ describe("registerRequest", () => {
     );
     expect(result).toEqual({ accessToken: "new-token" });
   });
-  it("throw une erreur si le refresh token échoue", async () => {
+  it("throws an error if refresh token fails", async () => {
     mockFetch.mockResolvedValue({
       ok: false,
       json: async () => ({ message: "Refresh failed" }),
