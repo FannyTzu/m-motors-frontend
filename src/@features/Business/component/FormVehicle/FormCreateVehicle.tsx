@@ -72,7 +72,6 @@ function FormCreateVehicle() {
       console.log("Véhicule créé:", response);
       router.push("/business-space");
     } catch (err) {
-      console.error("Erreur:", err);
       setError(
         err instanceof Error
           ? err.message

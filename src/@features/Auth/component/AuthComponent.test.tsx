@@ -7,7 +7,7 @@ jest.mock("lucide-react", () => ({
 }));
 
 describe("AuthComponent", () => {
-  it("rend correctement pour login", () => {
+  it("renders correctly for login", () => {
     render(<AuthComponent type="login" />);
 
     expect(screen.getByText("Connexion")).toBeInTheDocument();
@@ -17,7 +17,7 @@ describe("AuthComponent", () => {
     expect(screen.getByText("S'inscrire")).toBeInTheDocument();
   });
 
-  it("render correcte pour register", () => {
+  it("renders correctly for register", () => {
     render(<AuthComponent type="register" />);
 
     expect(screen.getByText("Créer un compte")).toBeInTheDocument();
@@ -29,7 +29,7 @@ describe("AuthComponent", () => {
     expect(screen.getByText("Se connecter")).toBeInTheDocument();
   });
 
-  it("met à jour les inputs et appelle onSubmit", () => {
+  it("updates inputs and calls onSubmit", () => {
     const handleSubmit = jest.fn();
     render(<AuthComponent type="login" onSubmit={handleSubmit} />);
 
@@ -44,7 +44,7 @@ describe("AuthComponent", () => {
     expect(handleSubmit).toHaveBeenCalledWith("test@mail.com", "password123");
   });
 
-  it("affiche un message d'erreur et succès", () => {
+  it("displays error and success messages", () => {
     render(
       <AuthComponent
         type="login"
@@ -59,7 +59,7 @@ describe("AuthComponent", () => {
     expect(screen.getByText("CheckCircle")).toBeInTheDocument();
   });
 
-  it("appelle redirectionUrl au click", () => {
+  it("calls redirectionUrl on click", () => {
     const redirect = jest.fn();
     render(<AuthComponent type="login" redirectionUrl={redirect} />);
 

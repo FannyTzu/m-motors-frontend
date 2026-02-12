@@ -21,15 +21,13 @@ describe("DisplayCardVehicle", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-
-  it("affiche un loader pendant le chargement", () => {
+  it("display loader during loading", () => {
     mockGetVehicles.mockImplementation(() => new Promise(() => {}));
-
     render(<DisplayCardVehicle />);
     expect(screen.getByText("Chargement...")).toBeInTheDocument();
   });
 
-  it("affiche les véhicules après le chargement", async () => {
+  it("display vehicles after loadnig", async () => {
     const mockVehicles = [
       {
         id: 1,
@@ -69,7 +67,7 @@ describe("DisplayCardVehicle", () => {
     expect(screen.getByText("BMXX Cargo")).toBeInTheDocument();
   });
 
-  it("affiche un message d'erreur en cas d'échec", async () => {
+  it("display error message if fail", async () => {
     const errorMessage = "Erreur réseau";
     mockGetVehicles.mockRejectedValueOnce(new Error(errorMessage));
 
@@ -81,12 +79,9 @@ describe("DisplayCardVehicle", () => {
 
     expect(screen.queryByText("Chargement...")).not.toBeInTheDocument();
   });
-
-  it("affiche un message d'erreur générique si l'erreur n'est pas une instance Error", async () => {
-    mockGetVehicles.mockRejectedValueOnce("Erreur inconnue");
-
+  it("display generic error message if error is not an instance of Error", async () => {
+    mockGetVehicles.mockRejectedValueOnce("Unknown error");
     render(<DisplayCardVehicle />);
-
     await waitFor(() => {
       expect(
         screen.getByText("Erreur: Erreur lors du chargement")
@@ -94,7 +89,7 @@ describe("DisplayCardVehicle", () => {
     });
   });
 
-  it("affiche une liste vide si aucun véhicule n'est retourné", async () => {
+  it("display empty list if no vehicles are returned", async () => {
     mockGetVehicles.mockResolvedValueOnce([]);
 
     render(<DisplayCardVehicle />);
@@ -107,7 +102,7 @@ describe("DisplayCardVehicle", () => {
     expect(cards).toHaveLength(0);
   });
 
-  it("passe l'image par défaut si le véhicule n'a pas d'image", async () => {
+  it("default image if vehicle are no image", async () => {
     const mockVehicles = [
       {
         id: 1,

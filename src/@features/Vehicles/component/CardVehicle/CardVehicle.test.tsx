@@ -48,10 +48,8 @@ describe("CardVehicle", () => {
     energy: "Essence",
     price: 35000,
   };
-
-  it("affiche correctement toutes les informations du véhicule", () => {
+  it(" display correctly all data vehicles", () => {
     render(<CardVehicle {...defaultProps} />);
-
     expect(screen.getByAltText("Opria S2")).toBeInTheDocument();
     expect(screen.getByText("Opria S2")).toBeInTheDocument();
     expect(screen.getByText("2023")).toBeInTheDocument();
@@ -60,39 +58,34 @@ describe("CardVehicle", () => {
     expect(screen.getByText("35 000 €")).toBeInTheDocument();
   });
 
-  it("affiche 'Vente' pour un type 'sale'", () => {
+  it("display 'Vente' for type 'sale'", () => {
     render(<CardVehicle {...defaultProps} type="sale" />);
 
     expect(screen.getByText("Vente")).toBeInTheDocument();
   });
 
-  it("affiche 'Location LLD' pour un type 'rental'", () => {
+  it("display 'Location LLD' for type 'rental'", () => {
     render(<CardVehicle {...defaultProps} type="rental" />);
 
     expect(screen.getByText("Location LLD")).toBeInTheDocument();
   });
-
-  it("affiche ' / mois' pour les véhicules en location", () => {
+  it("display ' / mois' for rental vehicles", () => {
     render(<CardVehicle {...defaultProps} type="rental" price={500} />);
-
     expect(screen.getByText("500 €")).toBeInTheDocument();
     expect(screen.getByText("/ mois")).toBeInTheDocument();
   });
-
-  it("n'affiche pas ' / mois' pour les véhicules à la vente", () => {
+  it("don't display ' / mois' for sale vehicles", () => {
     render(<CardVehicle {...defaultProps} type="sale" />);
-
     expect(screen.queryByText("/ mois")).not.toBeInTheDocument();
   });
-
-  it("affiche l'image avec le bon src et alt", () => {
+  it("display image with good src and alt", () => {
     render(<CardVehicle {...defaultProps} />);
 
     const image = screen.getByAltText("Opria S2");
     expect(image).toHaveAttribute("src", "/car.jpg");
   });
 
-  it("affiche toutes les icônes d'information", () => {
+  it("display all icons", () => {
     render(<CardVehicle {...defaultProps} />);
 
     expect(screen.getByTestId("calendar-icon")).toBeInTheDocument();
@@ -101,31 +94,25 @@ describe("CardVehicle", () => {
     expect(screen.getByTestId("arrow-icon")).toBeInTheDocument();
   });
 
-  it("affiche le label 'À partir de'", () => {
+  it("display label 'À partir de'", () => {
     render(<CardVehicle {...defaultProps} />);
 
     expect(screen.getByText("À partir de")).toBeInTheDocument();
   });
-
-  it("affiche le texte 'En savoir plus'", () => {
+  it("display text 'En savoir plus'", () => {
     render(<CardVehicle {...defaultProps} />);
-
     expect(screen.getByText("En savoir plus")).toBeInTheDocument();
   });
-
-  it("gere un prix a 0", () => {
+  it("price 0", () => {
     render(<CardVehicle {...defaultProps} price={0} />);
 
     expect(screen.getByText("0 €")).toBeInTheDocument();
   });
-
-  it("gère des km élevés", () => {
+  it("high km", () => {
     render(<CardVehicle {...defaultProps} km={150000} />);
-
     expect(screen.getByText("150000 km")).toBeInTheDocument();
   });
-
-  it("navigue avec le bon ID pour différents véhicules", () => {
+  it("navigate with good ID for different vehicles", () => {
     const { rerender } = render(<CardVehicle {...defaultProps} id={42} />);
 
     const button = screen.getByRole("button");

@@ -1,4 +1,4 @@
-import ProtectedRoute from "@/@lib/ProtectedRoute";
+import ProtectedRoute from "@/@utils/ProtectedRoute";
 
 function UserPage() {
   return <ProtectedRoute allowedRoles={["user"]}>UserPage</ProtectedRoute>;

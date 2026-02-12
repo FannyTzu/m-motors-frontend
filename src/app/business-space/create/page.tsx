@@ -1,5 +1,5 @@
 import FormCreateVehicle from "@/@features/Business/component/FormVehicle/FormCreateVehicle";
-import ProtectedRoute from "@/@lib/ProtectedRoute";
+import ProtectedRoute from "@/@utils/ProtectedRoute";
 
 function createPage() {
   return (
