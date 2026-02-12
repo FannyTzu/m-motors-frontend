@@ -30,7 +30,6 @@ function DisplayCardVehicle() {
         setError(
           err instanceof Error ? err.message : "Erreur lors du chargement"
         );
-        console.error("Error fetching vehicles:", err);
       } finally {
         setLoading(false);
       }

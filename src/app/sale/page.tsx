@@ -30,7 +30,6 @@ function SalePage() {
         setError(
           err instanceof Error ? err.message : "Erreur lors du chargement"
         );
-        console.error("Error fetching vehicles by type:", err);
       } finally {
         setLoading(false);
       }
