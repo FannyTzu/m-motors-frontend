@@ -7,6 +7,8 @@ import {
   getMeRequest,
   refreshTokenRequest,
 } from "../service/auth.service";
+import { catchAsync } from "@/@utils/catchAsync";
+import * as Sentry from "@sentry/nextjs";
 
 type User = {
   id: number;
@@ -33,6 +35,10 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
+function addBreadcrumb(message: string, category: string = "auth") {
+  Sentry.addBreadcrumb({ message, category, level: "info" });
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -54,34 +60,47 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const register = async (email: string, password: string) => {
-    const { user, accessToken } = await registerRequest(email, password);
+    addBreadcrumb("Auth register", "auth");
+    const { user, accessToken } = await catchAsync(
+      () => registerRequest(email, password),
+      {
+        tags: { feature: "auth", action: "register" },
+        extra: { email },
+      }
+    );
     setUser(user);
     setAccessToken(accessToken);
     return { user, accessToken };
   };
 
   const login = async (email: string, password: string) => {
-    const { user, accessToken } = await loginRequest(email, password);
+    addBreadcrumb("Auth login", "auth");
+    const { user, accessToken } = await catchAsync(
+      () => loginRequest(email, password),
+      {
+        tags: { feature: "auth", action: "login" },
+        extra: { email },
+      }
+    );
     setUser(user);
     setAccessToken(accessToken);
     return { user, accessToken };
   };
 
   const logout = async () => {
-    await logoutRequest();
+    addBreadcrumb("Auth logout", "auth");
+    await catchAsync(() => logoutRequest(), {
+      tags: { feature: "auth", action: "logout" },
+    });
     setUser(null);
     setAccessToken(null);
   };
 
   const refreshToken = async () => {
-    try {
-      const { accessToken } = await refreshTokenRequest();
-      setAccessToken(accessToken);
-    } catch (error) {
-      setUser(null);
-      setAccessToken(null);
-      throw error;
-    }
+    const newTokenData = await catchAsync(() => refreshTokenRequest(), {
+      tags: { feature: "auth", action: "refreshToken" },
+    });
+    setAccessToken(newTokenData.accessToken);
   };
 
   const isAuthenticated = !!user;
