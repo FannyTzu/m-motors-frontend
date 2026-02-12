@@ -9,6 +9,7 @@ import {
 } from "../service/auth.service";
 import { catchAsync } from "@/@utils/catchAsync";
 import { addBreadcrumb } from "@/@utils/sentry";
+import * as Sentry from "@sentry/nextjs";
 
 type User = {
   id: number;
@@ -45,8 +46,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         const userData = await getMeRequest();
         setUser(userData);
+        Sentry.setUser({
+          id: userData.id.toString(),
+          email: userData.mail,
+          role: userData.role,
+        });
       } catch {
         setUser(null);
+        Sentry.setUser(null);
       } finally {
         setIsLoading(false);
       }
@@ -66,6 +73,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     );
     setUser(user);
     setAccessToken(accessToken);
+    Sentry.setUser({
+      id: user.id.toString(),
+      email: user.mail,
+      role: user.role,
+    });
     return { user, accessToken };
   };
 
@@ -80,6 +92,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     );
     setUser(user);
     setAccessToken(accessToken);
+    Sentry.setUser({
+      id: user.id.toString(),
+      email: user.mail,
+      role: user.role,
+    });
     return { user, accessToken };
   };
 
@@ -90,6 +107,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
     setUser(null);
     setAccessToken(null);
+    Sentry.setUser(null);
   };
 
   const refreshToken = async () => {
