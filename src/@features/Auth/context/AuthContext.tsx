@@ -8,7 +8,7 @@ import {
   refreshTokenRequest,
 } from "../service/auth.service";
 import { catchAsync } from "@/@utils/catchAsync";
-import * as Sentry from "@sentry/nextjs";
+import { addBreadcrumb } from "@/@utils/sentry";
 
 type User = {
   id: number;
@@ -34,10 +34,6 @@ type AuthContextType = {
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
-
-function addBreadcrumb(message: string, category: string = "auth") {
-  Sentry.addBreadcrumb({ message, category, level: "info" });
-}
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);

@@ -1,3 +1,5 @@
+import { catchAsync } from "@/@utils/catchAsync";
+
 export const createVehicles = async (vehicleData: {
   brand: string;
   model: string;
@@ -13,107 +15,115 @@ export const createVehicles = async (vehicleData: {
   image?: string;
   status: "available" | "reserved" | "sold";
 }) => {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/vehicle/create`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(vehicleData),
+  return catchAsync(
+    async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/vehicle/create`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(vehicleData),
+        }
+      );
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.message || "Failed to create vehicle");
       }
-    );
 
-    if (!response.ok) {
-      const err = await response.json();
-      throw new Error(err.message || "Failed to create vehicle");
+      return await response.json();
+    },
+    {
+      tags: { service: "vehicle", action: "create" },
+      extra: { brand: vehicleData.brand, model: vehicleData.model },
     }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error creating vehicle:", error);
-    throw error;
-  }
+  );
 };
 
 export const getVehicles = async () => {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/vehicle/`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
+  return catchAsync(
+    async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/vehicle/`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.message || "Failed to fetch vehicles");
       }
-    );
 
-    if (!response.ok) {
-      const err = await response.json();
-      throw new Error(err.message || "Failed to fetch vehicles");
+      return await response.json();
+    },
+    {
+      tags: { service: "vehicle", action: "getAll" },
     }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching vehicles:", error);
-    throw error;
-  }
+  );
 };
 
 export const getVehicleById = async (id: number) => {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/vehicle/${id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
+  return catchAsync(
+    async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/vehicle/${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.message || "Failed to fetch vehicle");
       }
-    );
 
-    if (!response.ok) {
-      const err = await response.json();
-      throw new Error(err.message || "Failed to fetch vehicle");
+      return await response.json();
+    },
+    {
+      tags: { service: "vehicle", action: "getById" },
+      extra: { id },
     }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching vehicle:", error);
-    throw error;
-  }
+  );
 };
 
 export const getVehiclesByType = async (type: "sale" | "rental") => {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/vehicle/type/${type}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    );
-    if (!response.ok) {
-      const err = await response.json();
-      throw new Error(err.message || "Failed to display vehicle by type");
-    }
+  return catchAsync(
+    async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/vehicle/type/${type}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
 
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching vehicles by type:", error);
-    throw error;
-  }
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.message || "Failed to display vehicle by type");
+      }
+
+      return await response.json();
+    },
+    {
+      tags: { service: "vehicle", action: "getByType" },
+      extra: { type },
+    }
+  );
 };
 
 export const updateVehicle = async (
@@ -135,51 +145,56 @@ export const updateVehicle = async (
     status: "available" | "reserved" | "sold";
   }
 ) => {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/vehicle/${id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(vehicleData),
+  return catchAsync(
+    async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/vehicle/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(vehicleData),
+        }
+      );
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.message || "Failed to update vehicle");
       }
-    );
 
-    if (!response.ok) {
-      const err = await response.json();
-      throw new Error(err.message || "Failed to update vehicle");
+      return await response.json();
+    },
+    {
+      tags: { service: "vehicle", action: "update" },
+      extra: { id, brand: vehicleData.brand, model: vehicleData.model },
     }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error updating vehicle:", error);
-    throw error;
-  }
+  );
 };
 
 export const deleteVehicleById = async (id: number) => {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/vehicle/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    );
+  return catchAsync(
+    async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/vehicle/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
 
-    if (!response.ok) {
-      const err = await response.json();
-      throw new Error(err.message || "Failed to delete vehicle");
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.message || "Failed to delete vehicle");
+      }
+    },
+    {
+      tags: { service: "vehicle", action: "delete" },
+      extra: { id },
     }
-  } catch (error) {
-    console.error("Error deleting vehicle:", error);
-    throw error;
-  }
+  );
 };
