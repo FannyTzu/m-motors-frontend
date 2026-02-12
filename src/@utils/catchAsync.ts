@@ -20,7 +20,12 @@ export async function catchAsync<T>(
     const isBusinessError =
       ignoreBusinessErrors &&
       error instanceof Error &&
-      error.message?.includes("400|401");
+      (error.message?.includes("identifiant") ||
+        error.message?.includes("mot de passe") ||
+        error.message?.includes("incorrect") ||
+        error.message?.includes("Not authenticated") ||
+        error.message?.includes("Enregistrement échoué") ||
+        error.message?.match(/400|401|403|422/));
 
     if (!isBusinessError) {
       Sentry.captureException(error, {

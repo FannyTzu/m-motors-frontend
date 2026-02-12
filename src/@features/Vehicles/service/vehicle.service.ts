@@ -31,7 +31,7 @@ export const createVehicles = async (vehicleData: {
 
       if (!response.ok) {
         const err = await response.json();
-        throw new Error(err.message || "Failed to create vehicle");
+        throw new Error(err.message || "Impossible de créer le véhicule");
       }
 
       return await response.json();
@@ -59,7 +59,7 @@ export const getVehicles = async () => {
 
       if (!response.ok) {
         const err = await response.json();
-        throw new Error(err.message || "Failed to fetch vehicles");
+        throw new Error(err.message || "Impossible de récupérer les véhicules");
       }
 
       return await response.json();
@@ -86,7 +86,7 @@ export const getVehicleById = async (id: number) => {
 
       if (!response.ok) {
         const err = await response.json();
-        throw new Error(err.message || "Failed to fetch vehicle");
+        throw new Error(err.message || "Impossible de récupérer les véhicules");
       }
 
       return await response.json();
@@ -114,7 +114,9 @@ export const getVehiclesByType = async (type: "sale" | "rental") => {
 
       if (!response.ok) {
         const err = await response.json();
-        throw new Error(err.message || "Failed to display vehicle by type");
+        throw new Error(
+          err.message || "Impossible d'afficher le véhicule par type"
+        );
       }
 
       return await response.json();
@@ -161,7 +163,7 @@ export const updateVehicle = async (
 
       if (!response.ok) {
         const err = await response.json();
-        throw new Error(err.message || "Failed to update vehicle");
+        throw new Error(err.message || "Mise à jour impossible");
       }
 
       return await response.json();
@@ -189,7 +191,7 @@ export const deleteVehicleById = async (id: number) => {
 
       if (!response.ok) {
         const err = await response.json();
-        throw new Error(err.message || "Failed to delete vehicle");
+        throw new Error(err.message || "Suppression impossible");
       }
     },
     {
