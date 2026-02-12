@@ -32,7 +32,7 @@ export const registerRequest = async (email: string, password: string) => {
 
   if (!response.ok) {
     const err = await response.json();
-    throw new Error(err.message || "Register failed");
+    throw new Error(err.message || "Enregistrement échoué");
   }
 
   const data = await response.json();

@@ -1,6 +1,6 @@
 "use client";
 import FormEditVehicle from "@/@features/Business/component/FormVehicle/FormEditVehicle";
-import ProtectedRoute from "@/@lib/ProtectedRoute";
+import ProtectedRoute from "@/@utils/ProtectedRoute";
 import { useParams } from "next/navigation";
 
 function EditPage() {

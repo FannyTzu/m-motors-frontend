@@ -2,7 +2,7 @@
 import BusinessComponent from "@/@features/Business/component/BusinessComponent/BusinessComponent";
 import { useState } from "react";
 import s from "./styles.module.css";
-import ProtectedRoute from "@/@lib/ProtectedRoute";
+import ProtectedRoute from "@/@utils/ProtectedRoute";
 
 function BusinessPage() {
   const [activeTab, setActiveTab] = useState<"vehicles" | "clients">(

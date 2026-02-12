@@ -7,6 +7,9 @@ import {
   getMeRequest,
   refreshTokenRequest,
 } from "../service/auth.service";
+import { catchAsync } from "@/@utils/catchAsync";
+import { addBreadcrumb } from "@/@utils/sentry";
+import * as Sentry from "@sentry/nextjs";
 
 type User = {
   id: number;
@@ -43,8 +46,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         const userData = await getMeRequest();
         setUser(userData);
+        Sentry.setUser({
+          id: userData.id.toString(),
+          email: userData.mail,
+          role: userData.role,
+        });
       } catch {
         setUser(null);
+        Sentry.setUser(null);
       } finally {
         setIsLoading(false);
       }
@@ -54,34 +63,58 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const register = async (email: string, password: string) => {
-    const { user, accessToken } = await registerRequest(email, password);
+    addBreadcrumb("Auth register", "auth");
+    const { user, accessToken } = await catchAsync(
+      () => registerRequest(email, password),
+      {
+        tags: { feature: "auth", action: "register" },
+        extra: { email },
+      }
+    );
     setUser(user);
     setAccessToken(accessToken);
+    Sentry.setUser({
+      id: user.id.toString(),
+      email: user.mail,
+      role: user.role,
+    });
     return { user, accessToken };
   };
 
   const login = async (email: string, password: string) => {
-    const { user, accessToken } = await loginRequest(email, password);
+    addBreadcrumb("Auth login", "auth");
+    const { user, accessToken } = await catchAsync(
+      () => loginRequest(email, password),
+      {
+        tags: { feature: "auth", action: "login" },
+        extra: { email },
+      }
+    );
     setUser(user);
     setAccessToken(accessToken);
+    Sentry.setUser({
+      id: user.id.toString(),
+      email: user.mail,
+      role: user.role,
+    });
     return { user, accessToken };
   };
 
   const logout = async () => {
-    await logoutRequest();
+    addBreadcrumb("Auth logout", "auth");
+    await catchAsync(() => logoutRequest(), {
+      tags: { feature: "auth", action: "logout" },
+    });
     setUser(null);
     setAccessToken(null);
+    Sentry.setUser(null);
   };
 
   const refreshToken = async () => {
-    try {
-      const { accessToken } = await refreshTokenRequest();
-      setAccessToken(accessToken);
-    } catch (error) {
-      setUser(null);
-      setAccessToken(null);
-      throw error;
-    }
+    const newTokenData = await catchAsync(() => refreshTokenRequest(), {
+      tags: { feature: "auth", action: "refreshToken" },
+    });
+    setAccessToken(newTokenData.accessToken);
   };
 
   const isAuthenticated = !!user;

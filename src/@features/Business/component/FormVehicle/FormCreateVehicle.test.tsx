@@ -71,9 +71,14 @@ describe("FormCreateVehicle", () => {
     (useRouter as jest.Mock).mockReturnValue({
       push: mockPush,
     });
+    jest.spyOn(console, "error").mockImplementation(() => {});
   });
 
-  it("soumet le formulaire et redirige", async () => {
+  afterEach(() => {
+    (console.error as jest.Mock).mockRestore();
+  });
+
+  it(" submit submits form and redirects", async () => {
     mockCreateVehicles.mockResolvedValueOnce({ id: 1 });
 
     render(<FormCreateVehicle />);
@@ -104,7 +109,7 @@ describe("FormCreateVehicle", () => {
     });
   });
 
-  it("affiche une erreur si la creation echoue", async () => {
+  it(" displays an error if creation fails", async () => {
     mockCreateVehicles.mockRejectedValueOnce(new Error("Erreur API"));
 
     render(<FormCreateVehicle />);
@@ -119,8 +124,8 @@ describe("FormCreateVehicle", () => {
     expect(mockPush).not.toHaveBeenCalled();
   });
 
-  it("affiche un message generique si l'erreur n'est pas un Error", async () => {
-    mockCreateVehicles.mockRejectedValueOnce("Erreur inconnue");
+  it(" displays a generic message if the error isn't an Error", async () => {
+    mockCreateVehicles.mockRejectedValueOnce("Unknown error");
 
     render(<FormCreateVehicle />);
     fillForm();
@@ -128,11 +133,13 @@ describe("FormCreateVehicle", () => {
     fireEvent.submit(screen.getByRole("button", { name: /Enregistrer/ }));
 
     await waitFor(() => {
-      expect(screen.getByText(/Erreur lors/)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Erreur lors de la création du véhicule/)
+      ).toBeInTheDocument();
     });
   });
 
-  it("change le label du prix pour la location", () => {
+  it("change label price for rental", () => {
     render(<FormCreateVehicle />);
 
     const priceLabel = screen.getByText(/Prix/);
@@ -145,7 +152,7 @@ describe("FormCreateVehicle", () => {
     expect(screen.getByText(/Prix/)).toHaveTextContent(/mois/);
   });
 
-  it("revient en arriere sur Annuler", () => {
+  it("go back on Cancel", () => {
     const backSpy = jest
       .spyOn(window.history, "back")
       .mockImplementation(() => {});

@@ -42,3 +42,9 @@ next-env.d.ts
 
 # param vscode 
 settings.json
+
+# config Sentry
+SENTRY.md
+
+# Sentry Config File
+.env.sentry-build-plugin

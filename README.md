@@ -31,7 +31,7 @@ production => npm start
 src/
 ├── @features/
 ├── @hooks/
-├── @lib/
+├── @utils/
 ├── @mocks/
 ├── @provider/
 ├── @schemas/

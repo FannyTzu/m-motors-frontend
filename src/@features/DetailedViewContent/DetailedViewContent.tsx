@@ -52,7 +52,6 @@ function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
             ? err.message
             : "Erreur lors du chargement du véhicule"
         );
-        console.error("Error fetching vehicle:", err);
       } finally {
         setLoading(false);
       }
@@ -200,14 +199,15 @@ function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
             <div className={s.sectionPrice}>
               <div className={s.priceLabel}>Location longue durée</div>
               <div className={s.priceAmount}>
-                {price.toLocaleString('fr-FR')} €<span className={s.priceUnit}> / mois</span>
+                {price.toLocaleString("fr-FR")} €
+                <span className={s.priceUnit}> / mois</span>
               </div>
             </div>
           ) : (
             <div className={s.sectionPrice}>
               <div className={s.priceLabel}>Paiement comptant</div>
               <div className={s.priceAmount}>
-                {price.toLocaleString('fr-FR')} €
+                {price.toLocaleString("fr-FR")} €
               </div>
             </div>
           )}

@@ -130,15 +130,15 @@
   justify-content: space-between;
   font-size: x-small;
   color: var(--color-gray);
-  gap: 4px;
+  gap: 6px;
 }
 
 .button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 32px;
+  height: 32px;
   background: var(--color-blue);
   border: none;
   border-radius: 50%;

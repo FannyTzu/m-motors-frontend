@@ -60,7 +60,6 @@ function FormEditVehicle({ vehicleId }: FormEditVehicleProps) {
         const data = await getVehicleById(vehicleId);
         setFormData(data);
       } catch (err) {
-        console.error("Erreur:", err);
         setError(
           err instanceof Error ? err.message : "Erreur lors du chargement"
         );
@@ -100,7 +99,6 @@ function FormEditVehicle({ vehicleId }: FormEditVehicleProps) {
       console.log("Véhicule modifié:", formData);
       router.push("/business-space");
     } catch (err) {
-      console.error("Erreur:", err);
       setError(
         err instanceof Error
           ? err.message
