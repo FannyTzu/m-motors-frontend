@@ -59,7 +59,7 @@ describe("createVehicles", () => {
   it("throws a generic error if the response has no message", async () => {
     mockFetch.mockResolvedValueOnce({ ok: false, json: async () => ({}) });
     await expect(createVehicles(mockVehicleData)).rejects.toThrow(
-      "Failed to create vehicle"
+      "Impossible de créer le véhicule"
     );
   });
   it("send correct data to the server", async () => {
