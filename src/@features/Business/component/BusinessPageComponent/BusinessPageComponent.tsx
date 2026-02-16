@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import s from "./styles.module.css";
-import BusinessComponent from "../BusinessComponent/BusinessComponent";
+import VehicleCatalogComponent from "../VehicleCatalogComponent/VehicleCatalogComponent";
 
 function BusinessPageComponent() {
   const [activeTab, setActiveTab] = useState<"vehicles" | "clients">(
@@ -32,7 +32,7 @@ function BusinessPageComponent() {
         <div>
           {activeTab === "vehicles" && (
             <div>
-              <BusinessComponent />
+              <VehicleCatalogComponent />
             </div>
           )}
           {activeTab === "clients" && (

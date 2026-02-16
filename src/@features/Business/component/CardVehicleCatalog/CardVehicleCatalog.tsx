@@ -22,7 +22,7 @@ interface CardVehicleProps {
   type: string;
 }
 
-function CardVehicleBusiness({
+function CardVehicleCatalog({
   id,
   image,
   status,
@@ -153,4 +153,4 @@ function CardVehicleBusiness({
   );
 }
 
-export default CardVehicleBusiness;
+export default CardVehicleCatalog;
