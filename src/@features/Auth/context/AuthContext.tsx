@@ -15,6 +15,10 @@ type User = {
   id: number;
   mail: string;
   role: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  address?: string;
 };
 
 type AuthContextType = {

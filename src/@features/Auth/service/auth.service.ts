@@ -2,6 +2,10 @@ type User = {
   id: number;
   mail: string;
   role: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  address?: string;
 };
 
 let accessToken: string | null = null;
