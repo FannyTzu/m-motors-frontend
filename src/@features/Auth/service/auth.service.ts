@@ -89,6 +89,23 @@ export const getMeRequest = async (): Promise<User> => {
   return response.json();
 };
 
+export const updateMeRequest = async (data: Partial<User>) => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update user information");
+  }
+
+  return response.json();
+};
+
 export const logoutRequest = async () => {
   clearAccessToken();
   await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {

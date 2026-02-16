@@ -10,6 +10,7 @@ import {
 import { catchAsync } from "@/@utils/catchAsync";
 import { addBreadcrumb } from "@/@utils/sentry";
 import * as Sentry from "@sentry/nextjs";
+import { updateMeRequest } from "../service/auth.service";
 
 type User = {
   id: number;
@@ -36,6 +37,7 @@ type AuthContextType = {
   ) => Promise<{ user: User; accessToken: string }>;
   logout: () => Promise<void>;
   refreshToken: () => Promise<void>;
+  updateUser: (data: Partial<User>) => Promise<User>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -121,6 +123,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setAccessToken(newTokenData.accessToken);
   };
 
+  const updateUser = async (data: Partial<User>) => {
+    const updatedUser = await catchAsync(() => updateMeRequest(data), {
+      tags: { feature: "auth", action: "updateUser" },
+    });
+    setUser(updatedUser);
+    Sentry.setUser({
+      id: updatedUser.id.toString(),
+      email: updatedUser.mail,
+      role: updatedUser.role,
+    });
+    return updatedUser;
+  };
+
   const isAuthenticated = !!user;
 
   return (
@@ -134,6 +149,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         logout,
         refreshToken,
+        updateUser,
       }}
     >
       {children}
