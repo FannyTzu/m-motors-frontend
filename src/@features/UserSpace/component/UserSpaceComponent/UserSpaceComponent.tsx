@@ -1,8 +1,9 @@
 "use client";
-import { useAuth } from "../Auth/hook/useAuth";
-import { ArrowLeft } from "lucide-react";
+
 import s from "./styles.module.css";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/@features/Auth/hook/useAuth";
+import ArrowBack from "@/@Component/ArrowBack/ArrowBack";
 
 function UserSpaceComponent() {
   const router = useRouter();
@@ -16,16 +17,9 @@ function UserSpaceComponent() {
     router.push("/user-space/contact-details");
   };
 
-  const handleBack = () => {
-    router.back();
-  };
-
   return (
     <div>
-      <button className={s.backButton} onClick={handleBack}>
-        <ArrowLeft />
-        Retour
-      </button>
+      <ArrowBack />
       <div className={s.container}>
         <header className={s.header}>
           <h1 className={s.title}>Mon espace personnel</h1>

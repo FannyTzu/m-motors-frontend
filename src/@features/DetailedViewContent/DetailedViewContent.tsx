@@ -1,7 +1,6 @@
 "use client";
 import s from "./styles.module.css";
 import {
-  ArrowLeft,
   CalendarDays,
   Fuel,
   Gauge,
@@ -14,6 +13,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getVehicleById } from "@/@features/Vehicles/service/vehicle.service";
+import ArrowBack from "@/@Component/ArrowBack/ArrowBack";
 
 interface Vehicle {
   image: string;
@@ -60,10 +60,6 @@ function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
     fetchVehicle();
   }, [vehicleId]);
 
-  const handleBack = () => {
-    router.back();
-  };
-
   const transmissionLabels: Record<string, string> = {
     automatic: "Automatique",
     manual: "Manuelle",
@@ -101,10 +97,7 @@ function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
 
   return (
     <>
-      <button className={s.backButton} onClick={handleBack}>
-        <ArrowLeft />
-        Retour
-      </button>
+      <ArrowBack />
 
       <div className={s.container}>
         <div>

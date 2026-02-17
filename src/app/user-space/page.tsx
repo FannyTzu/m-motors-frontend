@@ -1,4 +1,4 @@
-import UserSpaceComponent from "@/@features/UserSpace/UserSpaceComponent";
+import UserSpaceComponent from "@/@features/UserSpace/component/UserSpaceComponent/UserSpaceComponent";
 import ProtectedRoute from "@/@utils/ProtectedRoute";
 
 function UserPage() {

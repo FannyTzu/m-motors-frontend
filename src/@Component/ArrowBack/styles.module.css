@@ -1,0 +1,10 @@
+.backButton {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  color: var(--color-gray);
+  margin-left: 4px;
+  cursor: pointer;
+  padding: 4px;
+}
