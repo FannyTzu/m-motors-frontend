@@ -65,7 +65,9 @@ export const loginRequest = async (email: string, password: string) => {
 
   if (!response.ok) {
     const err = await response.json();
-    throw new Error(err.message || "Connexion échouée");
+    throw new Error(
+      err.message || "L'identifiant ou le mot de passe est incorrect"
+    );
   }
 
   const data = await response.json();

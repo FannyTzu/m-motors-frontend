@@ -41,14 +41,18 @@ describe("registerRequest", () => {
     ).rejects.toThrow("Email déjà utilisé");
   });
   it("return data if login success", async () => {
-    mockFetch.mockResolvedValue({
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ accessToken: "token123" }),
+    });
+    mockFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({ id: 1 }),
     });
 
     const result = await loginRequest("test@example.com", "password");
 
-    expect(result).toEqual({ id: 1 });
+    expect(result).toEqual({ user: { id: 1 }, accessToken: "token123" });
   });
   it("throws a default error if no message is returned", async () => {
     mockFetch.mockResolvedValue({
