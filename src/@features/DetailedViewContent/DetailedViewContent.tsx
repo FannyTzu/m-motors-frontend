@@ -10,7 +10,6 @@ import {
   DoorOpen,
 } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getVehicleById } from "@/@features/Vehicles/service/vehicle.service";
 import ArrowBack from "@/@Component/ArrowBack/ArrowBack";
@@ -36,7 +35,6 @@ interface DetailsViewContentProps {
 }
 
 function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
-  const router = useRouter();
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
