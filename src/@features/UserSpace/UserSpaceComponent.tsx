@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { useAuth } from "../Auth/hook/useAuth";
 import { ArrowLeft } from "lucide-react";
 import s from "./styles.module.css";
@@ -12,6 +11,11 @@ function UserSpaceComponent() {
   if (isLoading) {
     return <div className={s.loading}>Chargement...</div>;
   }
+
+  const handleClickUpdateDetails = () => {
+    router.push("/user-space/contact-details");
+  };
+
   const handleBack = () => {
     router.back();
   };
@@ -37,8 +41,8 @@ function UserSpaceComponent() {
               <div>
                 <div className={s.label}>Nom</div>
                 <div className={s.value}>
-                  {user?.firstName || "Ajouter votre nom"}{" "}
-                  {user?.lastName || "et prénom"}
+                  {user?.lastName || "Ajouter votre nom"}{" "}
+                  {user?.firstName || "et prénom"}
                 </div>
               </div>
               <div>
@@ -61,7 +65,9 @@ function UserSpaceComponent() {
               </div>
             </div>
             <div className={s.actions}>
-              <button className={s.button}>Modifier mes informations</button>
+              <button className={s.button} onClick={handleClickUpdateDetails}>
+                Modifier mes informations
+              </button>
               <button className={s.buttonDelete}>Supprimer mon compte</button>
             </div>
           </div>

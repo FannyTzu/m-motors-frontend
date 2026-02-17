@@ -1,3 +1,5 @@
+import { addBreadcrumb } from "@/@utils/sentry";
+
 type User = {
   id: number;
   mail: string;
@@ -48,6 +50,7 @@ export const registerRequest = async (email: string, password: string) => {
 };
 
 export const loginRequest = async (email: string, password: string) => {
+  addBreadcrumb("Auth login", "auth");
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
     {
@@ -62,16 +65,17 @@ export const loginRequest = async (email: string, password: string) => {
 
   if (!response.ok) {
     const err = await response.json();
-    throw new Error(
-      err.message || "L'identifiant ou le mot de passe est incorrect"
-    );
+    throw new Error(err.message || "Connexion échouée");
   }
+
   const data = await response.json();
   if (data.accessToken) {
     setAccessToken(data.accessToken);
   }
 
-  return data;
+  const user = await getMeRequest();
+
+  return { user, accessToken: data.accessToken };
 };
 
 export const getMeRequest = async (): Promise<User> => {
