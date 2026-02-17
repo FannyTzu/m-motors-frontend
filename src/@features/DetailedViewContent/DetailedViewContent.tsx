@@ -1,7 +1,6 @@
 "use client";
 import s from "./styles.module.css";
 import {
-  ArrowLeft,
   CalendarDays,
   Fuel,
   Gauge,
@@ -11,9 +10,9 @@ import {
   DoorOpen,
 } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getVehicleById } from "@/@features/Vehicles/service/vehicle.service";
+import ArrowBack from "@/@Component/ArrowBack/ArrowBack";
 
 interface Vehicle {
   image: string;
@@ -36,7 +35,6 @@ interface DetailsViewContentProps {
 }
 
 function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
-  const router = useRouter();
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -59,10 +57,6 @@ function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
 
     fetchVehicle();
   }, [vehicleId]);
-
-  const handleBack = () => {
-    router.back();
-  };
 
   const transmissionLabels: Record<string, string> = {
     automatic: "Automatique",
@@ -101,10 +95,7 @@ function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
 
   return (
     <>
-      <button className={s.backButton} onClick={handleBack}>
-        <ArrowLeft />
-        Retour
-      </button>
+      <ArrowBack />
 
       <div className={s.container}>
         <div>

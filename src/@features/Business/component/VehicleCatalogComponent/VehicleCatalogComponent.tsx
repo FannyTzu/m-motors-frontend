@@ -3,7 +3,7 @@ import s from "./styles.module.css";
 import { Plus } from "lucide-react";
 import DisplayCardVehicle from "../DisplayCardVehicle/DisplayCardVehicle";
 
-function BusinessComponent() {
+function VehicleCatalogComponent() {
   const router = useRouter();
 
   const handleCreate = () => {
@@ -20,4 +20,4 @@ function BusinessComponent() {
   );
 }
 
-export default BusinessComponent;
+export default VehicleCatalogComponent;
