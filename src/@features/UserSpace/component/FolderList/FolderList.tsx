@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import CardFolder from "../CardFolder/CardFolder";
 import { useAuth } from "@/@features/Auth/hook/useAuth";
 import { getVehicleById } from "@/@features/Vehicles/service/vehicle.service";
+import s from "./styles.module.css";
 
 type Folder = {
   id: number;
@@ -50,7 +51,7 @@ function FolderList() {
   }, [user?.user?.id]);
 
   return (
-    <div>
+    <div className={s.card}>
       {folders.map((folder) => (
         <CardFolder
           key={folder.id}

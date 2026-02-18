@@ -1,7 +1,7 @@
 .container {
   position: relative;
   max-width: 1100px;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0 auto;
   padding: 8px 8px 16px;
   color: var(--color-black);

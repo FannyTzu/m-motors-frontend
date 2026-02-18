@@ -1,5 +1,6 @@
 import React from "react";
 import s from "./styles.module.css";
+import { formatDate } from "@/@utils/formatDate";
 
 interface CardFolderProps {
   brand: string;
@@ -15,7 +16,7 @@ function CardFolder({ brand, model, dateSubmitted }: CardFolderProps) {
           <div className={s.label}>
             {brand} {model}
           </div>
-          <div className={s.label}>{dateSubmitted}</div>
+          <div className={s.label}>Déposé le {formatDate(dateSubmitted)}</div>
         </div>
         <div className={s.actions}>
           <button className={s.button}>Voir mon dossier</button>
