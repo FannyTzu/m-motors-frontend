@@ -20,3 +20,21 @@ export const createFolderRequest = async (data: {
 
   return response.json();
 };
+
+export const getFolderByUserIdRequest = async (userId: number) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/folder/user/${userId}`,
+    {
+      method: "GET",
+
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch folder");
+  }
+
+  return response.json();
+};
