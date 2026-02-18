@@ -4,7 +4,7 @@ import s from "./styles.module.css";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/@features/Auth/hook/useAuth";
 import ArrowBack from "@/@Component/ArrowBack/ArrowBack";
-import CardFolder from "../CardFolder/CardFolder";
+import FolderList from "../FolderList/FolderList";
 
 function UserSpaceComponent() {
   const router = useRouter();
@@ -70,7 +70,7 @@ function UserSpaceComponent() {
 
         <section className={s.section}>
           <div className={s.sectionTitle}>Mes dossiers</div>
-          <CardFolder />
+          <FolderList />
         </section>
       </div>
     </div>
