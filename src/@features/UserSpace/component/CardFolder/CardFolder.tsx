@@ -14,9 +14,11 @@ function CardFolder({ brand, model, dateSubmitted }: CardFolderProps) {
       <div className={s.card}>
         <div className={s.sectionFolder}>
           <div className={s.label}>
-            {brand} {model}
+            Véhicule selectionné : {brand} {model}
           </div>
-          <div className={s.label}>Déposé le {formatDate(dateSubmitted)}</div>
+          <div className={s.label}>
+            Dossier déposé le {formatDate(dateSubmitted)}
+          </div>
         </div>
         <div className={s.actions}>
           <button className={s.button}>Voir mon dossier</button>

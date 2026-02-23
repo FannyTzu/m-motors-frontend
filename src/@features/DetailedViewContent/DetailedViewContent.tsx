@@ -17,6 +17,7 @@ import ArrowBack from "@/@Component/ArrowBack/ArrowBack";
 import { createFolderRequest } from "../Folders/service/folder.service";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../Auth/hook/useAuth";
+import Modal from "@/@Component/Modal/Modal";
 
 interface Vehicle {
   image: string;
@@ -42,10 +43,15 @@ function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
   const router = useRouter();
   const userId = useAuth().user?.id;
 
   const handleSubmitFolder = async () => {
+    if (!userId) {
+      setShowModal(true);
+      return;
+    }
     try {
       const response = await createFolderRequest({
         vehicleId,
@@ -112,8 +118,22 @@ function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
 
   const isRental = type === "rental";
 
+  const handleConfirmLogin = () => {
+    router.push("/login");
+  };
+
   return (
     <>
+      {showModal && (
+        <Modal
+          title="Vous n'êtes pas connecté"
+          description={`Vous devez être connecté pour créer un dossier pour ce véhicule.`}
+          onConfirm={handleConfirmLogin}
+          onClose={() => setShowModal(false)}
+          confirmText={"Se connecter"}
+          cancelText="Annuler"
+        />
+      )}
       <ArrowBack />
 
       <div className={s.container}>
