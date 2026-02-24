@@ -143,3 +143,16 @@ export const refreshTokenRequest = async () => {
   }
   return data;
 };
+
+export const deleteUserAccountRequest = async () => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete user account");
+  }
+  clearAccessToken();
+  return response.json();
+};
