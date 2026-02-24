@@ -43,13 +43,13 @@ describe("UserSpaceComponent", () => {
     });
   });
 
-  it("affiche le loader si isLoading", () => {
+  it(" display loader if isLoading is true", () => {
     (useAuth as jest.Mock).mockReturnValue({ user: null, isLoading: true });
     render(<UserSpaceComponent />);
     expect(screen.getByText(/chargement/i)).toBeInTheDocument();
   });
 
-  it("affiche les infos utilisateur", () => {
+  it("display info users", () => {
     (useAuth as jest.Mock).mockReturnValue({
       user: mockUser,
       isLoading: false,
@@ -63,7 +63,7 @@ describe("UserSpaceComponent", () => {
     expect(screen.getByText(/1 rue de paris/i)).toBeInTheDocument();
   });
 
-  it("ouvre la modale de suppression", async () => {
+  it("opens the deletion modal", async () => {
     (useAuth as jest.Mock).mockReturnValue({
       user: mockUser,
       isLoading: false,
