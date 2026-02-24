@@ -23,7 +23,6 @@ function UserSpaceComponent() {
   };
 
   const handleClickDelete = async () => {
-    setOpenModal(true);
     {
       try {
         await deleteUserAccountRequest();
