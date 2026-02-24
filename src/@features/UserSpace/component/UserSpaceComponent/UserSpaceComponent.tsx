@@ -5,10 +5,14 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/@features/Auth/hook/useAuth";
 import ArrowBack from "@/@Component/ArrowBack/ArrowBack";
 import FolderList from "../FolderList/FolderList";
+import { deleteUserAccountRequest } from "@/@features/Auth/service/auth.service";
+import { useState } from "react";
+import Modal from "@/@Component/Modal/Modal";
 
 function UserSpaceComponent() {
   const router = useRouter();
   const { user, isLoading } = useAuth();
+  const [openModal, setOpenModal] = useState(false);
 
   if (isLoading) {
     return <div className={s.loading}>Chargement...</div>;
@@ -18,8 +22,29 @@ function UserSpaceComponent() {
     router.push("/user-space/contact-details");
   };
 
+  const handleClickDelete = async () => {
+    {
+      try {
+        await deleteUserAccountRequest();
+        router.push("/login");
+      } catch (error) {
+        console.error("Erreur lors de la suppression du compte:", error);
+      }
+    }
+  };
+
   return (
     <div>
+      {openModal && (
+        <Modal
+          title="Supprimer mon compte ?"
+          description={`Êtes-vous sûr de vouloir supprimer votre compte ?\nCette action est définitive.`}
+          onConfirm={handleClickDelete}
+          onClose={() => setOpenModal(false)}
+          confirmText="Supprimer"
+          cancelText="Annuler"
+        />
+      )}
       <ArrowBack />
       <div className={s.container}>
         <header className={s.header}>
@@ -63,7 +88,12 @@ function UserSpaceComponent() {
               <button className={s.button} onClick={handleClickUpdateDetails}>
                 Modifier mes informations
               </button>
-              <button className={s.buttonDelete}>Supprimer mon compte</button>
+              <button
+                onClick={() => setOpenModal(true)}
+                className={s.buttonDelete}
+              >
+                Supprimer mon compte
+              </button>
             </div>
           </div>
         </section>
