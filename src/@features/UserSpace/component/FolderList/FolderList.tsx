@@ -55,6 +55,7 @@ function FolderList() {
       {folders.map((folder) => (
         <CardFolder
           key={folder.id}
+          folderId={folder.id}
           brand={folder.vehicle?.brand || "-"}
           model={folder.vehicle?.model || "-"}
           dateSubmitted={folder.created_at}

@@ -1,12 +1,15 @@
-import FolderToCompleteComponent from "@/@features/Folders/component/FolderToCompleteComponent";
-import s from "./styles.module.css";
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 function FolderToCompletePage() {
-  return (
-    <div className={s.page}>
-      <FolderToCompleteComponent folderId={1} />
-    </div>
-  );
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace("/user-space");
+  }, [router]);
+
+  return null;
 }
 
 export default FolderToCompletePage;

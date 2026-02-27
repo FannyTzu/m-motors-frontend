@@ -1,14 +1,26 @@
 import React from "react";
 import s from "./styles.module.css";
 import { formatDate } from "@/@utils/formatDate";
+import { useRouter } from "next/navigation";
 
 interface CardFolderProps {
+  folderId: number;
   brand: string;
   model: string;
   dateSubmitted: string;
 }
 
-function CardFolder({ brand, model, dateSubmitted }: CardFolderProps) {
+function CardFolder({
+  folderId,
+  brand,
+  model,
+  dateSubmitted,
+}: CardFolderProps) {
+  const router = useRouter();
+
+  const handleRedirect = () => {
+    router.push(`/folder-to-complete/${folderId}`);
+  };
   return (
     <div>
       <div className={s.card}>
@@ -21,7 +33,9 @@ function CardFolder({ brand, model, dateSubmitted }: CardFolderProps) {
           </div>
         </div>
         <div className={s.actions}>
-          <button className={s.button}>Voir mon dossier</button>
+          <button className={s.button} onClick={handleRedirect}>
+            Voir mon dossier
+          </button>
           {/*todo: desactiver le bouton si dossier non valide */}
           <button className={s.buttonPaid}>Payer</button>
         </div>
