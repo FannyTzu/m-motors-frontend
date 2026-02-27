@@ -66,3 +66,47 @@ export const uploadDocumentRequest = async ({
 
   return response.json();
 };
+
+export const getDocumentsByIdRequest = async (folderId: number) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/documents/folder/${folderId}`,
+
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch documents");
+  }
+
+  return response.json();
+};
+
+export const updateDocumentRequest = async ({
+  documentId,
+  file,
+}: {
+  documentId: number;
+  file: File;
+}) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("name", file.name);
+
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/documents/${documentId}`,
+    {
+      method: "PATCH",
+      credentials: "include",
+      body: formData,
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to update document");
+  }
+
+  return response.json();
+};

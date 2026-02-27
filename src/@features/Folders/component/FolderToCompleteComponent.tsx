@@ -1,15 +1,19 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import s from "./styles.module.css";
 import ArrowBack from "@/@Component/ArrowBack/ArrowBack";
 import {
   CheckCircle,
+  Eye,
   IdCard,
   IdCardLanyard,
   Landmark,
   Upload,
 } from "lucide-react";
-import { uploadDocumentRequest } from "../service/folder.service";
+import {
+  uploadDocumentRequest,
+  getDocumentsByIdRequest,
+} from "../service/folder.service";
 import { useRouter } from "next/navigation";
 
 interface FolderToCompleteComponentProps {
@@ -30,12 +34,62 @@ function FolderToCompleteComponent({
     rib: null,
   });
 
+  const [existingDocuments, setExistingDocuments] = useState<{
+    idCard: { id: number; url: string; name: string } | null;
+    drivingLicense: { id: number; url: string; name: string } | null;
+    rib: { id: number; url: string; name: string } | null;
+  }>({
+    idCard: null,
+    drivingLicense: null,
+    rib: null,
+  });
+
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const idCardInputRef = useRef<HTMLInputElement>(null);
   const drivingLicenseInputRef = useRef<HTMLInputElement>(null);
   const ribInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        const documents = await getDocumentsByIdRequest(folderId);
+
+        const docsByType: {
+          idCard: { id: number; url: string; name: string } | null;
+          drivingLicense: { id: number; url: string; name: string } | null;
+          rib: { id: number; url: string; name: string } | null;
+        } = {
+          idCard: null,
+          drivingLicense: null,
+          rib: null,
+        };
+
+        documents.forEach(
+          (doc: { id: number; type: string; url: string; name: string }) => {
+            if (
+              doc.type === "idCard" ||
+              doc.type === "drivingLicense" ||
+              doc.type === "rib"
+            ) {
+              docsByType[doc.type] = {
+                id: doc.id,
+                url: doc.url,
+                name: doc.name,
+              };
+            }
+          }
+        );
+
+        setExistingDocuments(docsByType);
+      } catch (err) {
+        console.error("Erreur lors du chargement des documents:", err);
+      }
+    };
+
+    fetchDocuments();
+  }, [folderId]);
 
   const handleFileChange =
     (fileType: "idCard" | "drivingLicense" | "rib") =>
@@ -71,6 +125,10 @@ function FolderToCompleteComponent({
   ) => {
     e.preventDefault();
     ref.current?.click();
+  };
+
+  const handleViewDocument = (documentUrl: string) => {
+    window.open(documentUrl, "_blank");
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -147,21 +205,34 @@ function FolderToCompleteComponent({
                   style={{ display: "none" }}
                   aria-label="Télécharger pièce d'identité"
                 />
-                <button
-                  type="button"
-                  onClick={(e) => handleButtonClick(idCardInputRef, e)}
-                  className={s.uploadButton}
-                >
-                  {files.idCard ? (
-                    <>
-                      <CheckCircle size={16} /> {files.idCard.name}
-                    </>
-                  ) : (
-                    <>
-                      <Upload size={16} /> Télécharger
-                    </>
+                <div className={s.buttonGroup}>
+                  <button
+                    type="button"
+                    onClick={(e) => handleButtonClick(idCardInputRef, e)}
+                    className={s.uploadButton}
+                  >
+                    {files.idCard ? (
+                      <>
+                        <CheckCircle size={16} /> {files.idCard.name}
+                      </>
+                    ) : (
+                      <>
+                        <Upload size={16} /> Télécharger
+                      </>
+                    )}
+                  </button>
+                  {existingDocuments.idCard && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleViewDocument(existingDocuments.idCard!.url)
+                      }
+                      className={s.viewButton}
+                    >
+                      <Eye size={16} /> Voir mon document
+                    </button>
                   )}
-                </button>
+                </div>
               </li>
               <li className={s.documentItem}>
                 <IdCardLanyard />
@@ -174,21 +245,38 @@ function FolderToCompleteComponent({
                   style={{ display: "none" }}
                   aria-label="Télécharger permis de conduire"
                 />
-                <button
-                  type="button"
-                  onClick={(e) => handleButtonClick(drivingLicenseInputRef, e)}
-                  className={s.uploadButton}
-                >
-                  {files.drivingLicense ? (
-                    <>
-                      <CheckCircle size={16} /> {files.drivingLicense.name}
-                    </>
-                  ) : (
-                    <>
-                      <Upload size={16} /> Télécharger
-                    </>
+                <div className={s.buttonGroup}>
+                  <button
+                    type="button"
+                    onClick={(e) =>
+                      handleButtonClick(drivingLicenseInputRef, e)
+                    }
+                    className={s.uploadButton}
+                  >
+                    {files.drivingLicense ? (
+                      <>
+                        <CheckCircle size={16} /> {files.drivingLicense.name}
+                      </>
+                    ) : (
+                      <>
+                        <Upload size={16} /> Télécharger
+                      </>
+                    )}
+                  </button>
+                  {existingDocuments.drivingLicense && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleViewDocument(
+                          existingDocuments.drivingLicense!.url
+                        )
+                      }
+                      className={s.viewButton}
+                    >
+                      <Eye size={16} /> Voir mon document
+                    </button>
                   )}
-                </button>
+                </div>
               </li>
               <li className={s.documentItem}>
                 <Landmark />
@@ -201,21 +289,34 @@ function FolderToCompleteComponent({
                   style={{ display: "none" }}
                   aria-label="Télécharger RIB"
                 />
-                <button
-                  type="button"
-                  onClick={(e) => handleButtonClick(ribInputRef, e)}
-                  className={s.uploadButton}
-                >
-                  {files.rib ? (
-                    <>
-                      <CheckCircle size={16} /> {files.rib.name}
-                    </>
-                  ) : (
-                    <>
-                      <Upload size={16} /> Télécharger
-                    </>
+                <div className={s.buttonGroup}>
+                  <button
+                    type="button"
+                    onClick={(e) => handleButtonClick(ribInputRef, e)}
+                    className={s.uploadButton}
+                  >
+                    {files.rib ? (
+                      <>
+                        <CheckCircle size={16} /> {files.rib.name}
+                      </>
+                    ) : (
+                      <>
+                        <Upload size={16} /> Télécharger
+                      </>
+                    )}
+                  </button>
+                  {existingDocuments.rib && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleViewDocument(existingDocuments.rib!.url)
+                      }
+                      className={s.viewButton}
+                    >
+                      <Eye size={16} /> Voir mon document
+                    </button>
                   )}
-                </button>
+                </div>
               </li>
             </ul>
 
