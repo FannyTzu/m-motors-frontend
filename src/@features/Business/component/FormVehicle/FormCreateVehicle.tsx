@@ -3,8 +3,12 @@ import React from "react";
 import s from "./styles.module.css";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createVehicles } from "@/@features/Vehicles/service/vehicle.service";
-import { CircleX } from "lucide-react";
+import {
+  createVehicles,
+  uploadVehicleImage,
+} from "@/@features/Vehicles/service/vehicle.service";
+import { CircleX, Upload } from "lucide-react";
+import Image from "next/image";
 
 interface FormCreateVehicleProps {
   brand: string;
@@ -27,6 +31,8 @@ function FormCreateVehicle() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<FormCreateVehicleProps>({
     brand: "",
@@ -62,14 +68,44 @@ function FormCreateVehicle() {
     }));
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        setError("Veuillez sélectionner une image valide (JPEG ou PNG)");
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        setError("L'image ne doit pas dépasser 5000 ko");
+        return;
+      }
+
+      setImageFile(file);
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+      setError(null);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
     try {
-      const response = await createVehicles(formData);
-      console.log("Véhicule créé:", response);
+      const vehicle = await createVehicles(formData);
+      console.log("Véhicule créé:", vehicle);
+
+      if (imageFile && vehicle.id) {
+        const result = await uploadVehicleImage(vehicle.id, imageFile);
+        console.log("Image uploadée:", result.publicUrl);
+      }
+
       router.push("/business-space");
     } catch (err) {
       setError(
@@ -112,7 +148,6 @@ function FormCreateVehicle() {
               required
             />
           </div>
-
           <div className={s.formGroup}>
             <label htmlFor="model" className={s.label}>
               Modèle *
@@ -128,7 +163,6 @@ function FormCreateVehicle() {
               required
             />
           </div>
-
           <div className={s.formGroup}>
             <label htmlFor="transmission" className={s.label}>
               Transmission *
@@ -146,7 +180,6 @@ function FormCreateVehicle() {
               <option value="automatic">Automatique</option>
             </select>
           </div>
-
           <div className={s.formGroup}>
             <label htmlFor="year" className={s.label}>
               Année *
@@ -163,7 +196,6 @@ function FormCreateVehicle() {
               required
             />
           </div>
-
           <div className={s.formGroup}>
             <label htmlFor="energy" className={s.label}>
               Énergie *
@@ -184,7 +216,6 @@ function FormCreateVehicle() {
               <option value="GPL">GPL</option>
             </select>
           </div>
-
           <div className={s.formGroup}>
             <label htmlFor="km" className={s.label}>
               Kilométrage (km) *
@@ -201,7 +232,6 @@ function FormCreateVehicle() {
               required
             />
           </div>
-
           <div className={s.formGroup}>
             <label htmlFor="color" className={s.label}>
               Couleur *
@@ -217,7 +247,6 @@ function FormCreateVehicle() {
               required
             />
           </div>
-
           <div className={s.formGroup}>
             <label htmlFor="place" className={s.label}>
               Nombre de places *
@@ -234,7 +263,6 @@ function FormCreateVehicle() {
               required
             />
           </div>
-
           <div className={s.formGroup}>
             <label htmlFor="door" className={s.label}>
               Nombre de portes *
@@ -251,7 +279,6 @@ function FormCreateVehicle() {
               required
             />
           </div>
-
           <div className={s.formGroup}>
             <label htmlFor="type" className={s.label}>
               Type de véhicule *
@@ -269,7 +296,6 @@ function FormCreateVehicle() {
               <option value="rental">Location LLD</option>
             </select>
           </div>
-
           <div className={s.formGroup}>
             <label htmlFor="status" className={s.label}>
               Statut *
@@ -287,7 +313,6 @@ function FormCreateVehicle() {
               <option value="sold">Vendu</option>
             </select>
           </div>
-
           <div className={s.formGroup}>
             <label htmlFor="price" className={s.label}>
               Prix {formData.type === "rental" ? "(€/mois)" : "(€)"} *
@@ -305,7 +330,42 @@ function FormCreateVehicle() {
               required
             />
           </div>
-
+          <div className={s.formGroup}>
+            <label htmlFor="image" className={s.label}>
+              Image
+            </label>
+            <div className={s.imageUploadContainer}>
+              {imagePreview && (
+                <div className={s.imagePreviewWrapper}>
+                  <Image
+                    src={imagePreview}
+                    alt="Prévisualisation"
+                    width={100}
+                    height={100}
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+              )}
+              <div className={s.fileInputWrapper}>
+                <input
+                  type="file"
+                  id="image"
+                  name="image"
+                  onChange={handleImageChange}
+                  className={s.fileInput}
+                  accept="image/jpeg,image/jpg,image/png"
+                />
+                <label htmlFor="image" className={s.fileInputLabel}>
+                  <Upload size={18} />
+                  {imageFile ? imageFile.name : "Choisir une image"}
+                </label>
+              </div>
+            </div>
+          </div>{" "}
           <div className={s.formGroupDescription}>
             <label htmlFor="description" className={s.label}>
               Description
@@ -319,22 +379,6 @@ function FormCreateVehicle() {
               className={s.input}
               placeholder="Ex: ceci est une description plutot courte du véhicule mais vous pouvez en mettre une plus longue"
               required
-            />
-          </div>
-
-          <div className={s.formGroup}>
-            <label htmlFor="image" className={s.label}>
-              Image
-            </label>
-            {/* TODO import ImageUploader component */}
-            <input
-              type="url"
-              id="image"
-              name="image"
-              value={formData.image}
-              onChange={handleChange}
-              className={s.input}
-              placeholder="https://example.com/image.jpg"
             />
           </div>
         </div>
