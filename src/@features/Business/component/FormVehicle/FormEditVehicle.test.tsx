@@ -17,6 +17,15 @@ jest.mock("@/@features/Vehicles/service/vehicle.service", () => ({
 
 jest.mock("lucide-react", () => ({
   CircleX: () => <span data-testid="icon-error" />,
+  Upload: () => <span data-testid="icon-upload" />,
+}));
+
+jest.mock("next/image", () => ({
+  __esModule: true,
+  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img {...props} alt={props.alt || ""} />
+  ),
 }));
 
 const mockPush = jest.fn();
@@ -83,9 +92,6 @@ const fillForm = () => {
   });
   fireEvent.change(screen.getByLabelText(/Description/), {
     target: { value: "Vehicule en tres bon etat" },
-  });
-  fireEvent.change(screen.getByLabelText(/Image/), {
-    target: { value: "https://example.com/image.jpg" },
   });
 };
 
