@@ -9,12 +9,17 @@ import {
   Landmark,
   Upload,
 } from "lucide-react";
+import { uploadDocumentRequest } from "../service/folder.service";
+import { useRouter } from "next/navigation";
 
 interface FolderToCompleteComponentProps {
   folderId: number;
 }
 
-function FolderToCompleteComponent({}: FolderToCompleteComponentProps) {
+function FolderToCompleteComponent({
+  folderId,
+}: FolderToCompleteComponentProps) {
+  const router = useRouter();
   const [files, setFiles] = useState<{
     idCard: File | null;
     drivingLicense: File | null;
@@ -26,6 +31,7 @@ function FolderToCompleteComponent({}: FolderToCompleteComponentProps) {
   });
 
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const idCardInputRef = useRef<HTMLInputElement>(null);
   const drivingLicenseInputRef = useRef<HTMLInputElement>(null);
@@ -67,8 +73,46 @@ function FolderToCompleteComponent({}: FolderToCompleteComponentProps) {
     ref.current?.click();
   };
 
-  const handleSubmit = () => {
-    // TODO : implémenter la soumission du formulaire avec les fichiers et le folderId
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null);
+
+    if (!files.idCard || !files.drivingLicense || !files.rib) {
+      setError("Veuillez fournir tous les documents requis");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      await uploadDocumentRequest({
+        folderId,
+        documentType: "idCard",
+        file: files.idCard,
+      });
+
+      await uploadDocumentRequest({
+        folderId,
+        documentType: "drivingLicense",
+        file: files.drivingLicense,
+      });
+
+      await uploadDocumentRequest({
+        folderId,
+        documentType: "rib",
+        file: files.rib,
+      });
+
+      router.push("/user-space");
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Erreur lors de la soumission du dossier"
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -175,8 +219,17 @@ function FolderToCompleteComponent({}: FolderToCompleteComponentProps) {
               </li>
             </ul>
 
-            <button type="submit" className={s.submitButton}>
-              Envoyer mon dossier
+            <button
+              type="submit"
+              className={s.submitButton}
+              disabled={
+                isSubmitting ||
+                !files.idCard ||
+                !files.drivingLicense ||
+                !files.rib
+              }
+            >
+              {isSubmitting ? "Envoi en cours..." : "Envoyer mon dossier"}
             </button>
           </form>
         </div>
