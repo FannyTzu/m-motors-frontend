@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import s from "./styles.module.css";
 import ArrowBack from "@/@Component/ArrowBack/ArrowBack";
 import {
@@ -14,7 +14,6 @@ import {
   uploadDocumentRequest,
   getDocumentsByIdRequest,
 } from "../service/folder.service";
-import { useRouter } from "next/navigation";
 
 interface FolderToCompleteComponentProps {
   folderId: number;
@@ -23,17 +22,6 @@ interface FolderToCompleteComponentProps {
 function FolderToCompleteComponent({
   folderId,
 }: FolderToCompleteComponentProps) {
-  const router = useRouter();
-  const [files, setFiles] = useState<{
-    idCard: File | null;
-    drivingLicense: File | null;
-    rib: File | null;
-  }>({
-    idCard: null,
-    drivingLicense: null,
-    rib: null,
-  });
-
   const [existingDocuments, setExistingDocuments] = useState<{
     idCard: { id: number; url: string; name: string } | null;
     drivingLicense: { id: number; url: string; name: string } | null;
@@ -44,12 +32,18 @@ function FolderToCompleteComponent({
     rib: null,
   });
 
-  const [error, setError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadingState, setUploadingState] = useState<{
+    idCard: boolean;
+    drivingLicense: boolean;
+    rib: boolean;
+  }>({
+    idCard: false,
+    drivingLicense: false,
+    rib: false,
+  });
 
-  const idCardInputRef = useRef<HTMLInputElement>(null);
-  const drivingLicenseInputRef = useRef<HTMLInputElement>(null);
-  const ribInputRef = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchDocuments = async () => {
@@ -73,11 +67,13 @@ function FolderToCompleteComponent({
               doc.type === "drivingLicense" ||
               doc.type === "rib"
             ) {
-              docsByType[doc.type] = {
-                id: doc.id,
-                url: doc.url,
-                name: doc.name,
-              };
+              if (!docsByType[doc.type] || doc.id > docsByType[doc.type]!.id) {
+                docsByType[doc.type] = {
+                  id: doc.id,
+                  url: doc.url,
+                  name: doc.name,
+                };
+              }
             }
           }
         );
@@ -93,85 +89,105 @@ function FolderToCompleteComponent({
 
   const handleFileChange =
     (fileType: "idCard" | "drivingLicense" | "rib") =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
-      if (file) {
-        if (file.size > 5 * 1024 * 1024) {
-          setError("Le fichier ne doit pas dépasser 5MB");
-          return;
-        }
+      if (!file) return;
 
-        const allowedTypes = [
-          "image/jpeg",
-          "image/png",
-          "image/jpg",
-          "application/pdf",
-        ];
-        if (!allowedTypes.includes(file.type)) {
-          setError(
-            "Ce format de fichier n'est pas accepté, utilisez JPG, PNG ou PDF"
-          );
-          return;
-        }
+      if (file.size > 5 * 1024 * 1024) {
+        setError("Le fichier ne doit pas dépasser 5MB");
+        setSuccessMessage(null);
+        return;
+      }
 
-        setFiles((prev) => ({ ...prev, [fileType]: file }));
-        setError(null);
+      const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/jpg",
+        "application/pdf",
+      ];
+      if (!allowedTypes.includes(file.type)) {
+        setError(
+          "Ce format de fichier n'est pas accepté, utilisez JPG, PNG ou PDF"
+        );
+        setSuccessMessage(null);
+        return;
+      }
+
+      setError(null);
+      setSuccessMessage(null);
+      setUploadingState((prev) => ({ ...prev, [fileType]: true }));
+
+      try {
+        await uploadDocumentRequest({
+          folderId,
+          documentType: fileType,
+          file,
+        });
+
+        const documents = await getDocumentsByIdRequest(folderId);
+
+        const docsByType: {
+          idCard: { id: number; url: string; name: string } | null;
+          drivingLicense: { id: number; url: string; name: string } | null;
+          rib: { id: number; url: string; name: string } | null;
+        } = {
+          idCard: null,
+          drivingLicense: null,
+          rib: null,
+        };
+
+        documents.forEach(
+          (doc: { id: number; type: string; url: string; name: string }) => {
+            if (
+              doc.type === "idCard" ||
+              doc.type === "drivingLicense" ||
+              doc.type === "rib"
+            ) {
+              if (!docsByType[doc.type] || doc.id > docsByType[doc.type]!.id) {
+                docsByType[doc.type] = {
+                  id: doc.id,
+                  url: doc.url,
+                  name: doc.name,
+                };
+              }
+            }
+          }
+        );
+
+        setExistingDocuments(docsByType);
+
+        const documentLabels = {
+          idCard: "Pièce d'identité",
+          drivingLicense: "Permis de conduire",
+          rib: "RIB",
+        };
+
+        setSuccessMessage(
+          `${documentLabels[fileType]} ${
+            existingDocuments[fileType] ? "remplacé" : "téléchargé"
+          } avec succès !`
+        );
+
+        e.target.value = "";
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Erreur lors du téléchargement du document"
+        );
+      } finally {
+        setUploadingState((prev) => ({ ...prev, [fileType]: false }));
       }
     };
-
-  const handleButtonClick = (
-    ref: React.RefObject<HTMLInputElement | null>,
-    e: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    e.preventDefault();
-    ref.current?.click();
-  };
 
   const handleViewDocument = (documentUrl: string) => {
     window.open(documentUrl, "_blank");
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(null);
-
-    if (!files.idCard || !files.drivingLicense || !files.rib) {
-      setError("Veuillez fournir tous les documents requis");
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      await uploadDocumentRequest({
-        folderId,
-        documentType: "idCard",
-        file: files.idCard,
-      });
-
-      await uploadDocumentRequest({
-        folderId,
-        documentType: "drivingLicense",
-        file: files.drivingLicense,
-      });
-
-      await uploadDocumentRequest({
-        folderId,
-        documentType: "rib",
-        file: files.rib,
-      });
-
-      router.push("/user-space");
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Erreur lors de la soumission du dossier"
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const allDocumentsUploaded =
+    existingDocuments.idCard &&
+    existingDocuments.drivingLicense &&
+    existingDocuments.rib;
 
   return (
     <div>
@@ -182,46 +198,41 @@ function FolderToCompleteComponent({
           {/*  TODO : ajouter le composant statut qd il sera créé et fonctionnel */}
           <div>STATUT DU DOSSIER</div>
 
-          <form onSubmit={handleSubmit}>
-            <h2>Pièces justificatives</h2>
+          <h2>Pièces justificatives</h2>
 
-            <p className={s.explanation}>
-              Veuillez télécharger les documents requis avant d&apos;envoyer
-              votre dossier, vous pourrez suivre votre dossier en regardant le
-              statut ci dessus qui se mettra à jour !{" "}
-            </p>
+          <p className={s.explanation}>
+            Téléchargez vos documents un par un. Vous pouvez les remplacer à
+            tout moment en sélectionnant un nouveau fichier. Les documents sont
+            sauvegardés immédiatement après sélection.
+          </p>
 
-            {error && <div className={s.error}>{error} erreur</div>}
+          {error && <div className={s.error}>{error}</div>}
+          {successMessage && <div className={s.success}>{successMessage}</div>}
 
-            <ul className={s.documentList}>
-              <li className={s.documentItem}>
-                <IdCard />
-                <span>Pièce d&apos;identité</span>
-                <input
-                  ref={idCardInputRef}
-                  type="file"
-                  accept="image/jpeg,image/png,image/jpg,application/pdf"
-                  onChange={handleFileChange("idCard")}
-                  style={{ display: "none" }}
-                  aria-label="Télécharger pièce d'identité"
-                />
-                <div className={s.buttonGroup}>
-                  <button
-                    type="button"
-                    onClick={(e) => handleButtonClick(idCardInputRef, e)}
-                    className={s.uploadButton}
-                  >
-                    {files.idCard ? (
-                      <>
-                        <CheckCircle size={16} /> {files.idCard.name}
-                      </>
-                    ) : (
-                      <>
-                        <Upload size={16} /> Télécharger
-                      </>
-                    )}
-                  </button>
-                  {existingDocuments.idCard && (
+          <ul className={s.documentList}>
+            <li className={s.documentItem}>
+              <IdCard />
+              <span>Pièce d&apos;identité</span>
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/jpg,application/pdf"
+                onChange={handleFileChange("idCard")}
+                style={{ display: "none" }}
+                id="idCard-input"
+                aria-label="Télécharger pièce d'identité"
+                disabled={uploadingState.idCard}
+              />
+              <div className={s.buttonGroup}>
+                {uploadingState.idCard ? (
+                  <span className={s.statusText}>⏳ Upload en cours...</span>
+                ) : existingDocuments.idCard ? (
+                  <>
+                    <span className={s.statusSuccess}>
+                      <CheckCircle size={20} />
+                    </span>
+                    <label htmlFor="idCard-input" className={s.replaceButton}>
+                      <Upload size={16} /> Remplacer
+                    </label>
                     <button
                       type="button"
                       onClick={() =>
@@ -229,41 +240,42 @@ function FolderToCompleteComponent({
                       }
                       className={s.viewButton}
                     >
-                      <Eye size={16} /> Voir mon document
+                      <Eye size={16} /> Voir
                     </button>
-                  )}
-                </div>
-              </li>
-              <li className={s.documentItem}>
-                <IdCardLanyard />
-                <span>Permis de conduire</span>
-                <input
-                  ref={drivingLicenseInputRef}
-                  type="file"
-                  accept="image/jpeg,image/png,image/jpg,application/pdf"
-                  onChange={handleFileChange("drivingLicense")}
-                  style={{ display: "none" }}
-                  aria-label="Télécharger permis de conduire"
-                />
-                <div className={s.buttonGroup}>
-                  <button
-                    type="button"
-                    onClick={(e) =>
-                      handleButtonClick(drivingLicenseInputRef, e)
-                    }
-                    className={s.uploadButton}
-                  >
-                    {files.drivingLicense ? (
-                      <>
-                        <CheckCircle size={16} /> {files.drivingLicense.name}
-                      </>
-                    ) : (
-                      <>
-                        <Upload size={16} /> Télécharger
-                      </>
-                    )}
-                  </button>
-                  {existingDocuments.drivingLicense && (
+                  </>
+                ) : (
+                  <label htmlFor="idCard-input" className={s.uploadButton}>
+                    <Upload size={16} /> Télécharger
+                  </label>
+                )}
+              </div>
+            </li>
+            <li className={s.documentItem}>
+              <IdCardLanyard />
+              <span>Permis de conduire</span>
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/jpg,application/pdf"
+                onChange={handleFileChange("drivingLicense")}
+                style={{ display: "none" }}
+                id="drivingLicense-input"
+                aria-label="Télécharger permis de conduire"
+                disabled={uploadingState.drivingLicense}
+              />
+              <div className={s.buttonGroup}>
+                {uploadingState.drivingLicense ? (
+                  <span className={s.statusText}>⏳ Upload en cours...</span>
+                ) : existingDocuments.drivingLicense ? (
+                  <>
+                    <span className={s.statusSuccess}>
+                      <CheckCircle size={20} />
+                    </span>
+                    <label
+                      htmlFor="drivingLicense-input"
+                      className={s.replaceButton}
+                    >
+                      <Upload size={16} /> Remplacer
+                    </label>
                     <button
                       type="button"
                       onClick={() =>
@@ -273,39 +285,44 @@ function FolderToCompleteComponent({
                       }
                       className={s.viewButton}
                     >
-                      <Eye size={16} /> Voir mon document
+                      <Eye size={16} /> Voir
                     </button>
-                  )}
-                </div>
-              </li>
-              <li className={s.documentItem}>
-                <Landmark />
-                <span>RIB</span>
-                <input
-                  ref={ribInputRef}
-                  type="file"
-                  accept="image/jpeg,image/png,image/jpg,application/pdf"
-                  onChange={handleFileChange("rib")}
-                  style={{ display: "none" }}
-                  aria-label="Télécharger RIB"
-                />
-                <div className={s.buttonGroup}>
-                  <button
-                    type="button"
-                    onClick={(e) => handleButtonClick(ribInputRef, e)}
+                  </>
+                ) : (
+                  <label
+                    htmlFor="drivingLicense-input"
                     className={s.uploadButton}
                   >
-                    {files.rib ? (
-                      <>
-                        <CheckCircle size={16} /> {files.rib.name}
-                      </>
-                    ) : (
-                      <>
-                        <Upload size={16} /> Télécharger
-                      </>
-                    )}
-                  </button>
-                  {existingDocuments.rib && (
+                    <Upload size={16} /> Télécharger
+                  </label>
+                )}
+              </div>
+            </li>
+            <li className={s.documentItem}>
+              <Landmark />
+              <span>RIB</span>
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/jpg,application/pdf"
+                onChange={handleFileChange("rib")}
+                style={{ display: "none" }}
+                id="rib-input"
+                aria-label="Télécharger RIB"
+                disabled={uploadingState.rib}
+              />
+              <div className={s.buttonGroup}>
+                {uploadingState.rib ? (
+                  <span className={s.statusText}>
+                    ⏳ Chargement en cours...
+                  </span>
+                ) : existingDocuments.rib ? (
+                  <>
+                    <span className={s.statusSuccess}>
+                      <CheckCircle size={20} />
+                    </span>
+                    <label htmlFor="rib-input" className={s.replaceButton}>
+                      <Upload size={16} /> Remplacer
+                    </label>
                     <button
                       type="button"
                       onClick={() =>
@@ -313,26 +330,23 @@ function FolderToCompleteComponent({
                       }
                       className={s.viewButton}
                     >
-                      <Eye size={16} /> Voir mon document
+                      <Eye size={16} /> Voir
                     </button>
-                  )}
-                </div>
-              </li>
-            </ul>
+                  </>
+                ) : (
+                  <label htmlFor="rib-input" className={s.uploadButton}>
+                    <Upload size={16} /> Télécharger
+                  </label>
+                )}
+              </div>
+            </li>
+          </ul>
 
-            <button
-              type="submit"
-              className={s.submitButton}
-              disabled={
-                isSubmitting ||
-                !files.idCard ||
-                !files.drivingLicense ||
-                !files.rib
-              }
-            >
-              {isSubmitting ? "Envoi en cours..." : "Envoyer mon dossier"}
-            </button>
-          </form>
+          {allDocumentsUploaded && (
+            <div className={s.completionMessage}>
+              ✅ Tous les documents ont été téléchargés avec succès !
+            </div>
+          )}
         </div>
       </div>
     </div>

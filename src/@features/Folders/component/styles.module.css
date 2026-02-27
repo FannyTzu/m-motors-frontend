@@ -18,6 +18,16 @@
   color: var(--color-red-info);
 }
 
+.success {
+  background-color: #e8f5e9;
+  border: 1px solid #a5d6a7;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 12px 0;
+  color: var(--color-green-status-dark);
+  font-weight: 500;
+}
+
 .documentList {
   list-style: none;
   padding: 0;
@@ -46,6 +56,30 @@
   display: flex;
   gap: 8px;
   margin-left: auto;
+  align-items: center;
+}
+
+.statusText {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  color: var(--color-gray);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.statusSuccess {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  color: var(--color-green-status-dark);
+  font-weight: 600;
+  background-color: #e8f5e9;
+  border-radius: 6px;
+  width: 40px;
+  height: 40px;
 }
 
 .uploadButton {
@@ -70,6 +104,43 @@
 }
 
 .uploadButton svg {
+  flex-shrink: 0;
+}
+
+.uploadButton.disabled {
+  background-color: var(--color-gray-light);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.uploadButton.disabled:hover {
+  background-color: var(--color-gray-light);
+  transform: none;
+}
+
+.replaceButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  background-color: #f97316;
+  color: var(--color-white);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.replaceButton:hover {
+  background-color: #ea580c;
+}
+
+.replaceButton:active {
+  transform: scale(0.98);
+}
+
+.replaceButton svg {
   flex-shrink: 0;
 }
 
@@ -99,30 +170,14 @@
   flex-shrink: 0;
 }
 
-.submitButton {
-  width: 100%;
-  padding: 8px 16px;
-  background-color: var(--color-green);
-  color: var(--color-white);
-  border: none;
+.completionMessage {
+  background-color: #e8f5e9;
+  border: 2px solid var(--color-green);
   border-radius: 8px;
-  font-size: medium;
+  padding: 16px;
+  margin: 16px 0;
+  text-align: center;
+  color: var(--color-green-status-dark);
   font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 4px;
-}
-
-.submitButton:hover:not(:disabled) {
-  background-color: var(--color-green-status-dark);
-}
-
-.submitButton:disabled {
-  background-color: var(--color-gray-light);
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.submitButton:active:not(:disabled) {
-  transform: scale(0.98);
+  font-size: 1.1rem;
 }
