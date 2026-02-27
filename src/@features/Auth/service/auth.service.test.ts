@@ -3,6 +3,12 @@ import {
   loginRequest,
   refreshTokenRequest,
   registerRequest,
+  setAccessToken,
+  getAccessToken,
+  clearAccessToken,
+  updateMeRequest,
+  logoutRequest,
+  deleteUserAccountRequest,
 } from "./auth.service";
 
 const mockFetch = fetch as jest.Mock;
@@ -105,6 +111,153 @@ describe("registerRequest", () => {
 
     await expect(refreshTokenRequest()).rejects.toThrow(
       "Failed to refresh token"
+    );
+  });
+});
+
+describe("Token management", () => {
+  beforeEach(() => {
+    clearAccessToken();
+  });
+
+  it("should set and get access token", () => {
+    const token = "test-token-random";
+    setAccessToken(token);
+    expect(getAccessToken()).toBe(token);
+  });
+
+  it("should clear access token", () => {
+    setAccessToken("test-token-random");
+    clearAccessToken();
+    expect(getAccessToken()).toBeNull();
+  });
+
+  it("should return null if no token is set", () => {
+    expect(getAccessToken()).toBeNull();
+  });
+});
+
+describe("updateMeRequest", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("returns updated user data if update succeeds", async () => {
+    const userData = {
+      firstName: "John",
+      lastName: "Doe",
+      phone: "123456789",
+    };
+
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: async () => ({ id: 1, ...userData }),
+    });
+
+    const result = await updateMeRequest(userData);
+
+    expect(fetch).toHaveBeenCalledWith(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/me`,
+      expect.objectContaining({
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      })
+    );
+
+    expect(result).toEqual({ id: 1, ...userData });
+  });
+
+  it("throws an error if update fails", async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      json: async () => ({ message: "Update failed" }),
+    });
+
+    await expect(updateMeRequest({ firstName: "John" })).rejects.toThrow(
+      "Failed to update user information"
+    );
+  });
+});
+
+describe("logoutRequest", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    clearAccessToken();
+  });
+
+  it("clears access token and calls logout endpoint", async () => {
+    setAccessToken("test-token");
+
+    mockFetch.mockResolvedValue({
+      ok: true,
+    });
+
+    await logoutRequest();
+
+    expect(fetch).toHaveBeenCalledWith(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/logout`,
+      expect.objectContaining({
+        method: "POST",
+        credentials: "include",
+      })
+    );
+
+    expect(getAccessToken()).toBeNull();
+  });
+
+  it("clears access token even if request fails", async () => {
+    setAccessToken("test-token-random");
+
+    mockFetch.mockResolvedValue({
+      ok: false,
+    });
+
+    await logoutRequest();
+
+    expect(getAccessToken()).toBeNull();
+  });
+});
+
+describe("deleteUserAccountRequest", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    clearAccessToken();
+  });
+
+  it("deletes user account and clears token if successful", async () => {
+    setAccessToken("test-token");
+
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: async () => ({ message: "Account deleted" }),
+    });
+
+    const result = await deleteUserAccountRequest();
+
+    expect(fetch).toHaveBeenCalledWith(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/me`,
+      expect.objectContaining({
+        method: "DELETE",
+        credentials: "include",
+      })
+    );
+
+    expect(result).toEqual({ message: "Account deleted" });
+    expect(getAccessToken()).toBeNull();
+  });
+
+  it("throws an error if delete fails", async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      json: async () => ({ message: "Delete failed" }),
+    });
+
+    await expect(deleteUserAccountRequest()).rejects.toThrow(
+      "Failed to delete user account"
     );
   });
 });
