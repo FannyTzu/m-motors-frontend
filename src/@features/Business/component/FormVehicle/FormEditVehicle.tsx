@@ -6,8 +6,10 @@ import { useRouter } from "next/navigation";
 import {
   getVehicleById,
   updateVehicle,
+  uploadVehicleImage,
 } from "@/@features/Vehicles/service/vehicle.service";
-import { CircleX } from "lucide-react";
+import { CircleX, Upload } from "lucide-react";
+import Image from "next/image";
 
 interface FormEditVehicleProps {
   vehicleId: number;
@@ -35,6 +37,8 @@ function FormEditVehicle({ vehicleId }: FormEditVehicleProps) {
   const [loading, setLoading] = useState(true);
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<VehicleData>({
     brand: "",
@@ -59,6 +63,9 @@ function FormEditVehicle({ vehicleId }: FormEditVehicleProps) {
         setError(null);
         const data = await getVehicleById(vehicleId);
         setFormData(data);
+        if (data.image) {
+          setImagePreview(data.image);
+        }
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Erreur lors du chargement"
@@ -89,6 +96,30 @@ function FormEditVehicle({ vehicleId }: FormEditVehicleProps) {
     }));
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        setError("Veuillez sélectionner une image valide (JPEG ou PNG)");
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        setError("L'image ne doit pas dépasser 5 MB");
+        return;
+      }
+
+      setImageFile(file);
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+      setError(null);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsFormSubmitting(true);
@@ -97,6 +128,12 @@ function FormEditVehicle({ vehicleId }: FormEditVehicleProps) {
     try {
       await updateVehicle(vehicleId, formData);
       console.log("Véhicule modifié:", formData);
+
+      if (imageFile) {
+        const result = await uploadVehicleImage(vehicleId, imageFile);
+        console.log("Image uploadée:", result.publicUrl);
+      }
+
       router.push("/business-space");
     } catch (err) {
       setError(
@@ -343,6 +380,42 @@ function FormEditVehicle({ vehicleId }: FormEditVehicleProps) {
             />
           </div>
 
+          <div className={s.formGroup}>
+            <label htmlFor="image" className={s.label}>
+              Image
+            </label>
+            <div className={s.imageUploadContainer}>
+              {imagePreview && (
+                <div className={s.imagePreviewWrapper}>
+                  <Image
+                    src={imagePreview}
+                    alt="Prévisualisation"
+                    width={100}
+                    height={100}
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+              )}
+              <div className={s.fileInputWrapper}>
+                <input
+                  type="file"
+                  id="image"
+                  name="image"
+                  onChange={handleImageChange}
+                  className={s.fileInput}
+                  accept="image/jpeg,image/jpg,image/png"
+                />
+                <label htmlFor="image" className={s.fileInputLabel}>
+                  <Upload size={18} />
+                  {imageFile ? imageFile.name : "Choisir une image"}
+                </label>
+              </div>
+            </div>
+          </div>
           <div className={s.formGroupDescription}>
             <label htmlFor="description" className={s.label}>
               Description
@@ -356,22 +429,6 @@ function FormEditVehicle({ vehicleId }: FormEditVehicleProps) {
               className={s.input}
               placeholder="Ex: ceci est une description plutot courte du véhicule mais vous pouvez en mettre une plus longue"
               required
-            />
-          </div>
-
-          <div className={s.formGroup}>
-            <label htmlFor="image" className={s.label}>
-              Image
-            </label>
-            {/* TODO import ImageUploader component */}
-            <input
-              type="url"
-              id="image"
-              name="image"
-              value={formData.image}
-              onChange={handleChange}
-              className={s.input}
-              placeholder="https://example.com/image.jpg"
             />
           </div>
         </div>
