@@ -9,10 +9,12 @@ import {
   IdCardLanyard,
   Landmark,
   Upload,
+  Trash2,
 } from "lucide-react";
 import {
   uploadDocumentRequest,
   getDocumentsByIdRequest,
+  deleteDocumentRequest,
 } from "../service/folder.service";
 
 interface FolderToCompleteComponentProps {
@@ -123,9 +125,7 @@ function FolderToCompleteComponent({
           documentType: fileType,
           file,
         });
-
         const documents = await getDocumentsByIdRequest(folderId);
-
         const docsByType: {
           idCard: { id: number; url: string; name: string } | null;
           drivingLicense: { id: number; url: string; name: string } | null;
@@ -135,7 +135,6 @@ function FolderToCompleteComponent({
           drivingLicense: null,
           rib: null,
         };
-
         documents.forEach(
           (doc: { id: number; type: string; url: string; name: string }) => {
             if (
@@ -153,21 +152,11 @@ function FolderToCompleteComponent({
             }
           }
         );
-
         setExistingDocuments(docsByType);
-
-        const documentLabels = {
-          idCard: "Pièce d'identité",
-          drivingLicense: "Permis de conduire",
-          rib: "RIB",
-        };
-
-        setSuccessMessage(
-          `${documentLabels[fileType]} ${
-            existingDocuments[fileType] ? "remplacé" : "téléchargé"
-          } avec succès !`
-        );
-
+        setSuccessMessage("Document téléchargé avec succès !");
+        setTimeout(() => {
+          setSuccessMessage(null);
+        }, 2000);
         e.target.value = "";
       } catch (err) {
         setError(
@@ -179,6 +168,58 @@ function FolderToCompleteComponent({
         setUploadingState((prev) => ({ ...prev, [fileType]: false }));
       }
     };
+
+  const handleDeleteDocument = async (
+    fileType: "idCard" | "drivingLicense" | "rib"
+  ) => {
+    if (!existingDocuments[fileType]) return;
+    setUploadingState((prev) => ({ ...prev, [fileType]: true }));
+    setError(null);
+    setSuccessMessage(null);
+    try {
+      await deleteDocumentRequest(existingDocuments[fileType]!.id);
+      const documents = await getDocumentsByIdRequest(folderId);
+      const docsByType: {
+        idCard: { id: number; url: string; name: string } | null;
+        drivingLicense: { id: number; url: string; name: string } | null;
+        rib: { id: number; url: string; name: string } | null;
+      } = {
+        idCard: null,
+        drivingLicense: null,
+        rib: null,
+      };
+      documents.forEach(
+        (doc: { id: number; type: string; url: string; name: string }) => {
+          if (
+            doc.type === "idCard" ||
+            doc.type === "drivingLicense" ||
+            doc.type === "rib"
+          ) {
+            if (!docsByType[doc.type] || doc.id > docsByType[doc.type]!.id) {
+              docsByType[doc.type] = {
+                id: doc.id,
+                url: doc.url,
+                name: doc.name,
+              };
+            }
+          }
+        }
+      );
+      setExistingDocuments(docsByType);
+      setSuccessMessage("Document supprimé avec succès !");
+      setTimeout(() => {
+        setSuccessMessage(null);
+      }, 2000);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Erreur lors de la suppression du document"
+      );
+    } finally {
+      setUploadingState((prev) => ({ ...prev, [fileType]: false }));
+    }
+  };
 
   const handleViewDocument = (documentUrl: string) => {
     window.open(documentUrl, "_blank");
@@ -201,9 +242,8 @@ function FolderToCompleteComponent({
           <h2>Pièces justificatives</h2>
 
           <p className={s.explanation}>
-            Téléchargez vos documents un par un. Vous pouvez les remplacer à
-            tout moment en sélectionnant un nouveau fichier. Les documents sont
-            sauvegardés immédiatement après sélection.
+            Téléchargez vos documents un par un. Vous pouvez les supprimer à
+            tout moment et les remplacer.
           </p>
 
           {error && <div className={s.error}>{error}</div>}
@@ -211,6 +251,11 @@ function FolderToCompleteComponent({
 
           <ul className={s.documentList}>
             <li className={s.documentItem}>
+              {existingDocuments.idCard ? (
+                <span className={s.statusSuccess}>
+                  <CheckCircle size={20} />
+                </span>
+              ) : null}
               <IdCard />
               <span>Pièce d&apos;identité</span>
               <input
@@ -224,15 +269,9 @@ function FolderToCompleteComponent({
               />
               <div className={s.buttonGroup}>
                 {uploadingState.idCard ? (
-                  <span className={s.statusText}>⏳ Upload en cours...</span>
+                  <span className={s.statusText}>⏳ en cours...</span>
                 ) : existingDocuments.idCard ? (
                   <>
-                    <span className={s.statusSuccess}>
-                      <CheckCircle size={20} />
-                    </span>
-                    <label htmlFor="idCard-input" className={s.replaceButton}>
-                      <Upload size={16} /> Remplacer
-                    </label>
                     <button
                       type="button"
                       onClick={() =>
@@ -241,6 +280,14 @@ function FolderToCompleteComponent({
                       className={s.viewButton}
                     >
                       <Eye size={16} /> Voir
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteDocument("idCard")}
+                      className={s.deleteButton}
+                      disabled={uploadingState.idCard}
+                    >
+                      <Trash2 size={16} />
                     </button>
                   </>
                 ) : (
@@ -251,6 +298,11 @@ function FolderToCompleteComponent({
               </div>
             </li>
             <li className={s.documentItem}>
+              {existingDocuments.drivingLicense ? (
+                <span className={s.statusSuccess}>
+                  <CheckCircle size={20} />
+                </span>
+              ) : null}
               <IdCardLanyard />
               <span>Permis de conduire</span>
               <input
@@ -264,18 +316,9 @@ function FolderToCompleteComponent({
               />
               <div className={s.buttonGroup}>
                 {uploadingState.drivingLicense ? (
-                  <span className={s.statusText}>⏳ Upload en cours...</span>
+                  <span className={s.statusText}>⏳ en cours...</span>
                 ) : existingDocuments.drivingLicense ? (
                   <>
-                    <span className={s.statusSuccess}>
-                      <CheckCircle size={20} />
-                    </span>
-                    <label
-                      htmlFor="drivingLicense-input"
-                      className={s.replaceButton}
-                    >
-                      <Upload size={16} /> Remplacer
-                    </label>
                     <button
                       type="button"
                       onClick={() =>
@@ -286,6 +329,14 @@ function FolderToCompleteComponent({
                       className={s.viewButton}
                     >
                       <Eye size={16} /> Voir
+                    </button>{" "}
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteDocument("drivingLicense")}
+                      className={s.deleteButton}
+                      disabled={uploadingState.drivingLicense}
+                    >
+                      <Trash2 size={16} />
                     </button>
                   </>
                 ) : (
@@ -299,6 +350,11 @@ function FolderToCompleteComponent({
               </div>
             </li>
             <li className={s.documentItem}>
+              {existingDocuments.rib ? (
+                <span className={s.statusSuccess}>
+                  <CheckCircle size={20} />
+                </span>
+              ) : null}
               <Landmark />
               <span>RIB</span>
               <input
@@ -312,17 +368,9 @@ function FolderToCompleteComponent({
               />
               <div className={s.buttonGroup}>
                 {uploadingState.rib ? (
-                  <span className={s.statusText}>
-                    ⏳ Chargement en cours...
-                  </span>
+                  <span className={s.statusText}>⏳ en cours...</span>
                 ) : existingDocuments.rib ? (
                   <>
-                    <span className={s.statusSuccess}>
-                      <CheckCircle size={20} />
-                    </span>
-                    <label htmlFor="rib-input" className={s.replaceButton}>
-                      <Upload size={16} /> Remplacer
-                    </label>
                     <button
                       type="button"
                       onClick={() =>
@@ -331,6 +379,14 @@ function FolderToCompleteComponent({
                       className={s.viewButton}
                     >
                       <Eye size={16} /> Voir
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteDocument("rib")}
+                      className={s.deleteButton}
+                      disabled={uploadingState.rib}
+                    >
+                      <Trash2 size={16} />
                     </button>
                   </>
                 ) : (
@@ -341,11 +397,11 @@ function FolderToCompleteComponent({
               </div>
             </li>
           </ul>
-
+          {/* TODO: ajouter logique pour soumettre le dossier */}
           {allDocumentsUploaded && (
-            <div className={s.completionMessage}>
-              ✅ Tous les documents ont été téléchargés avec succès !
-            </div>
+            <button className={s.submitButton}>
+              ✅ Tous les documents sont prêts ! Envoyer le dossier maintenant
+            </button>
           )}
         </div>
       </div>

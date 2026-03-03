@@ -85,28 +85,18 @@ export const getDocumentsByIdRequest = async (folderId: number) => {
   return response.json();
 };
 
-export const updateDocumentRequest = async ({
-  documentId,
-  file,
-}: {
-  documentId: number;
-  file: File;
-}) => {
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("name", file.name);
-
+export const deleteDocumentRequest = async (documentId: number) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/documents/${documentId}`,
     {
-      method: "PATCH",
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: formData,
     }
   );
-  if (!response.ok) {
-    throw new Error("Failed to update document");
-  }
 
+  if (!response.ok) {
+    throw new Error("Failed to delete document");
+  }
   return response.json();
 };
