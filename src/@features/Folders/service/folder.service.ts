@@ -66,3 +66,37 @@ export const uploadDocumentRequest = async ({
 
   return response.json();
 };
+
+export const getDocumentsByIdRequest = async (folderId: number) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/documents/folder/${folderId}`,
+
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch documents");
+  }
+
+  return response.json();
+};
+
+export const deleteDocumentRequest = async (documentId: number) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/documents/${documentId}`,
+    {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to delete document");
+  }
+  return response.json();
+};
