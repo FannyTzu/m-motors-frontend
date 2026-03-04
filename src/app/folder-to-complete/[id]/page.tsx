@@ -1,4 +1,4 @@
-import FolderToCompleteComponent from "@/@features/Folders/component/FolderToCompleteComponent";
+import FolderToCompleteComponent from "@/@features/Folders/component/FolderToComplete/FolderToCompleteComponent";
 
 interface FolderToCompletePageProps {
   params: Promise<{
