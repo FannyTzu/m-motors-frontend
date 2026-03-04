@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import s from "./styles.module.css";
 import VehicleCatalogComponent from "../VehicleCatalogComponent/VehicleCatalogComponent";
-import FolderToValidateComponent from "@/@features/Folders/component/FolderCardToValidate/FolderToValidateComponent";
+import FolderToValidateComponent from "@/@features/Folders/component/FolderToValidate/FolderToValidateComponent";
 
 function BusinessPageComponent() {
   const [activeTab, setActiveTab] = useState<"vehicles" | "clients">(
