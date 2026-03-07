@@ -2,22 +2,22 @@ import React from "react";
 import { formatDate } from "@/@utils/formatDate";
 import s from "./styles.module.css";
 
-interface Vehicle {
+type Vehicle = {
   id: number;
   brand: string;
   model: string;
   type: string;
-}
+};
 
-interface Folder {
+type Folder = {
   id: number;
   user_id: number;
   vehicle_id: number;
   status: string;
   created_at: string;
-}
+};
 
-interface User {
+type User = {
   id: number;
   mail: string;
   first_name: string;
@@ -28,13 +28,13 @@ interface User {
   zip_code?: string;
   country?: string;
   role: string;
-}
+};
 
-interface FolderToValidateCardProps {
+type FolderToValidateCardProps = {
   folder: Folder;
   user: User;
   vehicle: Vehicle;
-}
+};
 
 function FolderToValidateCard({
   folder,
