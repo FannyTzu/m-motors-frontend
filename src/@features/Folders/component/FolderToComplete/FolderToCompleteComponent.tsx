@@ -12,10 +12,9 @@ import {
   Trash2,
 } from "lucide-react";
 import {
-  uploadDocumentRequest,
-  getDocumentsByIdRequest,
   deleteDocumentRequest,
-} from "../service/folder.service";
+  getDocumentsByIdRequest,
+} from "../../service/folder.service";
 
 interface FolderToCompleteComponentProps {
   folderId: number;
@@ -120,11 +119,6 @@ function FolderToCompleteComponent({
       setUploadingState((prev) => ({ ...prev, [fileType]: true }));
 
       try {
-        await uploadDocumentRequest({
-          folderId,
-          documentType: fileType,
-          file,
-        });
         const documents = await getDocumentsByIdRequest(folderId);
         const docsByType: {
           idCard: { id: number; url: string; name: string } | null;

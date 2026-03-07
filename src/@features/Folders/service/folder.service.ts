@@ -26,7 +26,6 @@ export const getFolderByUserIdRequest = async (userId: number) => {
     `${process.env.NEXT_PUBLIC_API_URL}/folder/user/${userId}`,
     {
       method: "GET",
-
       headers: { "Content-Type": "application/json" },
       credentials: "include",
     }
@@ -34,6 +33,20 @@ export const getFolderByUserIdRequest = async (userId: number) => {
 
   if (!response.ok) {
     throw new Error("Failed to fetch folder");
+  }
+
+  return response.json();
+};
+
+export const getAllFoldersRequest = async () => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/folder`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch all folders");
   }
 
   return response.json();

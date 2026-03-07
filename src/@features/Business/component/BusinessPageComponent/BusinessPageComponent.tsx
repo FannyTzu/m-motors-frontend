@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import s from "./styles.module.css";
 import VehicleCatalogComponent from "../VehicleCatalogComponent/VehicleCatalogComponent";
+import FolderToValidateComponent from "@/@features/Folders/component/FolderToValidate/FolderToValidateComponent";
 
 function BusinessPageComponent() {
   const [activeTab, setActiveTab] = useState<"vehicles" | "clients">(
@@ -37,7 +38,7 @@ function BusinessPageComponent() {
           )}
           {activeTab === "clients" && (
             <div>
-              <h3>COMPOSANT Dossiers clients à mettre ici</h3>
+              <FolderToValidateComponent />
             </div>
           )}
         </div>
