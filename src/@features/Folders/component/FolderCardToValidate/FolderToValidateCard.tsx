@@ -43,23 +43,42 @@ function FolderToValidateCard({
 }: FolderToValidateCardProps) {
   return (
     <div className={s.card}>
+      {" "}
+      {/* todo: component status to add */}
+      <div>Status à venir</div>
       <div className={s.section}>
-        <div className={s.userName}>
-          {user.first_name} {user.last_name}
+        <div className={s.label}>
+          Véhicule :
+          <span className={s.span}>
+            {vehicle.brand} {vehicle.model}
+          </span>
         </div>
-        {/* todo: component status to add */}
-        <div>Status à venir</div>
+        <div className={s.label}>
+          Type :
+          <span className={s.span}>
+            {vehicle.type === "sale" ? "Vente" : "Location"}
+          </span>
+        </div>
+        <div className={s.label}>
+          Dossier du
+          <span className={s.span}>{formatDate(folder.created_at)}</span>
+        </div>
       </div>
       <div className={s.section}>
-        <div className={s.contactInfo}>{user.mail}</div>
-        <div className={s.contactInfo}>{user.phone_number}</div>
+        <div className={s.label}>
+          Nom et prénom :
+          <span className={s.span}>
+            {user.first_name} {user.last_name}
+          </span>
+        </div>
       </div>
       <div className={s.section}>
-        <div className={s.vehicleInfo}>
-          {vehicle.brand} {vehicle.model}
+        <div className={s.label}>
+          Email : <span className={s.span}>{user.mail}</span>
         </div>
-        <div className={s.vehicleType}>{vehicle.type}</div>
-        <div className={s.date}>{formatDate(folder.created_at)}</div>
+        <div className={s.label}>
+          Téléphone : <span className={s.span}>{user.phone_number}</span>
+        </div>
       </div>
       <button className={s.button}>Consulter le dossier</button>
     </div>

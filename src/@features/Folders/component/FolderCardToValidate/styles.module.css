@@ -23,40 +23,15 @@
   flex-wrap: wrap;
 }
 
-.userName {
-  font-weight: 600;
-  font-size: 16px;
-  color: var(--color-black);
+.label {
+  font-size: 14px;
+  color: var(--color-gray-dark);
+  display: flex;
+  flex-direction: column;
 }
 
-.status {
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 14px;
+.span {
   font-weight: 500;
-  background-color: var(--color-gray-light);
-  color: var(--color-gray);
-}
-
-.contactInfo {
-  font-size: 14px;
-  color: var(--color-gray);
-}
-
-.vehicleInfo {
-  font-weight: 500;
-  font-size: 15px;
-  color: var(--color-black);
-}
-
-.vehicleType {
-  font-size: 14px;
-  color: var(--color-gray);
-}
-
-.date {
-  font-size: 13px;
-  color: var(--color-gray);
 }
 
 .button {
