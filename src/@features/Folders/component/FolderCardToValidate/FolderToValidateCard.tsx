@@ -23,24 +23,25 @@ type User = {
   first_name: string;
   last_name: string;
   phone_number: string;
-  address?: string;
-  city?: string;
-  zip_code?: string;
-  country?: string;
-  role: string;
 };
 
 type FolderToValidateCardProps = {
   folder: Folder;
   user: User;
   vehicle: Vehicle;
+  onConsultFolder: (folderId: number) => void;
 };
 
 function FolderToValidateCard({
   folder,
   user,
   vehicle,
+  onConsultFolder,
 }: FolderToValidateCardProps) {
+  const handleConsultFolder = () => {
+    onConsultFolder(folder.id);
+  };
+
   return (
     <div className={s.card}>
       {" "}
@@ -80,7 +81,9 @@ function FolderToValidateCard({
           Téléphone : <span className={s.span}>{user.phone_number}</span>
         </div>
       </div>
-      <button className={s.button}>Consulter le dossier</button>
+      <button className={s.button} onClick={handleConsultFolder}>
+        Consulter le dossier
+      </button>
     </div>
   );
 }

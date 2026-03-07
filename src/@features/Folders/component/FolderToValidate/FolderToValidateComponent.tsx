@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import FolderToValidateCard from "../FolderCardToValidate/FolderToValidateCard";
 import s from "./styles.module.css";
 import { getAllFoldersRequest } from "../../service/folder.service";
+import { useRouter } from "next/navigation";
 
 type Vehicle = {
   id: number;
@@ -38,6 +39,7 @@ function FolderToValidateComponent() {
   const [folders, setFolders] = useState<FolderWithRelations[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchFolders = async () => {
@@ -55,6 +57,10 @@ function FolderToValidateComponent() {
 
     fetchFolders();
   }, []);
+
+  const handleConsultFolder = (folderId: number) => {
+    router.push(`/folder-to-consult/${folderId}`);
+  };
 
   if (loading) {
     return <div className={s.loading}>Chargement des dossiers...</div>;
@@ -77,6 +83,7 @@ function FolderToValidateComponent() {
               folder={folder}
               user={folder.user}
               vehicle={folder.vehicle}
+              onConsultFolder={handleConsultFolder}
             />
           ))}
         </div>
