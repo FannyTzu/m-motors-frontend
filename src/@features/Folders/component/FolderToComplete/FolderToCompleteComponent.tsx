@@ -14,6 +14,7 @@ import {
 import {
   deleteDocumentRequest,
   getDocumentsByIdRequest,
+  uploadDocumentRequest,
 } from "../../service/folder.service";
 
 interface FolderToCompleteComponentProps {
@@ -119,6 +120,12 @@ function FolderToCompleteComponent({
       setUploadingState((prev) => ({ ...prev, [fileType]: true }));
 
       try {
+        await uploadDocumentRequest({
+          folderId,
+          documentType: fileType,
+          file,
+        });
+
         const documents = await getDocumentsByIdRequest(folderId);
         const docsByType: {
           idCard: { id: number; url: string; name: string } | null;
