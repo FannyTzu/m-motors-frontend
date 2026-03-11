@@ -38,6 +38,23 @@ export const getFolderByUserIdRequest = async (userId: number) => {
   return response.json();
 };
 
+export const getFolderByIdRequest = async (folderId: number) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/folder/${folderId}`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch folder");
+  }
+
+  return response.json();
+};
+
 export const getAllFoldersRequest = async () => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/folder`, {
     method: "GET",
