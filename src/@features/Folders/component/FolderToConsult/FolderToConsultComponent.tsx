@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import s from "./styles.module.css";
 import ArrowBack from "@/@Component/ArrowBack/ArrowBack";
-import { Eye } from "lucide-react";
+import { Eye, CheckCircle, Circle } from "lucide-react";
 import {
   getFolderByIdRequest,
   getDocumentsByIdRequest,
@@ -169,7 +169,14 @@ function FolderToConsultComponent({ folderId }: FolderToConsultComponentProps) {
           <h2 className={s.sectionTitle}>Documents fournis</h2>
           <div className={s.documentsList}>
             <div className={s.documentItem}>
-              <span className={s.documentLabel}>Carte d&apos;identité</span>
+              <span className={s.documentLabel}>
+                {idCard ? (
+                  <CheckCircle size={18} color="green" />
+                ) : (
+                  <Circle size={18} color="red" />
+                )}
+                Carte d&apos;identité
+              </span>
               {idCard ? (
                 <button
                   type="button"
@@ -183,7 +190,14 @@ function FolderToConsultComponent({ folderId }: FolderToConsultComponentProps) {
               )}
             </div>
             <div className={s.documentItem}>
-              <span className={s.documentLabel}>Permis de conduire</span>
+              <span className={s.documentLabel}>
+                {drivingLicense ? (
+                  <CheckCircle size={18} color="green" />
+                ) : (
+                  <Circle size={18} color="red" />
+                )}
+                Permis de conduire
+              </span>
               {drivingLicense ? (
                 <button
                   type="button"
@@ -197,7 +211,14 @@ function FolderToConsultComponent({ folderId }: FolderToConsultComponentProps) {
               )}
             </div>
             <div className={s.documentItem}>
-              <span className={s.documentLabel}>RIB</span>
+              <span className={s.documentLabel}>
+                {rib ? (
+                  <CheckCircle size={18} color="green" />
+                ) : (
+                  <Circle size={18} color="red" />
+                )}
+                RIB
+              </span>
               {rib ? (
                 <button
                   type="button"

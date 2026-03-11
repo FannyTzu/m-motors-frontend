@@ -90,6 +90,9 @@
   font-weight: 500;
   color: var(--color-black);
   font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .viewButton {
