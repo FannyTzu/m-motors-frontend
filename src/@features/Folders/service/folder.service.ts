@@ -69,6 +69,34 @@ export const getAllFoldersRequest = async () => {
   return response.json();
 };
 
+export const updateFolderStatusRequest = async ({
+  folderId,
+  status,
+}: {
+  folderId: number;
+  status:
+    | "submitted"
+    | "accepted"
+    | "rejected"
+    | "closed"
+    | "cancelled"
+    | "archived";
+}) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/folder/${folderId}/status`,
+    {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ status }),
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to update folder status");
+  }
+  return response.json();
+};
+
 export const uploadDocumentRequest = async ({
   folderId,
   documentType,
