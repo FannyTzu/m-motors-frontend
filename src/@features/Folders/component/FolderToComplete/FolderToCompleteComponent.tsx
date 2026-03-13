@@ -55,11 +55,11 @@ function FolderToCompleteComponent({
   useEffect(() => {
     const fetchFolderData = async () => {
       try {
-        // Récupérer le statut du dossier
+        // FEtch Status
         const folder = await getFolderByIdRequest(folderId);
         setFolderStatus(folder.status);
 
-        // Récupérer les documents
+        // Fetch documents
         const documents = await getDocumentsByIdRequest(folderId);
 
         const docsByType: {

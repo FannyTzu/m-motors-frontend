@@ -9,12 +9,12 @@ interface StatusComponentProps {
 }
 
 type FolderStatus =
-  | "active" // dossier créé
-  | "submitted" // dossier envoyé par le client
-  | "rejected" // dossier refusé
-  | "accepted" // dossier validé - en attente de paiement
-  | "closed" // paiement effectué et dossier clôturé
-  | "cancelled"; // paiement annulé
+  | "active" // folder create
+  | "submitted" // folder submitted by user
+  | "rejected" // folder rejected by admin
+  | "accepted" // folder accepted by admin - awaiting payment
+  | "closed" // payment completed and folder closed
+  | "cancelled"; // payment cancelled by user
 
 interface StatusConfig {
   label: string;
