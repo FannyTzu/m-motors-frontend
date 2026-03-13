@@ -6,8 +6,10 @@ import { Eye, CheckCircle, Circle } from "lucide-react";
 import {
   getFolderByIdRequest,
   getDocumentsByIdRequest,
+  updateFolderStatusRequest,
 } from "../../service/folder.service";
 import { formatDate } from "@/@utils/formatDate";
+import StatusComponent from "@/@Component/Status/StatusComponent";
 
 type Vehicle = {
   id: number;
@@ -77,9 +79,33 @@ function FolderToConsultComponent({ folderId }: FolderToConsultComponentProps) {
     window.open(documentUrl, "_blank");
   };
 
-  const handleValidateFolder = () => {};
+  const handleValidateFolder = async () => {
+    try {
+      setLoading(true);
+      await updateFolderStatusRequest({ folderId, status: "accepted" });
+      setFolder((prev) => (prev ? { ...prev, status: "accepted" } : prev));
+      console.log("Dossier validé avec succès");
+    } catch (err) {
+      console.error("Error validating folder:", err);
+      setError("Erreur lors de la validation du dossier");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const handleRejectFolder = () => {};
+  const handleRejectFolder = async () => {
+    try {
+      setLoading(true);
+      await updateFolderStatusRequest({ folderId, status: "rejected" });
+      setFolder((prev) => (prev ? { ...prev, status: "rejected" } : prev));
+      console.log("Dossier refusé avec succès");
+    } catch (err) {
+      console.error("Error rejecting folder:", err);
+      setError("Erreur lors du refus du dossier");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -118,9 +144,8 @@ function FolderToConsultComponent({ folderId }: FolderToConsultComponentProps) {
 
         {error && <div className={s.error}>{error}</div>}
 
-        {/*  TODO : ajouter le composant statut qd il sera créé et fonctionnel */}
         <div>
-          <div>STATUS à venir</div>
+          <StatusComponent folderId={folderId} />
         </div>
 
         <div className={s.section}>

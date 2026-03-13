@@ -14,8 +14,11 @@ import {
 import {
   deleteDocumentRequest,
   getDocumentsByIdRequest,
+  getFolderByIdRequest,
+  updateFolderStatusRequest,
   uploadDocumentRequest,
 } from "../../service/folder.service";
+import StatusComponent from "@/@Component/Status/StatusComponent";
 
 interface FolderToCompleteComponentProps {
   folderId: number;
@@ -46,10 +49,17 @@ function FolderToCompleteComponent({
 
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [folderStatus, setFolderStatus] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchDocuments = async () => {
+    const fetchFolderData = async () => {
       try {
+        // FEtch Status
+        const folder = await getFolderByIdRequest(folderId);
+        setFolderStatus(folder.status);
+
+        // Fetch documents
         const documents = await getDocumentsByIdRequest(folderId);
 
         const docsByType: {
@@ -82,11 +92,11 @@ function FolderToCompleteComponent({
 
         setExistingDocuments(docsByType);
       } catch (err) {
-        console.error("Erreur lors du chargement des documents:", err);
+        console.error("Erreur lors du chargement des données:", err);
       }
     };
 
-    fetchDocuments();
+    fetchFolderData();
   }, [folderId]);
 
   const handleFileChange =
@@ -226,6 +236,22 @@ function FolderToCompleteComponent({
     window.open(documentUrl, "_blank");
   };
 
+  const handleSubmitted = async () => {
+    try {
+      setIsSubmitting(true);
+      setError(null);
+      await updateFolderStatusRequest({ folderId, status: "submitted" });
+      setSuccessMessage("Dossier envoyé pour validation par M-Motors !");
+      setFolderStatus("submitted");
+      setTimeout(() => setSuccessMessage(null), 3000);
+    } catch (err) {
+      console.error("Error submitting folder:", err);
+      setError("Erreur lors de l'envoi du dossier");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const allDocumentsUploaded =
     existingDocuments.idCard &&
     existingDocuments.drivingLicense &&
@@ -237,14 +263,14 @@ function FolderToCompleteComponent({
       <div className={s.container}>
         <div>
           <h1>Dépôt de dossier</h1>
-          {/*  TODO : ajouter le composant statut qd il sera créé et fonctionnel */}
-          <div>STATUT DU DOSSIER</div>
+          <StatusComponent folderId={folderId} />
 
           <h2>Pièces justificatives</h2>
 
           <p className={s.explanation}>
-            Téléchargez vos documents un par un. Vous pouvez les supprimer à
-            tout moment et les remplacer.
+            {folderStatus === "active"
+              ? "Téléchargez vos documents un par un. Vous pouvez les supprimer à tout moment et les remplacer tant que vous n'envoyez pas votre dossier pour validation."
+              : "Vous ne pouvez plus supprimer vos documents mais vous pouvez toujours supprimer votre dossier sur votre espace personnel."}
           </p>
 
           {error && <div className={s.error}>{error}</div>}
@@ -282,14 +308,16 @@ function FolderToCompleteComponent({
                     >
                       <Eye size={16} /> Voir
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteDocument("idCard")}
-                      className={s.deleteButton}
-                      disabled={uploadingState.idCard}
-                    >
-                      <Trash2 size={16} />
-                    </button>
+                    {folderStatus !== "submitted" && (
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteDocument("idCard")}
+                        className={s.deleteButton}
+                        disabled={uploadingState.idCard}
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    )}
                   </>
                 ) : (
                   <label htmlFor="idCard-input" className={s.uploadButton}>
@@ -331,14 +359,16 @@ function FolderToCompleteComponent({
                     >
                       <Eye size={16} /> Voir
                     </button>{" "}
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteDocument("drivingLicense")}
-                      className={s.deleteButton}
-                      disabled={uploadingState.drivingLicense}
-                    >
-                      <Trash2 size={16} />
-                    </button>
+                    {folderStatus !== "submitted" && (
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteDocument("drivingLicense")}
+                        className={s.deleteButton}
+                        disabled={uploadingState.drivingLicense}
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    )}
                   </>
                 ) : (
                   <label
@@ -381,14 +411,16 @@ function FolderToCompleteComponent({
                     >
                       <Eye size={16} /> Voir
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteDocument("rib")}
-                      className={s.deleteButton}
-                      disabled={uploadingState.rib}
-                    >
-                      <Trash2 size={16} />
-                    </button>
+                    {folderStatus !== "submitted" && (
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteDocument("rib")}
+                        className={s.deleteButton}
+                        disabled={uploadingState.rib}
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    )}
                   </>
                 ) : (
                   <label htmlFor="rib-input" className={s.uploadButton}>
@@ -398,10 +430,15 @@ function FolderToCompleteComponent({
               </div>
             </li>
           </ul>
-          {/* TODO: ajouter logique pour soumettre le dossier */}
           {allDocumentsUploaded && (
-            <button className={s.submitButton}>
-              ✅ Tous les documents sont prêts ! Envoyer le dossier maintenant
+            <button
+              className={s.submitButton}
+              onClick={handleSubmitted}
+              disabled={isSubmitting || folderStatus !== "active"}
+            >
+              {folderStatus === "active"
+                ? "Faites une demande de validation de votre dossier en cliquant ici"
+                : "Suivez le statut de votre dossier en haut de cette page"}
             </button>
           )}
         </div>
