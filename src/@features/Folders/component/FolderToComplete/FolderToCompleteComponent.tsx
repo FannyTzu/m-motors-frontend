@@ -14,8 +14,10 @@ import {
 import {
   deleteDocumentRequest,
   getDocumentsByIdRequest,
+  updateFolderStatusRequest,
   uploadDocumentRequest,
 } from "../../service/folder.service";
+import StatusComponent from "@/@Component/Status/StatusComponent";
 
 interface FolderToCompleteComponentProps {
   folderId: number;
@@ -46,6 +48,7 @@ function FolderToCompleteComponent({
 
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchDocuments = async () => {
@@ -226,6 +229,21 @@ function FolderToCompleteComponent({
     window.open(documentUrl, "_blank");
   };
 
+  const handleSubmitted = async () => {
+    try {
+      setIsSubmitting(true);
+      setError(null);
+      await updateFolderStatusRequest({ folderId, status: "submitted" });
+      setSuccessMessage("Dossier envoyé pour validation par M-Motors !");
+      setTimeout(() => setSuccessMessage(null), 3000);
+    } catch (err) {
+      console.error("Error submitting folder:", err);
+      setError("Erreur lors de l'envoi du dossier");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const allDocumentsUploaded =
     existingDocuments.idCard &&
     existingDocuments.drivingLicense &&
@@ -237,8 +255,7 @@ function FolderToCompleteComponent({
       <div className={s.container}>
         <div>
           <h1>Dépôt de dossier</h1>
-          {/*  TODO : ajouter le composant statut qd il sera créé et fonctionnel */}
-          <div>STATUT DU DOSSIER</div>
+          <StatusComponent folderId={folderId} />
 
           <h2>Pièces justificatives</h2>
 
@@ -398,10 +415,13 @@ function FolderToCompleteComponent({
               </div>
             </li>
           </ul>
-          {/* TODO: ajouter logique pour soumettre le dossier */}
           {allDocumentsUploaded && (
-            <button className={s.submitButton}>
-              ✅ Tous les documents sont prêts ! Envoyer le dossier maintenant
+            <button
+              className={s.submitButton}
+              onClick={handleSubmitted}
+              disabled={isSubmitting}
+            >
+              Faites une demande de validation de votre dossier en cliquant ici
             </button>
           )}
         </div>

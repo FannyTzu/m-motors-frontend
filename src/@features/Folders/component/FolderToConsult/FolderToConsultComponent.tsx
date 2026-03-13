@@ -9,6 +9,7 @@ import {
   updateFolderStatusRequest,
 } from "../../service/folder.service";
 import { formatDate } from "@/@utils/formatDate";
+import StatusComponent from "@/@Component/Status/StatusComponent";
 
 type Vehicle = {
   id: number;
@@ -143,9 +144,8 @@ function FolderToConsultComponent({ folderId }: FolderToConsultComponentProps) {
 
         {error && <div className={s.error}>{error}</div>}
 
-        {/*  TODO : ajouter le composant statut qd il sera créé et fonctionnel */}
         <div>
-          <div>STATUS à venir</div>
+          <StatusComponent folderId={folderId} />
         </div>
 
         <div className={s.section}>
