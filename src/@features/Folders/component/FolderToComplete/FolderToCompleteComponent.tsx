@@ -268,8 +268,9 @@ function FolderToCompleteComponent({
           <h2>Pièces justificatives</h2>
 
           <p className={s.explanation}>
-            Téléchargez vos documents un par un. Vous pouvez les supprimer à
-            tout moment et les remplacer.
+            {folderStatus === "active"
+              ? "Téléchargez vos documents un par un. Vous pouvez les supprimer à tout moment et les remplacer tant que vous n'envoyez pas votre dossier pour validation."
+              : "Vous ne pouvez plus supprimer vos documents mais vous pouvez toujours supprimer votre dossier sur votre espace personnel."}
           </p>
 
           {error && <div className={s.error}>{error}</div>}
