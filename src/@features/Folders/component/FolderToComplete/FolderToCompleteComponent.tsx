@@ -116,6 +116,9 @@ function FolderToCompleteComponent({
         "image/png",
         "image/jpg",
         "application/pdf",
+        "application/x-pdf",
+        "text/pdf",
+        "application/x-bzpdf",
       ];
       if (!allowedTypes.includes(file.type)) {
         setError(
