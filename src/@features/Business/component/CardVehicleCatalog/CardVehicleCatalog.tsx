@@ -46,6 +46,8 @@ function CardVehicleCatalog({
   const [showToggleModal, setShowToggleModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isToggling, setIsToggling] = useState(false);
+  const [currentType, setCurrentType] = useState(type);
+  const [currentPrice, setCurrentPrice] = useState(price);
 
   const handleEdit = () => {
     router.push(`/business-space/update/${id}`);
@@ -62,7 +64,7 @@ function CardVehicleCatalog({
   const handleConfirmToggle = async (newPrice: number) => {
     try {
       setIsToggling(true);
-      const newType = type === "rental" ? "sale" : "rental";
+      const newType = currentType === "rental" ? "sale" : "rental";
 
       const currentVehicle = await getVehicleById(id);
 
@@ -72,7 +74,9 @@ function CardVehicleCatalog({
         price: newPrice,
       });
 
-      console.log(`Véhicule basculé de ${type} à ${newType}`);
+      setCurrentType(newType);
+      setCurrentPrice(newPrice);
+      console.log(`Véhicule basculé de ${currentType} à ${newType}`);
       setShowToggleModal(false);
 
       router.refresh();
@@ -105,7 +109,7 @@ function CardVehicleCatalog({
     }
   };
 
-  const isRental = type === "rental";
+  const isRental = currentType === "rental";
 
   const transmissionLabels: Record<string, string> = {
     automatic: "Automatique",
@@ -132,11 +136,11 @@ function CardVehicleCatalog({
       )}
       {showToggleModal && (
         <ModalToogleRentSale
-          title={`Basculer vers ${type === "rental" ? "Vente" : "Location"} ?`}
+          title={`Basculer vers ${currentType === "rental" ? "Vente" : "Location"} ?`}
           description={`Basculer le véhicule ${brand} ${model} de "${
-            type === "rental" ? "Location LLD" : "Vente"
-          }" à "${type === "rental" ? "Vente" : "Location LLD"}".`}
-          price={price}
+            currentType === "rental" ? "Location LLD" : "Vente"
+          }" à "${currentType === "rental" ? "Vente" : "Location LLD"}".`}
+          price={currentPrice}
           onConfirm={(newPrice) => handleConfirmToggle(newPrice)}
           onClose={() => !isToggling && setShowToggleModal(false)}
           confirmText={isToggling ? "Basculement..." : "Confirmer"}
@@ -198,7 +202,8 @@ function CardVehicleCatalog({
           </div>
         </div>
         <div className={s.priceSection}>
-          {price.toLocaleString("fr-FR")} €{isRental && <span> / mois</span>}
+          {currentPrice.toLocaleString("fr-FR")} €
+          {isRental && <span> / mois</span>}
         </div>
       </div>
     </>
