@@ -4,8 +4,13 @@ import Image from "next/image";
 import s from "./styles.module.css";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { deleteVehicleById } from "@/@features/Vehicles/service/vehicle.service";
+import {
+  deleteVehicleById,
+  updateVehicle,
+  getVehicleById,
+} from "@/@features/Vehicles/service/vehicle.service";
 import Modal from "@/@Component/Modal/Modal";
+import ModalToogleRentSale from "@/@features/Business/component/ModalToogleRentSale/ModalToogleRentSale";
 
 interface CardVehicleProps {
   id: number;
@@ -38,7 +43,9 @@ function CardVehicleCatalog({
 }: CardVehicleProps) {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
+  const [showToggleModal, setShowToggleModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isToggling, setIsToggling] = useState(false);
 
   const handleEdit = () => {
     router.push(`/business-space/update/${id}`);
@@ -46,6 +53,37 @@ function CardVehicleCatalog({
 
   const handleDelete = () => {
     setShowModal(true);
+  };
+
+  const handleToogleType = () => {
+    setShowToggleModal(true);
+  };
+
+  const handleConfirmToggle = async (newPrice: number) => {
+    try {
+      setIsToggling(true);
+      const newType = type === "rental" ? "sale" : "rental";
+
+      const currentVehicle = await getVehicleById(id);
+
+      await updateVehicle(id, {
+        ...currentVehicle,
+        type: newType,
+        price: newPrice,
+      });
+
+      console.log(`Véhicule basculé de ${type} à ${newType}`);
+      setShowToggleModal(false);
+
+      router.refresh();
+    } catch (err) {
+      console.error("Erreur lors du basculement:", err);
+      alert(
+        err instanceof Error ? err.message : "Erreur lors du changement de type"
+      );
+    } finally {
+      setIsToggling(false);
+    }
   };
 
   const handleConfirmDelete = async () => {
@@ -89,6 +127,19 @@ function CardVehicleCatalog({
           onConfirm={handleConfirmDelete}
           onClose={() => !isDeleting && setShowModal(false)}
           confirmText={isDeleting ? "Suppression..." : "Supprimer"}
+          cancelText="Annuler"
+        />
+      )}
+      {showToggleModal && (
+        <ModalToogleRentSale
+          title={`Basculer vers ${type === "rental" ? "Vente" : "Location"} ?`}
+          description={`Basculer le véhicule ${brand} ${model} de "${
+            type === "rental" ? "Location LLD" : "Vente"
+          }" à "${type === "rental" ? "Vente" : "Location LLD"}".`}
+          price={price}
+          onConfirm={(newPrice) => handleConfirmToggle(newPrice)}
+          onClose={() => !isToggling && setShowToggleModal(false)}
+          confirmText={isToggling ? "Basculement..." : "Confirmer"}
           cancelText="Annuler"
         />
       )}
@@ -142,6 +193,7 @@ function CardVehicleCatalog({
               >
                 Supprimer
               </button>
+              <button onClick={handleToogleType}>Basculer</button>
             </div>
           </div>
         </div>
