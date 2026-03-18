@@ -1,5 +1,6 @@
 import FolderToCompleteComponent from "@/@features/Folders/component/FolderToComplete/FolderToCompleteComponent";
 import s from "./styles.module.css";
+import ProtectedRoute from "@/@utils/ProtectedRoute";
 interface FolderToCompletePageProps {
   params: Promise<{
     id: string;
@@ -12,7 +13,9 @@ async function FolderToCompletePage({ params }: FolderToCompletePageProps) {
 
   return (
     <div className={s.container}>
-      <FolderToCompleteComponent folderId={folderId} />
+      <ProtectedRoute allowedRoles={["user"]}>
+        <FolderToCompleteComponent folderId={folderId} />
+      </ProtectedRoute>
     </div>
   );
 }
