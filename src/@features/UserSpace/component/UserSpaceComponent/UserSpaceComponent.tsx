@@ -14,7 +14,10 @@ function UserSpaceComponent() {
   const { user, isLoading } = useAuth();
   const [openModal, setOpenModal] = useState(false);
   const [hasFolders, setHasFolders] = useState(false);
-  const handleFoldersLoaded = useCallback((count: number) => setHasFolders(count > 0), []);
+  const handleFoldersLoaded = useCallback(
+    (count: number) => setHasFolders(count > 0),
+    []
+  );
 
   if (isLoading) {
     return <div className={s.loading}>Chargement...</div>;
@@ -101,9 +104,7 @@ function UserSpaceComponent() {
         </section>
 
         <section className={s.section}>
-          {hasFolders && (
-            <div className={s.sectionTitle}>Mes dossiers</div>
-          )}
+          {hasFolders && <div className={s.sectionTitle}>Mes dossiers</div>}
           <FolderList onFoldersLoaded={handleFoldersLoaded} />
         </section>
       </div>

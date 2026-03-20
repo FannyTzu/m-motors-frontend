@@ -25,9 +25,17 @@ function Footer() {
         </div>
         <div className={s.lastContainer}>
           <div className={s.title}>Contact</div>
-          <div className={s.icon}><MapPin size={20} />478 chemin des pins <br /> 33000 BORDEAUX</div>
-          <div className={s.icon}><Phone size={20} /> 05 78 96 45 22</div>
-          <div className={s.icon}><Mail size={20} />service-client@m-motors.com</div>
+          <div className={s.icon}>
+            <MapPin size={20} />
+            478 chemin des pins <br /> 33000 BORDEAUX
+          </div>
+          <div className={s.icon}>
+            <Phone size={20} /> 05 78 96 45 22
+          </div>
+          <div className={s.icon}>
+            <Mail size={20} />
+            service-client@m-motors.com
+          </div>
         </div>
       </div>
       <div className={s.copyright}>© 2026 M-Motors. Tous droits réservés.</div>
