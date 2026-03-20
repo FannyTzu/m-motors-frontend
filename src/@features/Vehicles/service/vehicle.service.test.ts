@@ -107,9 +107,6 @@ describe("getVehicles", () => {
       `${process.env.NEXT_PUBLIC_API_URL}/vehicle/`,
       {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
         credentials: "include",
       }
     );

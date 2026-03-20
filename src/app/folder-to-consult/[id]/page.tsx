@@ -1,3 +1,4 @@
+import ProtectedRoute from "@/@utils/ProtectedRoute";
 import s from "./styles.module.css";
 import FolderToConsultComponent from "@/@features/Folders/component/FolderToConsult/FolderToConsultComponent";
 
@@ -13,7 +14,9 @@ async function FolderToConsultPage({ params }: FolderToConsultPageProps) {
 
   return (
     <div className={s.container}>
-      <FolderToConsultComponent folderId={folderId} />
+      <ProtectedRoute allowedRoles={["user"]}>
+        <FolderToConsultComponent folderId={folderId} />
+      </ProtectedRoute>
     </div>
   );
 }
