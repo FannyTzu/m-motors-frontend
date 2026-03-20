@@ -42,21 +42,24 @@ function SalePage() {
   if (error) return <div>Erreur: {error}</div>;
 
   return (
-    <div className={s.grid}>
-      {vehicles.map((vehicle) => (
-        <CardVehicle
-          key={vehicle.id}
-          id={vehicle.id}
-          image={vehicle.image || "/carpix.png"}
-          type={vehicle.type}
-          brand={vehicle.brand}
-          model={vehicle.model}
-          year={vehicle.year}
-          km={vehicle.km}
-          energy={vehicle.energy}
-          price={vehicle.price}
-        />
-      ))}
+    <div>
+      <h2 className={s.title}>Nos véhicules à la vente</h2>
+      <div className={s.grid}>
+        {vehicles.map((vehicle) => (
+          <CardVehicle
+            key={vehicle.id}
+            id={vehicle.id}
+            image={vehicle.image || "/carpix.png"}
+            type={vehicle.type}
+            brand={vehicle.brand}
+            model={vehicle.model}
+            year={vehicle.year}
+            km={vehicle.km}
+            energy={vehicle.energy}
+            price={vehicle.price}
+          />
+        ))}
+      </div>
     </div>
   );
 }

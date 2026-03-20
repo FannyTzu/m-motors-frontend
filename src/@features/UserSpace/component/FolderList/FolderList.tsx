@@ -28,10 +28,22 @@ type FolderWithRelations = {
   vehicle: Vehicle;
 };
 
-function FolderList() {
+function FolderList({
+  onFoldersLoaded,
+}: {
+  onFoldersLoaded?: (count: number) => void;
+}) {
   const [folders, setFolders] = useState<FolderWithRelations[]>([]);
 
   const user = useAuth();
+
+  const handleFolderDelete = (folderId: number) => {
+    setFolders((prev) => {
+      const updated = prev.filter((folder) => folder.id !== folderId);
+      onFoldersLoaded?.(updated.length);
+      return updated;
+    });
+  };
 
   useEffect(() => {
     const fetchFolders = async () => {
@@ -39,10 +51,11 @@ function FolderList() {
         const foldersData: FolderWithRelations[] =
           await getFolderByUserIdRequest(user.user.id);
         setFolders(foldersData);
+        onFoldersLoaded?.(foldersData.length);
       }
     };
     fetchFolders();
-  }, [user?.user?.id]);
+  }, [user?.user?.id, onFoldersLoaded]);
 
   return (
     <div className={s.card}>
@@ -53,6 +66,7 @@ function FolderList() {
           brand={folder.vehicle?.brand || "-"}
           model={folder.vehicle?.model || "-"}
           dateSubmitted={folder.created_at}
+          onDelete={handleFolderDelete}
         />
       ))}
     </div>

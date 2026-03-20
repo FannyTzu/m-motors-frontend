@@ -311,7 +311,7 @@ function FolderToCompleteComponent({
                     >
                       <Eye size={16} /> Voir
                     </button>
-                    {folderStatus !== "submitted" && (
+                    {folderStatus === "active" && (
                       <button
                         type="button"
                         onClick={() => handleDeleteDocument("idCard")}
@@ -362,7 +362,7 @@ function FolderToCompleteComponent({
                     >
                       <Eye size={16} /> Voir
                     </button>{" "}
-                    {folderStatus !== "submitted" && (
+                    {folderStatus === "active" && (
                       <button
                         type="button"
                         onClick={() => handleDeleteDocument("drivingLicense")}
@@ -414,7 +414,7 @@ function FolderToCompleteComponent({
                     >
                       <Eye size={16} /> Voir
                     </button>
-                    {folderStatus !== "submitted" && (
+                    {folderStatus === "active" && (
                       <button
                         type="button"
                         onClick={() => handleDeleteDocument("rib")}

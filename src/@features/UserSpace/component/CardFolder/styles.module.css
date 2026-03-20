@@ -72,3 +72,23 @@
   box-shadow: 0 4px 10px rgba(1, 102, 48, 0.18);
   background: rgba(31, 214, 62, 0.16);
 }
+.buttonDelete {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  background: rgba(214, 31, 31, 0.1);
+  color: var(--color-red-info);
+  border: 1px solid rgba(214, 31, 31, 0.25);
+}
+
+.buttonDelete:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(214, 31, 31, 0.16);
+  background: rgba(214, 31, 31, 0.16);
+}

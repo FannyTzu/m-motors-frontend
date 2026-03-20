@@ -14,7 +14,7 @@ async function FolderToConsultPage({ params }: FolderToConsultPageProps) {
 
   return (
     <div className={s.container}>
-      <ProtectedRoute allowedRoles={["user"]}>
+      <ProtectedRoute allowedRoles={["admin"]}>
         <FolderToConsultComponent folderId={folderId} />
       </ProtectedRoute>
     </div>
