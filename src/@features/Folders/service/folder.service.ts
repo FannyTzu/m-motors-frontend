@@ -97,6 +97,31 @@ export const updateFolderStatusRequest = async ({
   return response.json();
 };
 
+export const deleteFolderRequest = async (folderId: number) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/folder/${folderId}`,
+    {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to delete folder");
+  }
+
+  const text = await response.text();
+  if (!text || text.trim() === "") {
+    return { success: true };
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    return { success: true };
+  }
+};
+
 export const uploadDocumentRequest = async ({
   folderId,
   documentType,

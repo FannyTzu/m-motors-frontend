@@ -33,6 +33,10 @@ function FolderList() {
 
   const user = useAuth();
 
+  const handleFolderDelete = (folderId: number) => {
+    setFolders((prev) => prev.filter((folder) => folder.id !== folderId));
+  };
+
   useEffect(() => {
     const fetchFolders = async () => {
       if (user.user?.id !== undefined) {
@@ -53,6 +57,7 @@ function FolderList() {
           brand={folder.vehicle?.brand || "-"}
           model={folder.vehicle?.model || "-"}
           dateSubmitted={folder.created_at}
+          onDelete={handleFolderDelete}
         />
       ))}
     </div>
