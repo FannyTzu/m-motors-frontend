@@ -6,13 +6,15 @@ import { useAuth } from "@/@features/Auth/hook/useAuth";
 import ArrowBack from "@/@Component/ArrowBack/ArrowBack";
 import FolderList from "../FolderList/FolderList";
 import { deleteUserAccountRequest } from "@/@features/Auth/service/auth.service";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Modal from "@/@Component/Modal/Modal";
 
 function UserSpaceComponent() {
   const router = useRouter();
   const { user, isLoading } = useAuth();
   const [openModal, setOpenModal] = useState(false);
+  const [hasFolders, setHasFolders] = useState(false);
+  const handleFoldersLoaded = useCallback((count: number) => setHasFolders(count > 0), []);
 
   if (isLoading) {
     return <div className={s.loading}>Chargement...</div>;
@@ -99,8 +101,10 @@ function UserSpaceComponent() {
         </section>
 
         <section className={s.section}>
-          <div className={s.sectionTitle}>Mes dossiers</div>
-          <FolderList />
+          {hasFolders && (
+            <div className={s.sectionTitle}>Mes dossiers</div>
+          )}
+          <FolderList onFoldersLoaded={handleFoldersLoaded} />
         </section>
       </div>
     </div>

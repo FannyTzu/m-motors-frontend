@@ -43,7 +43,7 @@ function SalePage() {
 
   return (
     <div>
-      <h2 className={s.title}>Nos véhicules en vente</h2>
+      <h2 className={s.title}>Nos véhicules à la vente</h2>
       <div className={s.grid}>
         {vehicles.map((vehicle) => (
           <CardVehicle
