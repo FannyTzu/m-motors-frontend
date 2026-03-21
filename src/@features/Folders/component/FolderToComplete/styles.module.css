@@ -1,0 +1,215 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 12px;
+}
+
+.explanation {
+  color: var(--color-gray);
+  margin: 8px 0;
+}
+
+.error {
+  background-color: #fee;
+  border: 1px solid #fcc;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 12px 0;
+  color: var(--color-red-info);
+}
+
+.success {
+  background-color: #e8f5e9;
+  border: 1px solid #a5d6a7;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 12px 0;
+  color: var(--color-green-status-dark);
+  font-weight: 500;
+}
+
+.documentList {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+}
+
+.documentItem {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 12px;
+  margin: 12px 0;
+  background-color: var(--color-white);
+  border: 2px solid var(--color-gray-light);
+  border-radius: 8px;
+  transition: border-color 0.3s ease;
+}
+
+.documentItem span {
+  font-weight: 500;
+  color: var(--color-black);
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+  align-items: center;
+}
+
+.statusText {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  color: var(--color-gray);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.statusSuccess {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  color: var(--color-green-status-dark);
+  font-weight: 600;
+  background-color: #e8f5e9;
+  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+}
+
+.uploadButton {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  background-color: var(--color-blue);
+  color: var(--color-white);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.uploadButton:hover {
+  background-color: var(--color-blue-dark);
+}
+
+.uploadButton:active {
+  transform: scale(0.98);
+}
+
+.uploadButton svg {
+  flex-shrink: 0;
+}
+
+.uploadButton.disabled {
+  background-color: var(--color-gray-light);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.uploadButton.disabled:hover {
+  background-color: var(--color-gray-light);
+  transform: none;
+}
+
+.deleteButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  background-color: #f92516;
+  color: var(--color-white);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.deleteButton:hover {
+  background-color: #ea0c0c;
+}
+
+.deleteButton:active {
+  transform: scale(0.98);
+}
+
+.deleteButton svg {
+  flex-shrink: 0;
+}
+
+.viewButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  background-color: var(--color-green);
+  color: var(--color-white);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.viewButton:hover {
+  background-color: var(--color-green-status-dark);
+}
+
+.viewButton:active {
+  transform: scale(0.98);
+}
+
+.viewButton svg {
+  flex-shrink: 0;
+}
+
+.submitButton {
+  display: inline-block;
+  width: 100%;
+  height: 50px;
+  padding: 12px 32px;
+  background: var(--color-white);
+  color: var(--color-green);
+  border: 2px solid var(--color-green-status);
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  transition:
+    background 0.2s,
+    color 0.2s,
+    transform 0.2s,
+    cursor 0.2s;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: var(--color-green);
+  color: var(--color-white);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.submitButton:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.submitButton:disabled {
+  color: #0b2f4d;
+  border-color: #51799e;
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+}
+
+.validateFolderSection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

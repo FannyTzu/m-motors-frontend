@@ -1,0 +1,215 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 24px;
+  color: var(--color-black);
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--color-gray);
+  font-size: 1.1rem;
+}
+
+.error {
+  background-color: #fee;
+  border: 1px solid #fcc;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  color: var(--color-red-info);
+  font-weight: 500;
+}
+
+.section {
+  background-color: var(--color-white);
+  border: 2px solid var(--color-gray-light);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.sectionTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--color-black);
+  border-bottom: 2px solid var(--color-gray-light);
+  padding-bottom: 8px;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-weight: 600;
+  color: var(--color-gray);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.value {
+  font-size: 1.1rem;
+  color: var(--color-black);
+  font-weight: 500;
+}
+
+.documentsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.documentItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: var(--color-gray-light);
+  border-radius: 8px;
+}
+
+.documentLabel {
+  font-weight: 500;
+  color: var(--color-black);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.viewButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background-color: var(--color-blue);
+  color: var(--color-white);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition:
+    background-color 0.3s ease,
+    transform 0.1s ease;
+}
+
+.viewButton:hover {
+  background-color: var(--color-blue-dark);
+}
+
+.viewButton:active {
+  transform: scale(0.98);
+}
+
+.noDocument {
+  color: var(--color-gray);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.actionsSection {
+  display: flex;
+  gap: 16px;
+  margin-top: 32px;
+  justify-content: center;
+}
+
+.validateButton {
+  flex: 1;
+  max-width: 300px;
+  padding: 14px 24px;
+  background-color: var(--color-green-status-dark);
+  color: var(--color-white);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition:
+    background-color 0.3s ease,
+    transform 0.1s ease;
+}
+
+.validateButton:hover:not(:disabled) {
+  background-color: #2e7d32;
+}
+
+.validateButton:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.validateButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.rejectButton {
+  flex: 1;
+  max-width: 300px;
+  padding: 14px 24px;
+  background-color: var(--color-red-info);
+  color: var(--color-white);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition:
+    background-color 0.3s ease,
+    transform 0.1s ease;
+}
+
+.rejectButton:hover:not(:disabled) {
+  background-color: #ea0c0c;
+}
+
+.rejectButton:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.rejectButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 12px;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .actionsSection {
+    flex-direction: column;
+  }
+
+  .validateButton,
+  .rejectButton {
+    max-width: 100%;
+  }
+}

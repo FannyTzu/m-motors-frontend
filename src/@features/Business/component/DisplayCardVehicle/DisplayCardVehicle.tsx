@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import CardVehicleBusiness from "../CardVehicleBusiness/CardVehicleBusiness";
 import { getVehicles } from "@/@features/Vehicles/service/vehicle.service";
+import CardVehicleCatalog from "../CardVehicleCatalog/CardVehicleCatalog";
 
 interface Vehicle {
   id: number;
@@ -51,7 +51,7 @@ function DisplayCardVehicle() {
   return (
     <div>
       {vehicles.map((vehicle) => (
-        <CardVehicleBusiness
+        <CardVehicleCatalog
           key={vehicle.id}
           id={vehicle.id}
           image={vehicle.image || "/carpix.png"}

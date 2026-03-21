@@ -1,9 +1,11 @@
 import {
   createVehicles,
+  deleteVehicleById,
   getVehicleById,
   getVehicles,
   getVehiclesByType,
   updateVehicle,
+  uploadVehicleImage,
 } from "./vehicle.service";
 
 global.fetch = jest.fn();
@@ -105,9 +107,6 @@ describe("getVehicles", () => {
       `${process.env.NEXT_PUBLIC_API_URL}/vehicle/`,
       {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
         credentials: "include",
       }
     );
@@ -253,5 +252,126 @@ describe("updateVehicle", () => {
     await expect(updateVehicle(1, completeVehicleData)).rejects.toThrow(
       errorMessage
     );
+  });
+});
+
+describe("deleteVehicleById", () => {
+  beforeEach(() => {
+    mockFetch.mockClear();
+    jest.clearAllMocks();
+  });
+  it("delete a vehicle successfully", async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({}),
+    });
+    await deleteVehicleById(1);
+    expect(mockFetch).toHaveBeenCalledWith(
+      `${process.env.NEXT_PUBLIC_API_URL}/vehicle/1`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
+  });
+  it("throws an error if deletion fails", async () => {
+    const errorMessage = "Véhicule non trouvé";
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      json: async () => ({ message: errorMessage }),
+    });
+    await expect(deleteVehicleById(1)).rejects.toThrow(errorMessage);
+  });
+  it("throws a generic error if the response has no message", async () => {
+    mockFetch.mockResolvedValueOnce({ ok: false, json: async () => ({}) });
+    await expect(deleteVehicleById(1)).rejects.toThrow(
+      "Suppression impossible"
+    );
+  });
+  it("send DELETE request with correct vehicle ID", async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({}),
+    });
+    await deleteVehicleById(99);
+    expect(mockFetch).toHaveBeenCalledWith(
+      expect.stringContaining("/vehicle/99"),
+      expect.any(Object)
+    );
+  });
+});
+
+describe("uploadVehicleImage", () => {
+  beforeEach(() => {
+    mockFetch.mockClear();
+    jest.clearAllMocks();
+  });
+  it("upload vehicle image successfully", async () => {
+    const mockFile = new File(["test"], "test.jpg", { type: "image/jpeg" });
+    const mockResponse = { id: 1, imageUrl: "https://example.com/image.jpg" };
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockResponse,
+    });
+    const result = await uploadVehicleImage(1, mockFile);
+    expect(result).toEqual(mockResponse);
+    expect(mockFetch).toHaveBeenCalledWith(
+      `${process.env.NEXT_PUBLIC_API_URL}/vehicle/1/image`,
+      expect.objectContaining({
+        method: "POST",
+        credentials: "include",
+      })
+    );
+  });
+  it("throws an error if image upload fails", async () => {
+    const mockFile = new File(["test"], "test.jpg", { type: "image/jpeg" });
+    const errorMessage = "Format d'image invalide";
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      json: async () => ({ message: errorMessage }),
+    });
+    await expect(uploadVehicleImage(1, mockFile)).rejects.toThrow(errorMessage);
+  });
+  it("throws a generic error if the response has no message", async () => {
+    const mockFile = new File(["test"], "test.jpg", { type: "image/jpeg" });
+    mockFetch.mockResolvedValueOnce({ ok: false, json: async () => ({}) });
+    await expect(uploadVehicleImage(1, mockFile)).rejects.toThrow(
+      "Impossible d'uploader l'image"
+    );
+  });
+  it("send FormData with image file", async () => {
+    const mockFile = new File(["test"], "test.jpg", { type: "image/jpeg" });
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({}),
+    });
+    await uploadVehicleImage(5, mockFile);
+    const callOptions = mockFetch.mock.calls[0][1];
+    expect(callOptions.body).toBeInstanceOf(FormData);
+  });
+  it("send correct vehicle ID in image upload endpoint", async () => {
+    const mockFile = new File(["test"], "test.jpg", { type: "image/jpeg" });
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({}),
+    });
+    await uploadVehicleImage(42, mockFile);
+    expect(mockFetch).toHaveBeenCalledWith(
+      expect.stringContaining("/vehicle/42/image"),
+      expect.any(Object)
+    );
+  });
+  it("does not include Content-Type header for FormData", async () => {
+    const mockFile = new File(["test"], "test.jpg", { type: "image/jpeg" });
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({}),
+    });
+    await uploadVehicleImage(1, mockFile);
+    const callOptions = mockFetch.mock.calls[0][1];
+    expect(callOptions.headers).toBeUndefined();
   });
 });

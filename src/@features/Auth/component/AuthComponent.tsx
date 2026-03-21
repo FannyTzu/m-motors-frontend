@@ -33,6 +33,10 @@ function AuthComponent({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const isPasswordValid = password.length >= 6;
+  const showPasswordValidation = isRegister && password.length > 0;
+  const isFormValid = email && (isRegister ? isPasswordValid : password);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
   };
@@ -63,6 +67,19 @@ function AuthComponent({
             onChange={(e) => setPassword(e.target.value)}
             className={s.input}
           />
+          {showPasswordValidation && (
+            <div className={isPasswordValid ? s.success : s.error}>
+              {isPasswordValid ? (
+                <>
+                  <CheckCircle size={16} /> Mot de passe valide
+                </>
+              ) : (
+                <>
+                  <TriangleAlert size={16} /> Au moins 6 caractères requis
+                </>
+              )}
+            </div>
+          )}
         </div>
 
         {error && (
@@ -78,6 +95,7 @@ function AuthComponent({
 
         <button
           onClick={() => onSubmit && onSubmit(email, password)}
+          disabled={isRegister && !isFormValid}
           className={s.button}
         >
           {buttonText}

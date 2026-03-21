@@ -1,0 +1,94 @@
+.card {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-light);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+.sectionFolder {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 24px;
+  margin-bottom: 18px;
+}
+
+.label {
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-gray);
+}
+
+.value {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-black);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.button {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  background: transparent;
+  color: var(--color-blue-dark);
+  border: 1px solid rgba(0, 82, 163, 0.2);
+}
+
+.button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 82, 163, 0.18);
+  background: rgba(0, 82, 163, 0.08);
+}
+
+.buttonPaid {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  background: rgba(31, 214, 62, 0.1);
+  color: var(--color-green-status-dark);
+  border: 1px solid rgba(31, 214, 62, 0.25);
+}
+
+.buttonPaid:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(1, 102, 48, 0.18);
+  background: rgba(31, 214, 62, 0.16);
+}
+.buttonDelete {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  background: rgba(214, 31, 31, 0.1);
+  color: var(--color-red-info);
+  border: 1px solid rgba(214, 31, 31, 0.25);
+}
+
+.buttonDelete:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(214, 31, 31, 0.16);
+  background: rgba(214, 31, 31, 0.16);
+}

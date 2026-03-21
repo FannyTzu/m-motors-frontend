@@ -1,3 +1,9 @@
+.title {
+  font-weight: 700;
+  text-align: center;
+  margin: 30px 0 10px;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

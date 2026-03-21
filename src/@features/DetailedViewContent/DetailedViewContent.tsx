@@ -1,7 +1,6 @@
 "use client";
 import s from "./styles.module.css";
 import {
-  ArrowLeft,
   CalendarDays,
   Fuel,
   Gauge,
@@ -11,9 +10,14 @@ import {
   DoorOpen,
 } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getVehicleById } from "@/@features/Vehicles/service/vehicle.service";
+import ArrowBack from "@/@Component/ArrowBack/ArrowBack";
+
+import { createFolderRequest } from "../Folders/service/folder.service";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../Auth/hook/useAuth";
+import Modal from "@/@Component/Modal/Modal";
 
 interface Vehicle {
   image: string;
@@ -36,10 +40,45 @@ interface DetailsViewContentProps {
 }
 
 function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
-  const router = useRouter();
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState<"login" | "incomplete">("login");
+  const router = useRouter();
+  const { user } = useAuth();
+
+  const isUserInfoComplete =
+    user?.firstName && user?.lastName && user?.phone && user?.address;
+
+  const handleSubmitFolder = async () => {
+    if (!user?.id) {
+      setModalType("login");
+      setShowModal(true);
+      return;
+    }
+
+    if (!isUserInfoComplete) {
+      setModalType("incomplete");
+      setShowModal(true);
+      return;
+    }
+
+    try {
+      const response = await createFolderRequest({
+        vehicleId,
+        userId: user.id,
+      });
+      console.log("Réponse de la création du dossier :", response);
+      router.push("/user-space");
+    } catch (err) {
+      console.error("Erreur lors de la création du dossier :", err);
+      if (err instanceof Error && err.message.includes("Non authentifié")) {
+        setModalType("login");
+        setShowModal(true);
+      }
+    }
+  };
 
   useEffect(() => {
     const fetchVehicle = async () => {
@@ -59,10 +98,6 @@ function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
 
     fetchVehicle();
   }, [vehicleId]);
-
-  const handleBack = () => {
-    router.back();
-  };
 
   const transmissionLabels: Record<string, string> = {
     automatic: "Automatique",
@@ -99,12 +134,37 @@ function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
 
   const isRental = type === "rental";
 
+  const handleConfirmLogin = () => {
+    router.push("/login");
+  };
+
+  const handleCompleteInfo = () => {
+    router.push("/user-space/contact-details");
+  };
+
   return (
     <>
-      <button className={s.backButton} onClick={handleBack}>
-        <ArrowLeft />
-        Retour
-      </button>
+      {showModal && modalType === "login" && (
+        <Modal
+          title="Vous n'êtes pas connecté"
+          description={`Vous devez être connecté pour créer un dossier pour ce véhicule.`}
+          onConfirm={handleConfirmLogin}
+          onClose={() => setShowModal(false)}
+          confirmText={"Se connecter"}
+          cancelText="Annuler"
+        />
+      )}
+      {showModal && modalType === "incomplete" && (
+        <Modal
+          title="Oups ! Il manque des informations sur votre profil"
+          description={`Merci de compléter vos informations personnelles avant de déposer votre dossier.`}
+          onConfirm={handleCompleteInfo}
+          onClose={() => setShowModal(false)}
+          confirmText={"Oui, je le fais !"}
+          cancelText="Annuler"
+        />
+      )}
+      <ArrowBack />
 
       <div className={s.container}>
         <div>
@@ -212,7 +272,9 @@ function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
             </div>
           )}
         </div>
-        <button>Déposer mon dossier pour ce véhicule</button>
+        <button onClick={handleSubmitFolder}>
+          Déposer mon dossier pour ce véhicule
+        </button>
       </div>
     </>
   );

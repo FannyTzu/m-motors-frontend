@@ -50,9 +50,6 @@ export const getVehicles = async () => {
         `${process.env.NEXT_PUBLIC_API_URL}/vehicle/`,
         {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
           credentials: "include",
         }
       );
@@ -197,6 +194,37 @@ export const deleteVehicleById = async (id: number) => {
     {
       tags: { service: "vehicle", action: "delete" },
       extra: { id },
+    }
+  );
+};
+export const uploadVehicleImage = async (
+  vehicleId: number,
+  imageFile: File
+) => {
+  return catchAsync(
+    async () => {
+      const formData = new FormData();
+      formData.append("image", imageFile);
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/vehicle/${vehicleId}/image`,
+        {
+          method: "POST",
+          credentials: "include",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.message || "Impossible d'uploader l'image");
+      }
+
+      return await response.json();
+    },
+    {
+      tags: { service: "vehicle", action: "uploadImage" },
+      extra: { vehicleId },
     }
   );
 };
