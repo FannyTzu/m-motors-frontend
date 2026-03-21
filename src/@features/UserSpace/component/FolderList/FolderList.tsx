@@ -40,7 +40,9 @@ function FolderList({
   const handleFolderDelete = (folderId: number) => {
     setFolders((prev) => {
       const updated = prev.filter((folder) => folder.id !== folderId);
-      onFoldersLoaded?.(updated.length);
+      setTimeout(() => {
+        onFoldersLoaded?.(updated.length);
+      }, 0);
       return updated;
     });
   };
@@ -51,7 +53,9 @@ function FolderList({
         const foldersData: FolderWithRelations[] =
           await getFolderByUserIdRequest(user.user.id);
         setFolders(foldersData);
-        onFoldersLoaded?.(foldersData.length);
+        setTimeout(() => {
+          onFoldersLoaded?.(foldersData.length);
+        }, 0);
       }
     };
     fetchFolders();

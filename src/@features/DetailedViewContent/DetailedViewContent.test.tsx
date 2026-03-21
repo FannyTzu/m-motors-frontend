@@ -49,7 +49,15 @@ describe("DetailsViewContent", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockUseRouter.mockReturnValue({ push: mockPush });
-    mockUseAuth.mockReturnValue({ user: { id: 123 } });
+    mockUseAuth.mockReturnValue({
+      user: {
+        id: 123,
+        firstName: "Jean",
+        lastName: "Dupont",
+        phone: "0612345678",
+        address: "11 rue de la fontaine",
+      },
+    });
     mockGetVehicleById.mockResolvedValue(mockVehicle);
     mockCreateFolderRequest.mockResolvedValue({ success: true });
   });
@@ -203,6 +211,15 @@ describe("DetailsViewContent", () => {
   });
 
   it("should handle folder creation error gracefully", async () => {
+    mockUseAuth.mockReturnValue({
+      user: {
+        id: 123,
+        firstName: "Jean",
+        lastName: "Dupont",
+        phone: "0612345678",
+        address: "11 rue de la fontaine",
+      },
+    });
     const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
     mockCreateFolderRequest.mockRejectedValue(new Error("Erreur serveur"));
 

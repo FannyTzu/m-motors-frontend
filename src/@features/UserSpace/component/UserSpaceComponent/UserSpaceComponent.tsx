@@ -50,7 +50,7 @@ function UserSpaceComponent() {
           cancelText="Annuler"
         />
       )}
-      <ArrowBack />
+      <ArrowBack defaultRoute="/" forceNavigate={true} />
       <div className={s.container}>
         <header className={s.header}>
           <h1 className={s.title}>Mon espace personnel</h1>

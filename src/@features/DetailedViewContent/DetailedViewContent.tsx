@@ -44,23 +44,39 @@ function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState<"login" | "incomplete">("login");
   const router = useRouter();
-  const userId = useAuth().user?.id;
+  const { user } = useAuth();
+
+  const isUserInfoComplete =
+    user?.firstName && user?.lastName && user?.phone && user?.address;
 
   const handleSubmitFolder = async () => {
-    if (!userId) {
+    if (!user?.id) {
+      setModalType("login");
       setShowModal(true);
       return;
     }
+
+    if (!isUserInfoComplete) {
+      setModalType("incomplete");
+      setShowModal(true);
+      return;
+    }
+
     try {
       const response = await createFolderRequest({
         vehicleId,
-        userId: userId as number,
+        userId: user.id,
       });
       console.log("Réponse de la création du dossier :", response);
       router.push("/user-space");
     } catch (err) {
       console.error("Erreur lors de la création du dossier :", err);
+      if (err instanceof Error && err.message.includes("Non authentifié")) {
+        setModalType("login");
+        setShowModal(true);
+      }
     }
   };
 
@@ -122,15 +138,29 @@ function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
     router.push("/login");
   };
 
+  const handleCompleteInfo = () => {
+    router.push("/user-space/contact-details");
+  };
+
   return (
     <>
-      {showModal && (
+      {showModal && modalType === "login" && (
         <Modal
           title="Vous n'êtes pas connecté"
           description={`Vous devez être connecté pour créer un dossier pour ce véhicule.`}
           onConfirm={handleConfirmLogin}
           onClose={() => setShowModal(false)}
           confirmText={"Se connecter"}
+          cancelText="Annuler"
+        />
+      )}
+      {showModal && modalType === "incomplete" && (
+        <Modal
+          title="Oups ! Il manque des informations sur votre profil"
+          description={`Merci de compléter vos informations personnelles avant de déposer votre dossier.`}
+          onConfirm={handleCompleteInfo}
+          onClose={() => setShowModal(false)}
+          confirmText={"Oui, je le fais !"}
           cancelText="Annuler"
         />
       )}

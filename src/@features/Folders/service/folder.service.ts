@@ -15,6 +15,9 @@ export const createFolderRequest = async (data: {
   );
 
   if (!response.ok) {
+    if (response.status === 401) {
+      throw new Error("Non authentifié");
+    }
     throw new Error("Failed to create folder");
   }
 

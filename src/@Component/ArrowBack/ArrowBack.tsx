@@ -3,17 +3,23 @@ import s from "./styles.module.css";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-function ArrowBack() {
+interface ArrowBackProps {
+  defaultRoute?: string;
+  forceNavigate?: boolean;
+}
+
+function ArrowBack({
+  defaultRoute = "/",
+  forceNavigate = false,
+}: ArrowBackProps) {
   const router = useRouter();
 
   const handleBack = () => {
-    const currentPath = window.location.pathname;
-    router.back();
-    setTimeout(() => {
-      if (window.location.pathname === currentPath) {
-        router.push("/");
-      }
-    }, 300);
+    if (forceNavigate) {
+      router.push(defaultRoute);
+    } else {
+      router.back();
+    }
   };
 
   return (
