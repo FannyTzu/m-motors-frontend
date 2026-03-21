@@ -73,6 +73,10 @@ function DetailsViewContent({ vehicleId }: DetailsViewContentProps) {
       router.push("/user-space");
     } catch (err) {
       console.error("Erreur lors de la création du dossier :", err);
+      if (err instanceof Error && err.message.includes("Non authentifié")) {
+        setModalType("login");
+        setShowModal(true);
+      }
     }
   };
 
