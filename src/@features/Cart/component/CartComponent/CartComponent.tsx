@@ -1,13 +1,16 @@
 "use client";
 import { ShoppingCart, Check } from "lucide-react";
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import s from "./styles.module.css";
+import { createOrderRequest } from "../../order.service";
 
 interface CartComponentProps {
   brand: string;
   model: string;
   price: number;
   type: "rent" | "sale";
+  folderId: number;
+  vehicleId: number;
 }
 
 interface Option {
@@ -17,21 +20,27 @@ interface Option {
 }
 
 const OPTIONS: Option[] = [
-  { id: "insurance", label: "Assurance", price: 50 },
-  { id: "technical_check", label: "Contrôle technique", price: 5 },
-  { id: "maintenance", label: "Entretien", price: 30 },
-  { id: "assistance", label: "Assistance dépannage", price: 15 },
+  { id: "1", label: "Assurance", price: 50 },
+  { id: "2", label: "Contrôle technique", price: 5 },
+  { id: "3", label: "Entretien", price: 30 },
+  { id: "4", label: "Assistance dépannage", price: 15 },
 ];
 
 function CartComponent({
-  brand = "Marque",
-  model = "Modèle",
-  price = 0,
-  type = "rent",
+  brand,
+  model,
+  price,
+  type,
+  folderId,
+  vehicleId,
 }: CartComponentProps) {
   const [selectedOptions, setSelectedOptions] = useState<Set<string>>(
     new Set()
   );
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const priceAsNumber = typeof price === "string" ? parseFloat(price) : price;
 
   const selectedOptionsList = useMemo(() => {
     return OPTIONS.filter((option) => selectedOptions.has(option.id));
@@ -42,8 +51,8 @@ function CartComponent({
   }, [selectedOptionsList]);
 
   const grandTotal = useMemo(() => {
-    return price + optionsTotal;
-  }, [price, optionsTotal]);
+    return priceAsNumber + optionsTotal;
+  }, [priceAsNumber, optionsTotal]);
 
   const toggleOption = (id: string) => {
     const newSelection = new Set(selectedOptions);
@@ -53,6 +62,32 @@ function CartComponent({
       newSelection.add(id);
     }
     setSelectedOptions(newSelection);
+  };
+
+  const handleValidateCart = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const optionsPayload = Array.from(selectedOptions)
+        .map((optionId) => ({
+          option_id: parseInt(optionId, 10),
+        }))
+        .filter((opt) => !isNaN(opt.option_id));
+
+      const order = await createOrderRequest({
+        folder_id: folderId,
+        vehicle_id: vehicleId,
+        options: optionsPayload,
+      });
+
+      //todo ajouter le param après payment qd page sera dispo
+
+      window.location.href = "/payment";
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Une erreur est survenue");
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -65,6 +100,8 @@ function CartComponent({
           Vérifiez votre panier avant de procéder au paiement
         </p>
       </div>
+
+      {error && <div className={s.error}>{error}</div>}
 
       <div className={s.section}>
         <h3 className={s.sectionTitle}>Véhicule</h3>
@@ -80,7 +117,7 @@ function CartComponent({
           </div>
           <div className={s.vehiclePrice}>
             <div className={s.price}>
-              {price.toFixed(2)} €{type === "rent" ? " /mois" : ""}
+              {priceAsNumber.toFixed(2)} €{type === "rent" ? " /mois" : ""}
             </div>
             <div className={s.paymentType}>
               {type === "rent" ? "48 mois" : "Comptant"}
@@ -127,7 +164,7 @@ function CartComponent({
       <div className={s.totalSection}>
         <div className={s.totalRow}>
           <span>Prix du véhicule</span>
-          <span className={s.amount}>{price.toFixed(2)} €</span>
+          <span className={s.amount}>{priceAsNumber.toFixed(2)} €</span>
         </div>
         {optionsTotal > 0 && (
           <div className={s.totalRow}>
@@ -146,7 +183,13 @@ function CartComponent({
         </div>
       </div>
 
-      <button className={s.validateButton}>Valider le panier</button>
+      <button
+        className={s.validateButton}
+        onClick={handleValidateCart}
+        disabled={isLoading}
+      >
+        {isLoading ? "En cours..." : "Valider le panier"}
+      </button>
     </div>
   );
 }

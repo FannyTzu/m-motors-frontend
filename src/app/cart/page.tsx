@@ -1,17 +1,15 @@
 "use client";
-import s from "./styles.module.css";
-import CartComponent from "@/@features/Cart/component/CartComponent/CartComponent";
-import ArrowBack from "@/@Component/ArrowBack/ArrowBack";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 function CartPage() {
-  return (
-    <div>
-      <ArrowBack />
-      <div className={s.container}>
-        <CartComponent brand="Peugeot" model="308" price={250} type="rent" />
-      </div>
-    </div>
-  );
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace("/user-space");
+  }, [router]);
+
+  return null;
 }
 
 export default CartPage;
