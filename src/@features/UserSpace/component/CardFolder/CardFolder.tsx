@@ -38,6 +38,11 @@ function CardFolder({
       console.error("Erreur lors de la suppression du dossier:", error);
     }
   };
+
+  const handleRedirectCart = () => {
+    router.push(`/cart/${folderId}`);
+  };
+
   return (
     <div>
       {openModal && (
@@ -65,7 +70,9 @@ Cette action est définitive.`}
             Voir mon dossier
           </button>
           {/*todo: desactiver le bouton si dossier non valide */}
-          <button className={s.buttonPaid}>Payer</button>
+          <button className={s.buttonPaid} onClick={handleRedirectCart}>
+            Payer
+          </button>
           <button className={s.buttonDelete} onClick={() => setOpenModal(true)}>
             Supprimer mon dossier
           </button>
