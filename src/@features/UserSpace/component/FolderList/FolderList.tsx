@@ -70,6 +70,7 @@ function FolderList({
           brand={folder.vehicle?.brand || "-"}
           model={folder.vehicle?.model || "-"}
           dateSubmitted={folder.created_at}
+          status={folder.status}
           onDelete={handleFolderDelete}
         />
       ))}

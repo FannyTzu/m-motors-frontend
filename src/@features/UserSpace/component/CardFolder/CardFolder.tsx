@@ -10,6 +10,7 @@ interface CardFolderProps {
   brand: string;
   model: string;
   dateSubmitted: string;
+  status: string;
   onDelete?: (folderId: number) => void;
 }
 
@@ -18,6 +19,7 @@ function CardFolder({
   brand,
   model,
   dateSubmitted,
+  status,
   onDelete,
 }: CardFolderProps) {
   const router = useRouter();
@@ -69,10 +71,11 @@ Cette action est définitive.`}
           <button className={s.button} onClick={handleRedirect}>
             Voir mon dossier
           </button>
-          {/*todo: desactiver le bouton si dossier non valide */}
-          <button className={s.buttonPaid} onClick={handleRedirectCart}>
-            Payer
-          </button>
+          {status === "accepted" && (
+            <button className={s.buttonPaid} onClick={handleRedirectCart}>
+              Payer
+            </button>
+          )}
           <button className={s.buttonDelete} onClick={() => setOpenModal(true)}>
             Supprimer mon dossier
           </button>
