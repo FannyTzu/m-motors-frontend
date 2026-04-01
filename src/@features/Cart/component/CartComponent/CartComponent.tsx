@@ -1,8 +1,8 @@
 "use client";
 import { ShoppingCart, Check } from "lucide-react";
 import { useState, useMemo } from "react";
+import { createOrderRequest } from "../../service/order.service";
 import s from "./styles.module.css";
-import { createOrderRequest } from "../../order.service";
 
 interface CartComponentProps {
   brand: string;
