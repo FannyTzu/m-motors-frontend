@@ -42,16 +42,13 @@ function CartComponent({
   useEffect(() => {
     const loadOptions = async () => {
       try {
-        console.log("🔄 Fetching options...");
         const fetchedOptions = await fetchOptionsRequest();
-        console.log("✅ Options fetched:", fetchedOptions);
         setOptions(fetchedOptions);
       } catch (err) {
         const errorMessage =
           err instanceof Error
             ? err.message
             : "Erreur lors du chargement des options";
-        console.error("❌ Error fetching options:", err);
         setError(errorMessage);
       } finally {
         setIsLoadingOptions(false);
