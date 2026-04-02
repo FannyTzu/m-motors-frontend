@@ -1,7 +1,8 @@
 "use client";
 import { ShoppingCart, Check } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { createOrderRequest } from "../../service/order.service";
+import { fetchOptionsRequest } from "../../service/option.service";
 import s from "./styles.module.css";
 
 interface CartComponentProps {
@@ -19,13 +20,6 @@ interface Option {
   price: number;
 }
 
-const OPTIONS: Option[] = [
-  { id: "1", label: "Assurance", price: 50 },
-  { id: "2", label: "Contrôle technique", price: 5 },
-  { id: "3", label: "Entretien", price: 30 },
-  { id: "4", label: "Assistance dépannage", price: 15 },
-];
-
 function CartComponent({
   brand,
   model,
@@ -34,17 +28,39 @@ function CartComponent({
   folderId,
   vehicleId,
 }: CartComponentProps) {
+  const [options, setOptions] = useState<Option[]>([]);
   const [selectedOptions, setSelectedOptions] = useState<Set<string>>(
     new Set()
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingOptions, setIsLoadingOptions] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const priceAsNumber = typeof price === "string" ? parseFloat(price) : price;
 
+  // Fetch options on mount
+  useEffect(() => {
+    const loadOptions = async () => {
+      try {
+        const fetchedOptions = await fetchOptionsRequest();
+        setOptions(fetchedOptions);
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error
+            ? err.message
+            : "Erreur lors du chargement des options";
+        setError(errorMessage);
+      } finally {
+        setIsLoadingOptions(false);
+      }
+    };
+
+    loadOptions();
+  }, []);
+
   const selectedOptionsList = useMemo(() => {
-    return OPTIONS.filter((option) => selectedOptions.has(option.id));
-  }, [selectedOptions]);
+    return options.filter((option) => selectedOptions.has(option.id));
+  }, [selectedOptions, options]);
 
   const optionsTotal = useMemo(() => {
     return selectedOptionsList.reduce((sum, option) => sum + option.price, 0);
@@ -80,8 +96,6 @@ function CartComponent({
         vehicle_id: vehicleId,
         options: optionsPayload,
       });
-
-      //todo ajouter le param après payment qd page sera dispo
 
       window.location.href = "/payment";
     } catch (err) {
@@ -125,38 +139,45 @@ function CartComponent({
           </div>
         </div>
       </div>
+
       {/* Options => only for rent */}
       {type === "rent" && (
         <div className={s.section}>
           <h3 className={s.sectionTitle}>Options disponibles</h3>
-          <div className={s.optionsContainer}>
-            {OPTIONS.map((option) => (
-              <label key={option.id} className={s.optionItem}>
-                <input
-                  type="checkbox"
-                  checked={selectedOptions.has(option.id)}
-                  onChange={() => toggleOption(option.id)}
-                  className={s.checkbox}
-                />
-                <span className={s.optionLabel}>{option.label}</span>
-                <span className={s.optionPrice}>
-                  +{option.price.toFixed(2)} €
-                </span>
-              </label>
-            ))}
-          </div>
+          {isLoadingOptions ? (
+            <p>Chargement des options...</p>
+          ) : (
+            <>
+              <div className={s.optionsContainer}>
+                {options.map((option) => (
+                  <label key={option.id} className={s.optionItem}>
+                    <input
+                      type="checkbox"
+                      checked={selectedOptions.has(option.id)}
+                      onChange={() => toggleOption(option.id)}
+                      className={s.checkbox}
+                    />
+                    <span className={s.optionLabel}>{option.label}</span>
+                    <span className={s.optionPrice}>
+                      +{option.price.toFixed(2)} €
+                    </span>
+                  </label>
+                ))}
+              </div>
 
-          {selectedOptionsList.length > 0 && (
-            <div className={s.selectedOptions}>
-              <h4>Récapitulatif des options</h4>
-              {selectedOptionsList.map((opt) => (
-                <div key={opt.id} className={s.selectedItem}>
-                  <Check size={18} color="#4CAF50" />
-                  <span>{opt.label}</span>
-                  <span className={s.price}>+{opt.price.toFixed(2)} €</span>
+              {selectedOptionsList.length > 0 && (
+                <div className={s.selectedOptions}>
+                  <h4>Récapitulatif des options</h4>
+                  {selectedOptionsList.map((opt) => (
+                    <div key={opt.id} className={s.selectedItem}>
+                      <Check size={18} color="#4CAF50" />
+                      <span>{opt.label}</span>
+                      <span className={s.price}>+{opt.price.toFixed(2)} €</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           )}
         </div>
       )}
@@ -186,7 +207,7 @@ function CartComponent({
       <button
         className={s.validateButton}
         onClick={handleValidateCart}
-        disabled={isLoading}
+        disabled={isLoading || isLoadingOptions}
       >
         {isLoading ? "En cours..." : "Valider le panier"}
       </button>
