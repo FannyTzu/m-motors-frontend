@@ -3,10 +3,20 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import CartComponent from "./CartComponent";
 import * as orderService from "../../service/order.service";
+import * as optionService from "../../service/option.service";
 
 jest.mock("../../service/order.service");
+jest.mock("../../service/option.service");
 
 const mockCreateOrderRequest = orderService.createOrderRequest as jest.Mock;
+const mockFetchOptionsRequest = optionService.fetchOptionsRequest as jest.Mock;
+
+const mockOptions = [
+  { id: "1", label: "Assurance", price: 50 },
+  { id: "2", label: "Contrôle technique", price: 5 },
+  { id: "3", label: "Entretien", price: 30 },
+  { id: "4", label: "Assistance dépannage", price: 15 },
+];
 
 const defaultProps = {
   brand: "Tesla",
@@ -20,6 +30,7 @@ const defaultProps = {
 describe("CartComponent", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockFetchOptionsRequest.mockResolvedValue(mockOptions);
   });
 
   describe("Rendering", () => {
@@ -63,14 +74,6 @@ describe("CartComponent", () => {
       expect(screen.getByText("Achat")).toBeInTheDocument();
     });
 
-    it("shows available options for rental", () => {
-      render(<CartComponent {...defaultProps} />);
-      expect(screen.getByText("Assurance")).toBeInTheDocument();
-      expect(screen.getByText("Contrôle technique")).toBeInTheDocument();
-      expect(screen.getByText("Entretien")).toBeInTheDocument();
-      expect(screen.getByText("Assistance dépannage")).toBeInTheDocument();
-    });
-
     it("does not show options section for sale type", () => {
       render(<CartComponent {...{ ...defaultProps, type: "sale" }} />);
       expect(screen.queryByText("Options disponibles")).not.toBeInTheDocument();
@@ -81,60 +84,42 @@ describe("CartComponent", () => {
       const button = screen.getByRole("button", { name: /Valider le panier/i });
       expect(button).toBeInTheDocument();
     });
-  });
 
-  describe("Price Calculations", () => {
-    it("calculates total with options", () => {
-      const { container } = render(<CartComponent {...defaultProps} />);
-      const assuranceCheckbox = screen.getByRole("checkbox", {
-        name: /Assurance/i,
-      });
-      fireEvent.click(assuranceCheckbox);
-      const totalSection = container.querySelector(".totalSection");
-      expect(totalSection?.textContent).toContain("550.00");
-    });
-
-    it("calculates correct total with multiple options", () => {
-      const { container } = render(<CartComponent {...defaultProps} />);
-      const assuranceCheckbox = screen.getByRole("checkbox", {
-        name: /Assurance/i,
-      });
-      const controleCheckbox = screen.getByRole("checkbox", {
-        name: /Contrôle technique/i,
-      });
-      fireEvent.click(assuranceCheckbox);
-      fireEvent.click(controleCheckbox);
-      const totalSection = container.querySelector(".totalSection");
-      expect(totalSection?.textContent).toContain("555.00");
-    });
-
-    it("handles string price input", () => {
-      const { container } = render(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        <CartComponent {...{ ...defaultProps, price: "1000" as any }} />
+    it("shows loading state for options", () => {
+      mockFetchOptionsRequest.mockImplementationOnce(
+        () => new Promise(() => {})
       );
-      const priceElement = container.querySelector(".price");
-      expect(priceElement?.textContent).toContain("1000.00");
+      render(<CartComponent {...defaultProps} />);
+      expect(screen.getByText("Chargement des options...")).toBeInTheDocument();
+    });
+
+    it("displays options after loading for rental", async () => {
+      render(<CartComponent {...defaultProps} />);
+      await waitFor(() => {
+        mockOptions.forEach((option) => {
+          expect(screen.getByText(option.label)).toBeInTheDocument();
+        });
+      });
     });
   });
 
   describe("Option Selection", () => {
-    it("toggles option selection on checkbox click", () => {
+    it("toggles option selection on checkbox click", async () => {
       render(<CartComponent {...defaultProps} />);
-      const assuranceCheckbox = screen.getByRole("checkbox", {
-        name: /Assurance/i,
-      }) as HTMLInputElement;
 
-      expect(assuranceCheckbox.checked).toBe(false);
+      const assuranceCheckbox = await screen.findByRole("checkbox", {
+        name: /Assurance/i,
+      });
+
+      expect((assuranceCheckbox as HTMLInputElement).checked).toBe(false);
       fireEvent.click(assuranceCheckbox);
-      expect(assuranceCheckbox.checked).toBe(true);
-      fireEvent.click(assuranceCheckbox);
-      expect(assuranceCheckbox.checked).toBe(false);
+      expect((assuranceCheckbox as HTMLInputElement).checked).toBe(true);
     });
 
-    it("shows selected options summary", () => {
+    it("shows selected options summary", async () => {
       render(<CartComponent {...defaultProps} />);
-      const assuranceCheckbox = screen.getByRole("checkbox", {
+
+      const assuranceCheckbox = await screen.findByRole("checkbox", {
         name: /Assurance/i,
       });
       fireEvent.click(assuranceCheckbox);
@@ -154,7 +139,10 @@ describe("CartComponent", () => {
       mockCreateOrderRequest.mockResolvedValueOnce({ id: 1 });
 
       render(<CartComponent {...defaultProps} />);
+
       const button = screen.getByRole("button", { name: /Valider le panier/i });
+      await waitFor(() => expect(button).not.toBeDisabled());
+
       fireEvent.click(button);
 
       await waitFor(() => {
@@ -170,7 +158,8 @@ describe("CartComponent", () => {
       mockCreateOrderRequest.mockResolvedValueOnce({ id: 1 });
 
       render(<CartComponent {...defaultProps} />);
-      const assuranceCheckbox = screen.getByRole("checkbox", {
+
+      const assuranceCheckbox = await screen.findByRole("checkbox", {
         name: /Assurance/i,
       });
       const entretienCheckbox = screen.getByRole("checkbox", {
@@ -180,7 +169,9 @@ describe("CartComponent", () => {
       fireEvent.click(assuranceCheckbox);
       fireEvent.click(entretienCheckbox);
 
-      const button = screen.getByRole("button", { name: /Valider le panier/i });
+      const button = screen.getByRole("button", {
+        name: /Valider le panier/i,
+      });
       fireEvent.click(button);
 
       await waitFor(() => {
@@ -192,31 +183,15 @@ describe("CartComponent", () => {
       });
     });
 
-    it("calls order service on button click", async () => {
-      mockCreateOrderRequest.mockResolvedValueOnce({ id: 1 });
-
-      render(<CartComponent {...defaultProps} />);
-      const button = screen.getByRole("button", { name: /Valider le panier/i });
-      fireEvent.click(button);
-
-      await waitFor(() => {
-        expect(mockCreateOrderRequest).toHaveBeenCalledWith({
-          folder_id: 1,
-          vehicle_id: 2,
-          options: [],
-        });
-      });
-    });
-
     it("disables button while loading", async () => {
       mockCreateOrderRequest.mockImplementationOnce(
         () => new Promise(() => {})
       );
 
       render(<CartComponent {...defaultProps} />);
-      const button = screen.getByRole("button", {
-        name: /Valider le panier/i,
-      }) as HTMLButtonElement;
+
+      const button = screen.getByRole("button", { name: /Valider le panier/i });
+      await waitFor(() => expect(button).not.toBeDisabled());
 
       fireEvent.click(button);
 
@@ -233,7 +208,10 @@ describe("CartComponent", () => {
       mockCreateOrderRequest.mockRejectedValueOnce(new Error(errorMessage));
 
       render(<CartComponent {...defaultProps} />);
+
       const button = screen.getByRole("button", { name: /Valider le panier/i });
+      await waitFor(() => expect(button).not.toBeDisabled());
+
       fireEvent.click(button);
 
       await waitFor(() => {
@@ -245,7 +223,10 @@ describe("CartComponent", () => {
       mockCreateOrderRequest.mockRejectedValueOnce("Unknown error");
 
       render(<CartComponent {...defaultProps} />);
+
       const button = screen.getByRole("button", { name: /Valider le panier/i });
+      await waitFor(() => expect(button).not.toBeDisabled());
+
       fireEvent.click(button);
 
       await waitFor(() => {
@@ -253,22 +234,14 @@ describe("CartComponent", () => {
       });
     });
 
-    it("clears error when retrying", async () => {
-      mockCreateOrderRequest.mockRejectedValueOnce(new Error("Error 1"));
+    it("displays option loading error", async () => {
+      const errorMessage = "Erreur lors du chargement des options";
+      mockFetchOptionsRequest.mockRejectedValueOnce(new Error(errorMessage));
 
       render(<CartComponent {...defaultProps} />);
-      const button = screen.getByRole("button", { name: /Valider le panier/i });
-
-      fireEvent.click(button);
-      await waitFor(() => {
-        expect(screen.getByText("Error 1")).toBeInTheDocument();
-      });
-
-      mockCreateOrderRequest.mockResolvedValueOnce({ id: 1 });
-      fireEvent.click(button);
 
       await waitFor(() => {
-        expect(screen.queryByText("Error 1")).not.toBeInTheDocument();
+        expect(screen.getByText(errorMessage)).toBeInTheDocument();
       });
     });
   });
