@@ -32,10 +32,8 @@ export const fetchOptionsRequest = async (): Promise<Option[]> => {
       }
 
       const data = await response.json();
-      console.log("🔍 Raw API response:", data);
 
       const optionsArray = Array.isArray(data) ? data : data.options || [];
-      console.log("📦 Options array:", optionsArray);
 
       return optionsArray.map((o: ApiOption) => ({
         id: String(o.id),
