@@ -77,7 +77,9 @@ function PaymentComponent({
               <br /> Le garage vous contacte dans les 24 heures pour récupérer
               votre véhicule.
             </p>
-            <p className={s.successAmount}>{vehiclePrice.toFixed(2)}€</p>
+            <p className={s.successAmount}>
+              {Number(vehiclePrice).toFixed(2)}€
+            </p>
           </div>
         </div>
       </div>
@@ -159,7 +161,7 @@ function PaymentComponent({
           <div className={s.recapSection}>
             <h4>Véhicule</h4>
             <p className={s.vehicleName}>{vehicleName}</p>
-            <p>{vehiclePrice?.toFixed(2)}€</p>
+            <p>{Number(vehiclePrice).toFixed(2)}€</p>
           </div>
 
           {options.length > 0 && (
@@ -169,7 +171,7 @@ function PaymentComponent({
                 {options.map((option, index) => (
                   <li key={index}>
                     <span>{option.name}</span>
-                    <span>{option.price.toFixed(2)}€</span>
+                    <span>{Number(option.price).toFixed(2)}€</span>
                   </li>
                 ))}
               </ul>
@@ -180,7 +182,7 @@ function PaymentComponent({
             <div className={s.amountRow}>
               <span>Montant total</span>
               <span className={s.amount}>
-                {totalAmount.toFixed(2)}{" "}
+                {Number(totalAmount).toFixed(2)}{" "}
                 {financeMode === "location" ? "€/mois" : "€"}
               </span>
             </div>
