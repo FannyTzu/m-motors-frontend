@@ -4,6 +4,7 @@ import PaymentComponent from "@/@features/Payment/paymentComponent";
 import ArrowBack from "@/@Component/ArrowBack/ArrowBack";
 import { useEffect, useState } from "react";
 import { getOrderByIdRequest } from "@/@features/Cart/service/order.service";
+import ProtectedRoute from "@/@utils/ProtectedRoute";
 
 interface OrderDetail {
   id: number;
@@ -82,10 +83,9 @@ export default function PaymentPage({ params }: PaymentPageProps) {
     return <div style={{ padding: "20px" }}>Commande non trouvée</div>;
 
   const vehicleName = `${order.vehicle.brand} ${order.vehicle.model}`;
-  const financeMode =
-    order.vehicle.type === "rental" ? "location" : "comptant";
+  const financeMode = order.vehicle.type === "rental" ? "location" : "comptant";
 
-  const selectedOptions = order.options.map((orderOption) => ({
+  const selectedOptions = (order.options || []).map((orderOption) => ({
     name: orderOption.option.name,
     price: Number(orderOption.option.price),
   }));
@@ -101,16 +101,19 @@ export default function PaymentPage({ params }: PaymentPageProps) {
   return (
     <div>
       <ArrowBack />
+
       <div className={s.container}>
-        <PaymentComponent
-          orderId={order.id}
-          vehicleName={vehicleName}
-          vehiclePrice={order.vehicle.price}
-          totalAmount={totalAmount}
-          financeMode={financeMode}
-          options={selectedOptions}
-          onPaymentComplete={handlePaymentComplete}
-        />
+        <ProtectedRoute allowedRoles={["user"]}>
+          <PaymentComponent
+            orderId={order.id}
+            vehicleName={vehicleName}
+            vehiclePrice={order.vehicle.price}
+            totalAmount={totalAmount}
+            financeMode={financeMode}
+            options={selectedOptions}
+            onPaymentComplete={handlePaymentComplete}
+          />
+        </ProtectedRoute>
       </div>
     </div>
   );
