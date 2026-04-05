@@ -12,12 +12,15 @@ import {
   Trash2,
 } from "lucide-react";
 import {
-  deleteDocumentRequest,
-  getDocumentsByIdRequest,
   getFolderByIdRequest,
   updateFolderStatusRequest,
-  uploadDocumentRequest,
 } from "../../service/folder.service";
+import {
+  deleteDocumentRequest,
+  getDocumentsByIdRequest,
+  uploadDocumentRequest,
+} from "../../service/document.service";
+
 import StatusComponent from "@/@Component/Status/StatusComponent";
 
 interface FolderToCompleteComponentProps {

@@ -2,8 +2,10 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import FolderToConsultComponent from "./FolderToConsultComponent";
 import * as folderService from "../../service/folder.service";
+import * as documentService from "../../service/document.service";
 
 jest.mock("../../service/folder.service");
+jest.mock("../../service/document.service");
 
 jest.mock("@/@Component/Status/StatusComponent", () => {
   return function DummyStatusComponent() {
@@ -22,6 +24,9 @@ jest.mock("@/@utils/formatDate", () => ({
 }));
 
 const mockFolderService = folderService as jest.Mocked<typeof folderService>;
+const mockDocumentService = documentService as jest.Mocked<
+  typeof documentService
+>;
 
 describe("FolderToConsultComponent", () => {
   const mockFolder = {
@@ -69,7 +74,9 @@ describe("FolderToConsultComponent", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockFolderService.getFolderByIdRequest.mockResolvedValue(mockFolder);
-    mockFolderService.getDocumentsByIdRequest.mockResolvedValue(mockDocuments);
+    mockDocumentService.getDocumentsByIdRequest.mockResolvedValue(
+      mockDocuments
+    );
     mockFolderService.updateFolderStatusRequest.mockResolvedValue(mockFolder);
   });
 
@@ -132,7 +139,7 @@ describe("FolderToConsultComponent", () => {
   });
 
   it("should display not provided message for missing documents", async () => {
-    mockFolderService.getDocumentsByIdRequest.mockResolvedValue([]);
+    mockDocumentService.getDocumentsByIdRequest.mockResolvedValue([]);
 
     render(<FolderToConsultComponent folderId={1} />);
 
@@ -259,7 +266,9 @@ describe("FolderToConsultComponent", () => {
 
     await waitFor(() => {
       expect(mockFolderService.getFolderByIdRequest).toHaveBeenCalledWith(1);
-      expect(mockFolderService.getDocumentsByIdRequest).toHaveBeenCalledWith(1);
+      expect(mockDocumentService.getDocumentsByIdRequest).toHaveBeenCalledWith(
+        1
+      );
     });
   });
 
@@ -271,7 +280,7 @@ describe("FolderToConsultComponent", () => {
     });
 
     mockFolderService.getFolderByIdRequest.mockClear();
-    mockFolderService.getDocumentsByIdRequest.mockClear();
+    mockDocumentService.getDocumentsByIdRequest.mockClear();
 
     rerender(<FolderToConsultComponent folderId={2} />);
 

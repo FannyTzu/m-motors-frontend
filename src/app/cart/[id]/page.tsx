@@ -29,14 +29,12 @@ export default function CartPage({ params }: CartPageProps) {
   const [folder, setFolder] = useState<Folder | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [folderId, setFolderId] = useState<number | null>(null);
 
   useEffect(() => {
     const loadFolder = async () => {
       try {
         const { id } = await params;
         const folderIdNum = Number(id);
-        setFolderId(folderIdNum);
 
         const data = await getFolderByIdRequest(folderIdNum);
         setFolder(data);

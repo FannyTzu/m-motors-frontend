@@ -41,7 +41,13 @@ function CardVehicle({
   return (
     <div className={s.container}>
       <div className={s.imageContainer}>
-        <Image src={image} alt={`${brand} ${model}`} fill className={s.image} />
+        <Image
+          src={image}
+          alt={`${brand} ${model}`}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className={s.image}
+        />
 
         {typeLabel && (
           <div className={isRental ? s.statusRental : s.statusSale}>

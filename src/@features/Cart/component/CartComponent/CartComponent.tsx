@@ -1,7 +1,11 @@
 "use client";
 import { ShoppingCart, Check } from "lucide-react";
 import { useState, useMemo, useEffect } from "react";
-import { createOrderRequest } from "../../service/order.service";
+import { useRouter } from "next/navigation";
+import {
+  createOrderRequest,
+  getOrderByIdRequest,
+} from "../../service/order.service";
 import { fetchOptionsRequest } from "../../service/option.service";
 import s from "./styles.module.css";
 
@@ -28,6 +32,7 @@ function CartComponent({
   folderId,
   vehicleId,
 }: CartComponentProps) {
+  const router = useRouter();
   const [options, setOptions] = useState<Option[]>([]);
   const [selectedOptions, setSelectedOptions] = useState<Set<string>>(
     new Set()
@@ -38,7 +43,6 @@ function CartComponent({
 
   const priceAsNumber = typeof price === "string" ? parseFloat(price) : price;
 
-  // Fetch options on mount
   useEffect(() => {
     const loadOptions = async () => {
       try {
@@ -62,13 +66,11 @@ function CartComponent({
     return options.filter((option) => selectedOptions.has(option.id));
   }, [selectedOptions, options]);
 
-  const optionsTotal = useMemo(() => {
-    return selectedOptionsList.reduce((sum, option) => sum + option.price, 0);
-  }, [selectedOptionsList]);
-
-  const grandTotal = useMemo(() => {
-    return priceAsNumber + optionsTotal;
-  }, [priceAsNumber, optionsTotal]);
+  const optionsTotal = selectedOptionsList.reduce(
+    (sum, option) => sum + option.price,
+    0
+  );
+  const amontTotal = priceAsNumber + optionsTotal;
 
   const toggleOption = (id: string) => {
     const newSelection = new Set(selectedOptions);
@@ -97,7 +99,9 @@ function CartComponent({
         options: optionsPayload,
       });
 
-      window.location.href = "/payment";
+      await getOrderByIdRequest(order.id);
+
+      router.push(`/payment/${order.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Une erreur est survenue");
       setIsLoading(false);
@@ -200,7 +204,7 @@ function CartComponent({
               {type === "rent" ? "Total mensuel" : "Prix comptant"}
             </span>
           </div>
-          <span className={s.finalAmount}>{grandTotal.toFixed(2)} €</span>
+          <span className={s.finalAmount}>{amontTotal.toFixed(2)} €</span>
         </div>
       </div>
 
