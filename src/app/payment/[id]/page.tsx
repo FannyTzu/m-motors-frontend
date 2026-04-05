@@ -103,6 +103,7 @@ export default function PaymentPage({ params }: PaymentPageProps) {
       <ArrowBack />
       <div className={s.container}>
         <PaymentComponent
+          orderId={order.id}
           vehicleName={vehicleName}
           vehiclePrice={order.vehicle.price}
           totalAmount={totalAmount}

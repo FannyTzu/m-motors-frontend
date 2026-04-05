@@ -62,6 +62,16 @@
   margin-top: 4px;
 }
 
+.errorMessage {
+  padding: 12px;
+  background: #fee2e2;
+  border: 1px solid #f87171;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  color: #dc2626;
+  font-size: 14px;
+}
+
 .paymentForm {
   display: flex;
   flex-direction: column;

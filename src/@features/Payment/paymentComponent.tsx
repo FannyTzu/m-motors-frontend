@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import s from "./styles.module.css";
 import { Lock } from "lucide-react";
+import {
+  createPaymentRequest,
+  updatePaymentStatusRequest,
+} from "./service/payment.service";
 
 interface PaymentComponentProps {
+  orderId: number;
   vehicleName?: string;
   vehiclePrice?: number;
   totalAmount?: number;
@@ -15,6 +20,7 @@ interface PaymentComponentProps {
 }
 
 function PaymentComponent({
+  orderId,
   vehicleName = "Vehicule",
   vehiclePrice = 0,
   financeMode = "comptant",
@@ -27,6 +33,7 @@ function PaymentComponent({
   const [cvv, setCvv] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\s/g, "").slice(0, 16);
@@ -47,15 +54,32 @@ function PaymentComponent({
     setCvv(e.target.value.replace(/\D/g, "").slice(0, 3));
   };
 
-  const handleSubmitPayment = (e: React.FormEvent) => {
+  const handleSubmitPayment = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     setIsProcessing(true);
 
-    setTimeout(() => {
+    try {
+      const payment = await createPaymentRequest({
+        order_id: orderId,
+        amount: Number(totalAmount),
+        transaction_id: `${Date.now()}-${cardNumber.slice(-4)}`,
+      });
+
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      await updatePaymentStatusRequest(payment.id, "paid");
+
       setIsProcessing(false);
       setPaymentSuccess(true);
       onPaymentComplete?.(true);
-    }, 1500);
+    } catch (err) {
+      setIsProcessing(false);
+      const errorMessage =
+        err instanceof Error ? err.message : "Erreur lors du paiement";
+      setError(errorMessage);
+      onPaymentComplete?.(false);
+    }
   };
 
   if (paymentSuccess) {
@@ -99,6 +123,8 @@ function PaymentComponent({
               <p>Vos données bancaires sont protégées</p>
             </div>
           </div>
+
+          {error && <div className={s.errorMessage}>{error}</div>}
 
           <form onSubmit={handleSubmitPayment} className={s.paymentForm}>
             <div className={s.formGroup}>
