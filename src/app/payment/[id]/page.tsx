@@ -83,7 +83,7 @@ export default function PaymentPage({ params }: PaymentPageProps) {
 
   const vehicleName = `${order.vehicle.brand} ${order.vehicle.model}`;
   const financeMode =
-    order.folder.financing_type === "location" ? "location" : "comptant";
+    order.vehicle.type === "rental" ? "location" : "comptant";
 
   const selectedOptions = order.options.map((orderOption) => ({
     name: orderOption.option.name,

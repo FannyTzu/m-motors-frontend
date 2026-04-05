@@ -77,9 +77,6 @@ function PaymentComponent({
               <br /> Le garage vous contacte dans les 24 heures pour récupérer
               votre véhicule.
             </p>
-            <p className={s.successAmount}>
-              {Number(vehiclePrice).toFixed(2)}€
-            </p>
           </div>
         </div>
       </div>
