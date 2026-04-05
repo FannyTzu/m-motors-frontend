@@ -4,6 +4,7 @@ import PaymentComponent from "@/@features/Payment/paymentComponent";
 import ArrowBack from "@/@Component/ArrowBack/ArrowBack";
 import { useEffect, useState } from "react";
 import { getOrderByIdRequest } from "@/@features/Cart/service/order.service";
+import ProtectedRoute from "@/@utils/ProtectedRoute";
 
 interface OrderDetail {
   id: number;
@@ -100,16 +101,19 @@ export default function PaymentPage({ params }: PaymentPageProps) {
   return (
     <div>
       <ArrowBack />
+
       <div className={s.container}>
-        <PaymentComponent
-          orderId={order.id}
-          vehicleName={vehicleName}
-          vehiclePrice={order.vehicle.price}
-          totalAmount={totalAmount}
-          financeMode={financeMode}
-          options={selectedOptions}
-          onPaymentComplete={handlePaymentComplete}
-        />
+        <ProtectedRoute allowedRoles={["user"]}>
+          <PaymentComponent
+            orderId={order.id}
+            vehicleName={vehicleName}
+            vehiclePrice={order.vehicle.price}
+            totalAmount={totalAmount}
+            financeMode={financeMode}
+            options={selectedOptions}
+            onPaymentComplete={handlePaymentComplete}
+          />
+        </ProtectedRoute>
       </div>
     </div>
   );

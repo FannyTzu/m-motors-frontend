@@ -4,6 +4,7 @@ import CartComponent from "@/@features/Cart/component/CartComponent/CartComponen
 import ArrowBack from "@/@Component/ArrowBack/ArrowBack";
 import { useEffect, useState } from "react";
 import { getFolderByIdRequest } from "@/@features/Folders/service/folder.service";
+import ProtectedRoute from "@/@utils/ProtectedRoute";
 
 interface Folder {
   id: number;
@@ -58,14 +59,16 @@ export default function CartPage({ params }: CartPageProps) {
     <div>
       <ArrowBack />
       <div className={s.container}>
-        <CartComponent
-          brand={folder.vehicle.brand}
-          model={folder.vehicle.model}
-          price={folder.vehicle.price}
-          type={folder.vehicle.type === "sale" ? "sale" : "rent"}
-          folderId={folder.id}
-          vehicleId={folder.vehicle_id}
-        />
+        <ProtectedRoute allowedRoles={["user"]}>
+          <CartComponent
+            brand={folder.vehicle.brand}
+            model={folder.vehicle.model}
+            price={folder.vehicle.price}
+            type={folder.vehicle.type === "sale" ? "sale" : "rent"}
+            folderId={folder.id}
+            vehicleId={folder.vehicle_id}
+          />
+        </ProtectedRoute>
       </div>
     </div>
   );
