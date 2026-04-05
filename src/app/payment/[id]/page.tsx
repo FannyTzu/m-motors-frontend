@@ -82,10 +82,9 @@ export default function PaymentPage({ params }: PaymentPageProps) {
     return <div style={{ padding: "20px" }}>Commande non trouvée</div>;
 
   const vehicleName = `${order.vehicle.brand} ${order.vehicle.model}`;
-  const financeMode =
-    order.vehicle.type === "rental" ? "location" : "comptant";
+  const financeMode = order.vehicle.type === "rental" ? "location" : "comptant";
 
-  const selectedOptions = order.options.map((orderOption) => ({
+  const selectedOptions = (order.options || []).map((orderOption) => ({
     name: orderOption.option.name,
     price: Number(orderOption.option.price),
   }));
