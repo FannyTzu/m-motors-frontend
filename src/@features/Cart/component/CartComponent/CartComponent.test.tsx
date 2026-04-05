@@ -7,6 +7,11 @@ import * as optionService from "../../service/option.service";
 
 jest.mock("../../service/order.service");
 jest.mock("../../service/option.service");
+jest.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+  }),
+}));
 
 const mockCreateOrderRequest = orderService.createOrderRequest as jest.Mock;
 const mockFetchOptionsRequest = optionService.fetchOptionsRequest as jest.Mock;

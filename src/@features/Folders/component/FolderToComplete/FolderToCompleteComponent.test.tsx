@@ -2,8 +2,10 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import FolderToCompleteComponent from "./FolderToCompleteComponent";
 import * as folderService from "../../service/folder.service";
+import * as documentService from "../../service/document.service";
 
 jest.mock("../../service/folder.service");
+jest.mock("../../service/document.service");
 
 jest.mock("@/@Component/Status/StatusComponent", () => {
   return function DummyStatusComponent() {
@@ -18,6 +20,9 @@ jest.mock("@/@Component/ArrowBack/ArrowBack", () => {
 });
 
 const mockFolderService = folderService as jest.Mocked<typeof folderService>;
+const mockDocumentService = documentService as jest.Mocked<
+  typeof documentService
+>;
 
 describe("FolderToCompleteComponent", () => {
   const mockFolder = {
@@ -52,7 +57,9 @@ describe("FolderToCompleteComponent", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockFolderService.getFolderByIdRequest.mockResolvedValue(mockFolder);
-    mockFolderService.getDocumentsByIdRequest.mockResolvedValue(mockDocuments);
+    mockDocumentService.getDocumentsByIdRequest.mockResolvedValue(
+      mockDocuments
+    );
     mockFolderService.updateFolderStatusRequest.mockResolvedValue(mockFolder);
   });
 
@@ -71,12 +78,14 @@ describe("FolderToCompleteComponent", () => {
 
     await waitFor(() => {
       expect(mockFolderService.getFolderByIdRequest).toHaveBeenCalledWith(1);
-      expect(mockFolderService.getDocumentsByIdRequest).toHaveBeenCalledWith(1);
+      expect(mockDocumentService.getDocumentsByIdRequest).toHaveBeenCalledWith(
+        1
+      );
     });
   });
 
   it("should display upload buttons when no documents exist", async () => {
-    mockFolderService.getDocumentsByIdRequest.mockResolvedValue([]);
+    mockDocumentService.getDocumentsByIdRequest.mockResolvedValue([]);
 
     render(<FolderToCompleteComponent folderId={1} />);
 
@@ -148,7 +157,7 @@ describe("FolderToCompleteComponent", () => {
   });
 
   it("should handle file upload", async () => {
-    mockFolderService.uploadDocumentRequest.mockResolvedValue({
+    mockDocumentService.uploadDocumentRequest.mockResolvedValue({
       id: 4,
       type: "idCard",
       url: "https://example.com/new-id.pdf",
@@ -167,7 +176,7 @@ describe("FolderToCompleteComponent", () => {
     fireEvent.change(fileInput, { target: { files: [file] } });
 
     await waitFor(() => {
-      expect(mockFolderService.uploadDocumentRequest).toHaveBeenCalledWith({
+      expect(mockDocumentService.uploadDocumentRequest).toHaveBeenCalledWith({
         folderId: 1,
         documentType: "idCard",
         file,
