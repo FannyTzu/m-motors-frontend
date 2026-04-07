@@ -1,11 +1,19 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import FolderToValidateCard from "./FolderToValidateCard";
 import * as formatDateModule from "@/@utils/formatDate";
+import * as folderService from "@/@features/Folders/service/folder.service";
 
 jest.mock("@/@utils/formatDate", () => ({
   formatDate: jest.fn(() => "01/01/2026"),
 }));
+
+jest.mock("@/@features/Folders/service/folder.service");
+
+const mockGetFolderById =
+  folderService.getFolderByIdRequest as jest.MockedFunction<
+    typeof folderService.getFolderByIdRequest
+  >;
 
 describe("FolderToValidateCard", () => {
   const mockFolder = {
@@ -35,6 +43,13 @@ describe("FolderToValidateCard", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockGetFolderById.mockResolvedValue({
+      id: 1,
+      user_id: 4587,
+      vehicle_id: 8534,
+      status: "active",
+      created_at: "2026-01-01T00:00:00Z",
+    });
   });
 
   it("should render folder card with correct data", () => {
@@ -112,7 +127,7 @@ describe("FolderToValidateCard", () => {
     expect(button).toBeInTheDocument();
   });
 
-  it("should display status placeholder", () => {
+  it("should render StatusComponent with correct folderId", async () => {
     render(
       <FolderToValidateCard
         folder={mockFolder}
@@ -122,7 +137,9 @@ describe("FolderToValidateCard", () => {
       />
     );
 
-    expect(screen.getByText(/Status à venir/)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(mockGetFolderById).toHaveBeenCalledWith(mockFolder.id);
+    });
   });
 
   it("should format date correctly", () => {

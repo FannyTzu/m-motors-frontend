@@ -47,19 +47,19 @@ function StatusComponent({ folderId }: StatusComponentProps) {
 
   const statusConfig: Record<string, StatusConfig> = {
     active: {
-      label: "En attente",
+      label: "En attente d'envoi des documents",
       color: "#e0c25f",
       bgColor: "#fff3cd",
       icon: <Clock size={20} />,
     },
     submitted: {
-      label: "Envoyé",
+      label: "Documents envoyés",
       color: "#007bff",
       bgColor: "#cce5ff",
       icon: <Clock size={20} />,
     },
     accepted: {
-      label: "Validé",
+      label: "En attente de paiement",
       color: "#28a745",
       bgColor: "#d4edda",
       icon: <CheckCircle size={20} />,
@@ -69,6 +69,12 @@ function StatusComponent({ folderId }: StatusComponentProps) {
       color: "#dc3545",
       bgColor: "#f8d7da",
       icon: <XCircle size={20} />,
+    },
+    closed: {
+      label: "Véhicule payé",
+      color: "#6c757d",
+      bgColor: "#e2e3e5",
+      icon: <CheckCircle size={20} />,
     },
   };
 

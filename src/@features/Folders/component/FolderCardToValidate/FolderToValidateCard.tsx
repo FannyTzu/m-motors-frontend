@@ -1,6 +1,7 @@
 import React from "react";
 import { formatDate } from "@/@utils/formatDate";
 import s from "./styles.module.css";
+import StatusComponent from "@/@Component/Status/StatusComponent";
 
 type Vehicle = {
   id: number;
@@ -44,9 +45,7 @@ function FolderToValidateCard({
 
   return (
     <div className={s.card}>
-      {" "}
-      {/* todo: component status to add */}
-      <div>Status à venir</div>
+      <StatusComponent folderId={folder.id} />
       <div className={s.section}>
         <div className={s.label}>
           Véhicule :
