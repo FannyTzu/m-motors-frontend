@@ -92,3 +92,21 @@
   box-shadow: 0 4px 10px rgba(214, 31, 31, 0.16);
   background: rgba(214, 31, 31, 0.16);
 }
+
+.buttonPaidDisabled {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: not-allowed;
+  background: linear-gradient(
+    135deg,
+    rgba(10, 165, 233, 0.12) 0%,
+    rgba(14, 165, 233, 0.08) 100%
+  );
+  color: var(--color-blue);
+  border: 1px solid rgba(14, 165, 233, 0.35);
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.12);
+  opacity: 0.85;
+}

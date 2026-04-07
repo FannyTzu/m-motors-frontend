@@ -76,9 +76,19 @@ Cette action est définitive.`}
               Payer
             </button>
           )}
-          <button className={s.buttonDelete} onClick={() => setOpenModal(true)}>
-            Supprimer mon dossier
-          </button>
+          {status === "closed" && (
+            <button className={s.buttonPaidDisabled} disabled>
+              Véhicule payé
+            </button>
+          )}
+          {status !== "closed" && (
+            <button
+              className={s.buttonDelete}
+              onClick={() => setOpenModal(true)}
+            >
+              Supprimer mon dossier
+            </button>
+          )}
         </div>
       </div>
     </div>
