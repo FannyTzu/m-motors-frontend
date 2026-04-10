@@ -10,6 +10,7 @@ interface CardFolderProps {
   brand: string;
   model: string;
   dateSubmitted: string;
+  status: string;
   onDelete?: (folderId: number) => void;
 }
 
@@ -18,6 +19,7 @@ function CardFolder({
   brand,
   model,
   dateSubmitted,
+  status,
   onDelete,
 }: CardFolderProps) {
   const router = useRouter();
@@ -38,6 +40,11 @@ function CardFolder({
       console.error("Erreur lors de la suppression du dossier:", error);
     }
   };
+
+  const handleRedirectCart = () => {
+    router.push(`/cart/${folderId}`);
+  };
+
   return (
     <div>
       {openModal && (
@@ -64,11 +71,24 @@ Cette action est définitive.`}
           <button className={s.button} onClick={handleRedirect}>
             Voir mon dossier
           </button>
-          {/*todo: desactiver le bouton si dossier non valide */}
-          <button className={s.buttonPaid}>Payer</button>
-          <button className={s.buttonDelete} onClick={() => setOpenModal(true)}>
-            Supprimer mon dossier
-          </button>
+          {status === "accepted" && (
+            <button className={s.buttonPaid} onClick={handleRedirectCart}>
+              Payer
+            </button>
+          )}
+          {status === "closed" && (
+            <button className={s.buttonPaidDisabled} disabled>
+              Véhicule payé
+            </button>
+          )}
+          {status !== "closed" && (
+            <button
+              className={s.buttonDelete}
+              onClick={() => setOpenModal(true)}
+            >
+              Supprimer mon dossier
+            </button>
+          )}
         </div>
       </div>
     </div>

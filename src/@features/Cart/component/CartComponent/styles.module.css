@@ -1,0 +1,263 @@
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 12px;
+  background-color: var(--color-theme);
+  border-radius: 8px;
+}
+
+.header {
+  margin-bottom: 16px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--color-black);
+}
+
+.subtitle {
+  font-size: 14px;
+  color: var(--color-gray);
+  margin: 0;
+}
+
+.section {
+  background-color: var(--color-white);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid var(--color-gray-light);
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: var(--color-black);
+}
+
+.vehicleCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: var(--color-blue-status);
+  border-radius: 6px;
+  gap: 16px;
+}
+
+.vehicleInfo {
+  display: flex;
+  gap: 16px;
+  flex: 1;
+}
+
+.vehicleDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-black);
+}
+
+.model {
+  font-size: 14px;
+  color: var(--color-gray);
+}
+
+.vehicleType {
+  font-size: 12px;
+  padding: 4px 12px;
+  background-color: var(--color-blue-status);
+  color: var(--color-blue-dark);
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.vehiclePrice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.price {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-black);
+}
+
+.paymentType {
+  font-size: 12px;
+  color: var(--color-gray);
+}
+
+.optionsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.optionItem {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background-color: var(--color-white);
+  border: 2px solid var(--color-gray-light);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.optionItem:hover {
+  background-color: var(--color-blue-status);
+  border-color: var(--color-blue);
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  margin-right: 12px;
+  cursor: pointer;
+  accent-color: var(--color-blue);
+}
+
+.optionLabel {
+  flex: 1;
+  font-size: 14px;
+  color: var(--color-black);
+  font-weight: 500;
+}
+
+.optionPrice {
+  font-size: 14px;
+  color: var(--color-green);
+  font-weight: 600;
+  margin-left: 12px;
+}
+
+.selectedOptions {
+  background-color: var(--color-green-status);
+  border: 1px solid var(--color-green);
+  border-radius: 6px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.selectedOptions h4 {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  text-transform: uppercase;
+  color: var(--color-green-status-dark);
+  font-weight: 600;
+}
+
+.selectedItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 14px;
+  color: var(--color-black);
+}
+
+.selectedItem:not(:last-child) {
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-gray-light);
+}
+
+.totalSection {
+  background-color: var(--color-white);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 2px solid var(--color-gray-light);
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  font-size: 14px;
+  color: var(--color-gray);
+}
+
+.totalRow:first-child {
+  padding-top: 0;
+}
+
+.amount {
+  font-weight: 600;
+  color: var(--color-black);
+}
+
+.totalFinal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 2px solid var(--color-gray-light);
+}
+
+.finalLabel {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-black);
+}
+
+.paymentTypeLabel {
+  font-size: 12px;
+  color: var(--color-gray);
+  display: block;
+  margin-top: 4px;
+}
+
+.finalAmount {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-green);
+}
+
+.validateButton {
+  width: 100%;
+  padding: 14px;
+  background-color: var(--color-blue);
+  color: var(--color-white);
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    transform 0.1s ease;
+}
+
+.validateButton:hover {
+  background-color: var(--color-blue-dark);
+  transform: translateY(-1px);
+}
+
+.validateButton:active {
+  transform: translateY(0);
+}
+
+.error {
+  padding: 12px;
+  margin-bottom: 16px;
+  background-color: #fee;
+  color: #c00;
+  border-radius: 4px;
+  border: 1px solid #fcc;
+}

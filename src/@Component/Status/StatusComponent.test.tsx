@@ -34,7 +34,7 @@ describe("StatusComponent", () => {
     });
   });
 
-  it("should display 'En attente' status for active folder", async () => {
+  it("should display 'En attente d'envoi des documents' status for active folder", async () => {
     mockGetFolderByIdRequest.mockResolvedValueOnce({
       id: 1,
       status: "active",
@@ -44,11 +44,13 @@ describe("StatusComponent", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Statut :")).toBeInTheDocument();
-      expect(screen.getByText("En attente")).toBeInTheDocument();
+      expect(
+        screen.getByText("En attente d'envoi des documents")
+      ).toBeInTheDocument();
     });
   });
 
-  it("should display 'Envoyé' status for submitted folder", async () => {
+  it("should display 'Documents envoyés' status for submitted folder", async () => {
     mockGetFolderByIdRequest.mockResolvedValueOnce({
       id: 1,
       status: "submitted",
@@ -57,11 +59,11 @@ describe("StatusComponent", () => {
     render(<StatusComponent folderId={1} />);
 
     await waitFor(() => {
-      expect(screen.getByText("Envoyé")).toBeInTheDocument();
+      expect(screen.getByText("Documents envoyés")).toBeInTheDocument();
     });
   });
 
-  it("should display 'Validé' status for accepted folder", async () => {
+  it("should display 'En attente de paiement' status for accepted folder", async () => {
     mockGetFolderByIdRequest.mockResolvedValueOnce({
       id: 1,
       status: "accepted",
@@ -70,7 +72,7 @@ describe("StatusComponent", () => {
     render(<StatusComponent folderId={1} />);
 
     await waitFor(() => {
-      expect(screen.getByText("Validé")).toBeInTheDocument();
+      expect(screen.getByText("En attente de paiement")).toBeInTheDocument();
     });
   });
 

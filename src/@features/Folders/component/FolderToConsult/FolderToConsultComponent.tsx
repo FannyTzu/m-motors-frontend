@@ -5,9 +5,9 @@ import ArrowBack from "@/@Component/ArrowBack/ArrowBack";
 import { Eye, CheckCircle, Circle } from "lucide-react";
 import {
   getFolderByIdRequest,
-  getDocumentsByIdRequest,
   updateFolderStatusRequest,
 } from "../../service/folder.service";
+import { getDocumentsByIdRequest } from "../../service/document.service";
 import { formatDate } from "@/@utils/formatDate";
 import StatusComponent from "@/@Component/Status/StatusComponent";
 

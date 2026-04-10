@@ -84,7 +84,7 @@ function ContactDetailsComponent() {
       router.replace("/user-space");
     } catch (err) {
       setError(
-        err instanceof Error
+        (err instanceof Error && err.message)
           ? err.message
           : "Erreur lors de la modification du contact"
       );
