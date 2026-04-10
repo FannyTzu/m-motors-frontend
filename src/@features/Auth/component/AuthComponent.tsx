@@ -11,6 +11,28 @@ interface AuthComponentProps {
   success?: string;
 }
 
+interface PasswordValidation {
+  minLength: boolean;
+  hasUppercase: boolean;
+  hasNumber: boolean;
+  hasSpecialChar: boolean;
+  isValid: boolean;
+}
+
+function validatePassword(password: string): PasswordValidation {
+  return {
+    minLength: password.length >= 8,
+    hasUppercase: /[A-Z]/.test(password),
+    hasNumber: /[0-9]/.test(password),
+    hasSpecialChar: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password),
+    isValid:
+      password.length >= 8 &&
+      /[A-Z]/.test(password) &&
+      /[0-9]/.test(password) &&
+      /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password),
+  };
+}
+
 function AuthComponent({
   type,
   onSubmit,
@@ -33,9 +55,10 @@ function AuthComponent({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const isPasswordValid = password.length >= 6;
+  const passwordValidation = validatePassword(password);
   const showPasswordValidation = isRegister && password.length > 0;
-  const isFormValid = email && (isRegister ? isPasswordValid : password);
+  const isFormValid =
+    email && (isRegister ? passwordValidation.isValid : password);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,16 +91,51 @@ function AuthComponent({
             className={s.input}
           />
           {showPasswordValidation && (
-            <div className={isPasswordValid ? s.success : s.error}>
-              {isPasswordValid ? (
-                <>
-                  <CheckCircle size={16} /> Mot de passe valide
-                </>
-              ) : (
-                <>
-                  <TriangleAlert size={16} /> Au moins 6 caractères requis
-                </>
-              )}
+            <div className={s.validationContainer}>
+              <div
+                className={passwordValidation.minLength ? s.success : s.error}
+              >
+                {passwordValidation.minLength ? (
+                  <CheckCircle size={16} />
+                ) : (
+                  <TriangleAlert size={16} />
+                )}
+                Minimum 8 caractères
+              </div>
+              <div
+                className={
+                  passwordValidation.hasUppercase ? s.success : s.error
+                }
+              >
+                {passwordValidation.hasUppercase ? (
+                  <CheckCircle size={16} />
+                ) : (
+                  <TriangleAlert size={16} />
+                )}
+                1 majuscule
+              </div>
+              <div
+                className={passwordValidation.hasNumber ? s.success : s.error}
+              >
+                {passwordValidation.hasNumber ? (
+                  <CheckCircle size={16} />
+                ) : (
+                  <TriangleAlert size={16} />
+                )}
+                1 chiffre
+              </div>
+              <div
+                className={
+                  passwordValidation.hasSpecialChar ? s.success : s.error
+                }
+              >
+                {passwordValidation.hasSpecialChar ? (
+                  <CheckCircle size={16} />
+                ) : (
+                  <TriangleAlert size={16} />
+                )}
+                1 caractère spécial
+              </div>
             </div>
           )}
         </div>
