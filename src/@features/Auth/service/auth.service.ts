@@ -1,5 +1,3 @@
-import { addBreadcrumb } from "@/@utils/sentry";
-
 type User = {
   id: number;
   mail: string;
@@ -50,7 +48,6 @@ export const registerRequest = async (email: string, password: string) => {
 };
 
 export const loginRequest = async (email: string, password: string) => {
-  addBreadcrumb("Auth login", "auth");
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
     {

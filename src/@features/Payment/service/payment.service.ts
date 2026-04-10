@@ -1,3 +1,5 @@
+import { catchAsync } from "@/@utils/catchAsync";
+
 export interface CreatePaymentData {
   order_id: number;
   amount: number;
@@ -23,50 +25,61 @@ export interface Payment {
   };
 }
 
-export const createPaymentRequest = async (data: CreatePaymentData) => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/payments`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+export const createPaymentRequest = (data: CreatePaymentData) =>
+  catchAsync(
+    async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/payments`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error("Non authentifié");
+        }
+        throw new Error("Failed to create payment");
+      }
+
+      const result = await response.json();
+      return result.data as Payment;
     },
-    credentials: "include",
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    if (response.status === 401) {
-      throw new Error("Non authentifié");
-    }
-    throw new Error("Failed to create payment");
-  }
-
-  const result = await response.json();
-  return result.data as Payment;
-};
-
-export const updatePaymentStatusRequest = async (
-  paymentId: number,
-  status: "pending" | "paid" | "failed"
-) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/payments/${paymentId}`,
-    {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({ status }),
-    }
+    { tags: { feature: "payment", action: "createPayment" } }
   );
 
-  if (!response.ok) {
-    if (response.status === 401) {
-      throw new Error("Non authentifié");
-    }
-    throw new Error("Failed to update payment status");
-  }
+export const updatePaymentStatusRequest = (
+  paymentId: number,
+  status: "pending" | "paid" | "failed"
+) =>
+  catchAsync(
+    async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/payments/${paymentId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({ status }),
+        }
+      );
 
-  const result = await response.json();
-  return result.data as Payment;
-};
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error("Non authentifié");
+        }
+        throw new Error("Failed to update payment status");
+      }
+
+      const result = await response.json();
+      return result.data as Payment;
+    },
+    { tags: { feature: "payment", action: "updatePaymentStatus" } }
+  );
