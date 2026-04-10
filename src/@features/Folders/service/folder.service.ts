@@ -1,78 +1,99 @@
-export const createFolderRequest = async (data: {
+import { catchAsync } from "@/@utils/catchAsync";
+
+export const createFolderRequest = (data: {
   vehicleId: number;
   userId: number;
-}) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/folder/create`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(data),
-    }
+}) =>
+  catchAsync(
+    async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/folder/create`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error("Non authentifié");
+        }
+        throw new Error("Failed to create folder");
+      }
+
+      return response.json();
+    },
+    { tags: { feature: "folder", action: "createFolder" } }
   );
 
-  if (!response.ok) {
-    if (response.status === 401) {
-      throw new Error("Non authentifié");
-    }
-    throw new Error("Failed to create folder");
-  }
+export const getFolderByUserIdRequest = (userId: number) =>
+  catchAsync(
+    async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/folder/user/${userId}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        }
+      );
 
-  return response.json();
-};
+      if (!response.ok) {
+        throw new Error("Failed to fetch folder");
+      }
 
-export const getFolderByUserIdRequest = async (userId: number) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/folder/user/${userId}`,
-    {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    }
+      return response.json();
+    },
+    { tags: { feature: "folder", action: "getFolderByUserId" } }
   );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch folder");
-  }
+export const getFolderByIdRequest = (folderId: number) =>
+  catchAsync(
+    async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/folder/${folderId}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        }
+      );
 
-  return response.json();
-};
+      if (!response.ok) {
+        throw new Error("Failed to fetch folder");
+      }
 
-export const getFolderByIdRequest = async (folderId: number) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/folder/${folderId}`,
-    {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    }
+      return response.json();
+    },
+    { tags: { feature: "folder", action: "getFolderById" } }
   );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch folder");
-  }
+export const getAllFoldersRequest = () =>
+  catchAsync(
+    async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/folder`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        }
+      );
 
-  return response.json();
-};
+      if (!response.ok) {
+        throw new Error("Failed to fetch all folders");
+      }
 
-export const getAllFoldersRequest = async () => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/folder`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-  });
+      return response.json();
+    },
+    { tags: { feature: "folder", action: "getAllFolders" } }
+  );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch all folders");
-  }
-
-  return response.json();
-};
-
-export const updateFolderStatusRequest = async ({
+export const updateFolderStatusRequest = ({
   folderId,
   status,
 }: {
@@ -84,43 +105,51 @@ export const updateFolderStatusRequest = async ({
     | "closed"
     | "cancelled"
     | "archived";
-}) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/folder/${folderId}/status`,
-    {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ status }),
-    }
+}) =>
+  catchAsync(
+    async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/folder/${folderId}/status`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ status }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to update folder status");
+      }
+      return response.json();
+    },
+    { tags: { feature: "folder", action: "updateFolderStatus" } }
   );
-  if (!response.ok) {
-    throw new Error("Failed to update folder status");
-  }
-  return response.json();
-};
 
-export const deleteFolderRequest = async (folderId: number) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/folder/${folderId}`,
-    {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    }
+export const deleteFolderRequest = (folderId: number) =>
+  catchAsync(
+    async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/folder/${folderId}`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to delete folder");
+      }
+
+      const text = await response.text();
+      if (!text || text.trim() === "") {
+        return { success: true };
+      }
+
+      try {
+        return JSON.parse(text);
+      } catch {
+        return { success: true };
+      }
+    },
+    { tags: { feature: "folder", action: "deleteFolder" } }
   );
-  if (!response.ok) {
-    throw new Error("Failed to delete folder");
-  }
-
-  const text = await response.text();
-  if (!text || text.trim() === "") {
-    return { success: true };
-  }
-
-  try {
-    return JSON.parse(text);
-  } catch (error) {
-    return { success: true };
-  }
-};

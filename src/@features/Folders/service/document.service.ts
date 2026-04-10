@@ -1,4 +1,6 @@
-export const uploadDocumentRequest = async ({
+import { catchAsync } from "@/@utils/catchAsync";
+
+export const uploadDocumentRequest = ({
   folderId,
   documentType,
   file,
@@ -6,56 +8,70 @@ export const uploadDocumentRequest = async ({
   folderId: number;
   documentType: "idCard" | "drivingLicense" | "rib";
   file: File;
-}) => {
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("folderId", folderId.toString());
-  formData.append("name", file.name);
-  formData.append("type", documentType);
+}) =>
+  catchAsync(
+    async () => {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folderId", folderId.toString());
+      formData.append("name", file.name);
+      formData.append("type", documentType);
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/documents`, {
-    method: "POST",
-    credentials: "include",
-    body: formData,
-  });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/documents`,
+        {
+          method: "POST",
+          credentials: "include",
+          body: formData,
+        }
+      );
 
-  if (!response.ok) {
-    throw new Error("Failed to upload document");
-  }
+      if (!response.ok) {
+        throw new Error("Failed to upload document");
+      }
 
-  return response.json();
-};
-
-export const getDocumentsByIdRequest = async (folderId: number) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/documents/folder/${folderId}`,
-
-    {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    }
+      return response.json();
+    },
+    { tags: { feature: "document", action: "uploadDocument" } }
   );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch documents");
-  }
+export const getDocumentsByIdRequest = (folderId: number) =>
+  catchAsync(
+    async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/documents/folder/${folderId}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        }
+      );
 
-  return response.json();
-};
+      if (!response.ok) {
+        throw new Error("Failed to fetch documents");
+      }
 
-export const deleteDocumentRequest = async (documentId: number) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/documents/${documentId}`,
-    {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    }
+      return response.json();
+    },
+    { tags: { feature: "document", action: "getDocumentsById" } }
   );
 
-  if (!response.ok) {
-    throw new Error("Failed to delete document");
-  }
-  return response.json();
-};
+export const deleteDocumentRequest = (documentId: number) =>
+  catchAsync(
+    async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/documents/${documentId}`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to delete document");
+      }
+      return response.json();
+    },
+    { tags: { feature: "document", action: "deleteDocument" } }
+  );

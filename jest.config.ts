@@ -17,7 +17,6 @@ const customJestConfig = {
     "!<rootDir>/src/**/?(*.)+(spec|test).{ts,tsx,js,jsx}",
     "!<rootDir>/src/**/__mocks__/**",
     "!<rootDir>/src/@mocks/**",
-    "!<rootDir>/src/@utils/useSentry.ts",
     "!<rootDir>/src/instrumentation-client.ts",
     "!<rootDir>/src/instrumentation.ts",
     "!<rootDir>/src/app/**",

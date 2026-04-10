@@ -1,3 +1,5 @@
+import { catchAsync } from "@/@utils/catchAsync";
+
 interface CreateOrderRequest {
   folder_id: number;
   vehicle_id: number;
@@ -51,51 +53,55 @@ interface OrderDetail extends Order {
   payments: Payment[];
 }
 
-export const createOrderRequest = async (
-  data: CreateOrderRequest
-): Promise<Order> => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/orders/create`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-      credentials: "include",
-    }
+export const createOrderRequest = (data: CreateOrderRequest): Promise<Order> =>
+  catchAsync(
+    async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/orders/create`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+          credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.error || "Erreur lors de la création de la commande"
+        );
+      }
+
+      return response.json();
+    },
+    { tags: { feature: "order", action: "createOrder" } }
   );
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(
-      errorData.error || "Erreur lors de la création de la commande"
-    );
-  }
+export const getOrderByIdRequest = (orderId: number): Promise<OrderDetail> =>
+  catchAsync(
+    async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/orders/${orderId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
 
-  return response.json();
-};
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.error || "Erreur lors de la récupération de la commande"
+        );
+      }
 
-export const getOrderByIdRequest = async (
-  orderId: number
-): Promise<OrderDetail> => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/orders/${orderId}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    }
+      return response.json();
+    },
+    { tags: { feature: "order", action: "getOrderById" } }
   );
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(
-      errorData.error || "Erreur lors de la récupération de la commande"
-    );
-  }
-
-  return response.json();
-};
