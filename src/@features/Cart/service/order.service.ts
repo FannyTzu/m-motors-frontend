@@ -3,9 +3,7 @@ import { catchAsync } from "@/@utils/catchAsync";
 interface CreateOrderRequest {
   folder_id: number;
   vehicle_id: number;
-  options: Array<{
-    option_id: number;
-  }>;
+  optionIds: number[];
 }
 
 interface Order {
@@ -14,6 +12,7 @@ interface Order {
   vehicle_id: number;
   user_id: number;
   status: string;
+  total_amount: string | number;
   created_at: string;
 }
 
@@ -43,15 +42,14 @@ interface OrderDetail extends Order {
   };
   options: Array<{
     id: number;
-    option_id: number;
-    option: {
-      id: number;
-      name: string;
-      price: number;
-    };
+    name: string;
+    price: number;
+    description?: string;
   }>;
   payments: Payment[];
 }
+
+export type { OrderDetail };
 
 export const createOrderRequest = (data: CreateOrderRequest): Promise<Order> =>
   catchAsync(

@@ -4,47 +4,8 @@ import PaymentComponent from "@/@features/Payment/paymentComponent";
 import ArrowBack from "@/@Component/ArrowBack/ArrowBack";
 import { useEffect, useState } from "react";
 import { getOrderByIdRequest } from "@/@features/Cart/service/order.service";
+import type { OrderDetail } from "@/@features/Cart/service/order.service";
 import ProtectedRoute from "@/@utils/ProtectedRoute";
-
-interface OrderDetail {
-  id: number;
-  folder_id: number;
-  vehicle_id: number;
-  user_id: number;
-  status: string;
-  created_at: string;
-  folder: {
-    id: number;
-    user_id: number;
-    vehicle_id: number;
-    status: string;
-    financing_type: string;
-    created_at: string;
-  };
-  vehicle: {
-    id: number;
-    brand: string;
-    model: string;
-    type: string;
-    price: number;
-  };
-  options: Array<{
-    id: number;
-    option_id: number;
-    option: {
-      id: number;
-      name: string;
-      price: number;
-    };
-  }>;
-  payments: Array<{
-    id: number;
-    order_id: number;
-    amount: number;
-    status: string;
-    created_at: string;
-  }>;
-}
 
 interface PaymentPageProps {
   params: Promise<{
@@ -85,13 +46,14 @@ export default function PaymentPage({ params }: PaymentPageProps) {
   const vehicleName = `${order.vehicle.brand} ${order.vehicle.model}`;
   const financeMode = order.vehicle.type === "rental" ? "location" : "comptant";
 
-  const selectedOptions = (order.options || []).map((orderOption) => ({
-    name: orderOption.option.name,
-    price: Number(orderOption.option.price),
-  }));
+  const selectedOptions = (order.options || []).map(
+    (option: { name: string; price: number; id: number }) => ({
+      name: option.name,
+      price: Number(option.price),
+    })
+  );
 
-  const optionsTotal = selectedOptions.reduce((sum, opt) => sum + opt.price, 0);
-  const totalAmount = Number(order.vehicle.price) + optionsTotal;
+  const totalAmount = Number(order.total_amount);
 
   const handlePaymentComplete = (success: boolean) => {
     console.log("Paiement complété:", success, "Commande ID:", order.id);
