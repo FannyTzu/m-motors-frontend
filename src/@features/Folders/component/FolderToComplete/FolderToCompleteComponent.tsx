@@ -54,6 +54,7 @@ function FolderToCompleteComponent({
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [folderStatus, setFolderStatus] = useState<string | null>(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     const fetchFolderData = async () => {
@@ -249,6 +250,7 @@ function FolderToCompleteComponent({
       await updateFolderStatusRequest({ folderId, status: "submitted" });
       setSuccessMessage("Dossier envoyé pour validation par M-Motors !");
       setFolderStatus("submitted");
+      setRefreshTrigger((prev) => prev + 1);
       setTimeout(() => setSuccessMessage(null), 3000);
     } catch (err) {
       console.error("Error submitting folder:", err);
@@ -269,7 +271,10 @@ function FolderToCompleteComponent({
       <div className={s.container}>
         <div>
           <h1>Dépôt de dossier</h1>
-          <StatusComponent folderId={folderId} />
+          <StatusComponent
+            folderId={folderId}
+            refreshTrigger={refreshTrigger}
+          />
 
           <h2>Pièces justificatives</h2>
 
