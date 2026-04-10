@@ -154,7 +154,7 @@ describe("CartComponent", () => {
         expect(mockCreateOrderRequest).toHaveBeenCalledWith({
           folder_id: 1,
           vehicle_id: 2,
-          options: [],
+          optionIds: [],
         });
       });
     });
@@ -183,7 +183,7 @@ describe("CartComponent", () => {
         expect(mockCreateOrderRequest).toHaveBeenCalledWith({
           folder_id: 1,
           vehicle_id: 2,
-          options: [{ option_id: 1 }, { option_id: 3 }],
+          optionIds: [1, 3],
         });
       });
     });
