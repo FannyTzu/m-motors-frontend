@@ -2,10 +2,7 @@
 import { ShoppingCart, Check } from "lucide-react";
 import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import {
-  createOrderRequest,
-  getOrderByIdRequest,
-} from "../../service/order.service";
+import { createOrderRequest } from "../../service/order.service";
 import { fetchOptionsRequest } from "../../service/option.service";
 import s from "./styles.module.css";
 
@@ -87,19 +84,15 @@ function CartComponent({
     setError(null);
 
     try {
-      const optionsPayload = Array.from(selectedOptions)
-        .map((optionId) => ({
-          option_id: parseInt(optionId, 10),
-        }))
-        .filter((opt) => !isNaN(opt.option_id));
+      const optionIds = Array.from(selectedOptions)
+        .map((optionId) => parseInt(optionId, 10))
+        .filter((id) => !isNaN(id));
 
       const order = await createOrderRequest({
         folder_id: folderId,
         vehicle_id: vehicleId,
-        options: optionsPayload,
+        optionIds,
       });
-
-      await getOrderByIdRequest(order.id);
 
       router.push(`/payment/${order.id}`);
     } catch (err) {

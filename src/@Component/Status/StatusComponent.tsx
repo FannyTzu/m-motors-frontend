@@ -6,6 +6,7 @@ import { getFolderByIdRequest } from "@/@features/Folders/service/folder.service
 
 interface StatusComponentProps {
   folderId: number;
+  refreshTrigger?: number;
 }
 
 type FolderStatus =
@@ -23,7 +24,7 @@ interface StatusConfig {
   icon: React.ReactNode;
 }
 
-function StatusComponent({ folderId }: StatusComponentProps) {
+function StatusComponent({ folderId, refreshTrigger }: StatusComponentProps) {
   const [status, setStatus] = useState<FolderStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +44,7 @@ function StatusComponent({ folderId }: StatusComponentProps) {
     };
 
     fetchStatus();
-  }, [folderId]);
+  }, [folderId, refreshTrigger]);
 
   const statusConfig: Record<string, StatusConfig> = {
     active: {
