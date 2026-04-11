@@ -1,57 +1,148 @@
-# M-MOTORS - Frontend
+# M-MOTORS — Frontend
 
 Frontend du projet, construit avec React et Next.js
 
-Ce README décrit les prérequis, l’installation et les principales commandes pour démarrer le projet en local.
+Ce README décrit les prérequis, l’installation et les principales commandes pour démarrer le projet en local ainsi que les informations techniques importantes pour comprendre le projet.
 
-🧰 Prérequis
-Assurez-vous d’avoir installé les outils suivants :
+---
 
-- **Node.js** (version recommandée : LTS)
+## Prérequis
 
-📦 Installation
+- **Node.js** v20 (version utilisée en CI)
+- Un backend M-Motors accessible (l'URL est configurée via variable d'environnement)
 
-Clonez le dépôt puis installez les dépendances :
+---
+
+## Installation
 
 ```bash
-=> npm install
+git clone <url-du-repo>
+cd m-motors-frontend
+npm install
+```
 
-🚀 Lancer le serveur
+---
 
-dev => npm run dev
-production => npm start
+## Variables d'environnement
 
+Vigilance sur les variables d'environnement, tout doit rester dans les .env, pas de push de secret !
 
-📁 Structure du projet
+Créez un fichier `.env.local` à la racine :
 
-.github/
-└── workflows/
-    └── ci.yml
+PORT=
+NEXT_PUBLIC_API_URL=
+NEXT_PUBLIC_SENTRY_DSN=
+SENTRY_DSN=
+NEXT_PUBLIC_APP_ENV=
+SENTRY_AUTH_TOKEN=
+SENTRY_ORG=
+
+Rapprochez vous de votre lead dev pour obtenir les secrets.
+
+---
+
+## Lancer le projet
+
+## Développement (port 3001)\*\*
+
+npm run dev
+
+## Build de production puis démarrage\*\*
+
+npm run build
+npm start
+
+---
+
+## Stack technique
+
+| Couche        | Technologie                             |
+| ------------- | --------------------------------------- |
+| Framework     | Next.js 16.2 (App Router)               |
+| UI            | React 19, CSS Modules, Lucide React     |
+| Langage       | TypeScript 5                            |
+| Validation    | Zod 4                                   |
+| Fetching      | `fetch` natif + SWR 2                   |
+| Monitoring    | Sentry `@sentry/nextjs` v10             |
+| Tests         | Jest 30, Testing Library React, ts-jest |
+| Lint / Format | ESLint 9, Prettier                      |
+| CI            | GitHub Actions                          |
+
+---
+
+## Architecture
+
+Chaque domaine métier est encapsulé dans son propre dossier sous `src/@features/`, avec ses composants, hooks, services et tests colocalisés.
 
 src/
+├── @Component/ # Composants UI génériques (Modal, Status, ArrowBack…)
 ├── @features/
-├── @hooks/
-├── @utils/
-├── @mocks/
-├── @provider/
-├── @schemas/
-├── @services/
-├── @types/
-└── app
-     └── auth/
-     └── business-space/
-     └── details/
-     └── rental/
-     └── sale/
-     └── user-space/
-     └── page.tsx
+│ ├── Auth/ # Authentification, contexte, refresh token
+│ ├── Business/ # Espace gestionnaire (catalogue, formulaires véhicule)
+│ ├── Cart/ # Panier et options
+│ ├── DetailedViewContent/ # Vue détaillée d'un véhicule
+│ ├── Folders/ # Dossiers à valider / consulter
+│ ├── Homepage/ # Navbar, Footer
+│ ├── Payment/ # Paiement
+│ ├── UserSpace/ # Profil utilisateur
+│ └── Vehicles/ # Catalogue, détail véhicule
+├── @mocks/ # Données fictives pour les tests
+├── @utils/ # Utilitaires transverses (fetcher, formatDate, ProtectedRoute…)
+└── app/ # Pages Next.js (App Router)
+├── layout.tsx
+├── page.tsx
+├── login/ & register/
+├── sale/ & rental/
+├── cart/ & payment/
+├── user-space/
+└── business-space/
 
-.env
+---
 
+## Sécurité
 
-⚙️ Variables d’environnement
+Plusieurs mécanismes sont en place pour sécuriser l'application.
 
+**Authentification par double token**
+L'access token est stocké **en mémoire uniquement** (variable de module, jamais dans `localStorage` ni `sessionStorage`), ce qui le protège des attaques XSS. Le refresh token circule via un cookie HttpOnly géré côté backend. Chaque requête utilise `credentials: 'include'` pour transmettre ce cookie automatiquement.
 
+**Contrôle d'accès par rôle (RBAC)**
+Le composant `ProtectedRoute` vérifie à la fois l'authentification et le rôle de l'utilisateur (prop `allowedRoles`). Si la condition n'est pas remplie, l'utilisateur est redirigé vers `/login` sans afficher le moindre contenu intermédiaire.
+
+**Validation des entrées utilisateur**
+Les formulaires sont validés avec Zod côté client avant tout envoi au backend. Les schémas imposent des contraintes de type, longueur et format (regex).
+
+**Isolation des variables d'environnement**
+Toutes les URLs et clés sensibles passent par des variables d'environnement. Seules les variables préfixées `NEXT_PUBLIC_` sont exposées au navigateur.
+
+---
+
+## Alerting avec Sentry
+
+Sentry est intégré à trois niveaux : **client**, **serveur Node.js** et **edge runtime**. Côté client et edge, il ne s'initialise qu'en production pour éviter le bruit en développement.
+
+---
+
+## Tests
+
+La stratégie de test repose sur **Jest** avec `jest-environment-jsdom` et **Testing Library** pour les composants React.
+
+npm test # Lance tous les tests
+npm run test:watch # Mode watch
+npm run test:coverage # Génère le rapport dans /coverage
+
+---
+
+## CI / CD
+
+Un workflow GitHub Actions (`ci.yml`) tourne sur les branches `develop` et `main`, ainsi que sur chaque pull request. Il exécute dans l'ordre :
+
+1. **Lint** — `eslint`
+2. **Tests avec couverture** — `jest --coverage`
+3. **Build Next.js** — `next build`
+4. **Upload du rapport de couverture**
+
+---
 
 ⚠️ Avertissement
 
@@ -59,4 +150,3 @@ Cette application est un projet fictif réalisé à des fins d’apprentissage e
 
 Toute ressemblance avec des marques, véhicules, images, entreprises ou services existants est purement fortuite.
 Les noms, visuels et données utilisés ne sont pas destinés à représenter des entités réelles ni à un usage commercial.
-```
