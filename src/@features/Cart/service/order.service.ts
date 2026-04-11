@@ -1,3 +1,4 @@
+import { authHeaders } from "@/@features/Auth/service/auth.service";
 import { catchAsync } from "@/@utils/catchAsync";
 
 interface CreateOrderRequest {
@@ -60,6 +61,7 @@ export const createOrderRequest = (data: CreateOrderRequest): Promise<Order> =>
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            ...authHeaders(),
           },
           body: JSON.stringify(data),
           credentials: "include",
@@ -87,6 +89,7 @@ export const getOrderByIdRequest = (orderId: number): Promise<OrderDetail> =>
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            ...authHeaders(),
           },
           credentials: "include",
         }

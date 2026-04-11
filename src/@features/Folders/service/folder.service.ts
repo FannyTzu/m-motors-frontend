@@ -1,3 +1,4 @@
+import { authHeaders } from "@/@features/Auth/service/auth.service";
 import { catchAsync } from "@/@utils/catchAsync";
 
 export const createFolderRequest = (data: {
@@ -12,6 +13,7 @@ export const createFolderRequest = (data: {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            ...authHeaders(),
           },
           credentials: "include",
           body: JSON.stringify(data),
@@ -37,7 +39,7 @@ export const getFolderByUserIdRequest = (userId: number) =>
         `${process.env.NEXT_PUBLIC_API_URL}/folder/user/${userId}`,
         {
           method: "GET",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", ...authHeaders() },
           credentials: "include",
         }
       );
@@ -58,7 +60,7 @@ export const getFolderByIdRequest = (folderId: number) =>
         `${process.env.NEXT_PUBLIC_API_URL}/folder/${folderId}`,
         {
           method: "GET",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", ...authHeaders() },
           credentials: "include",
         }
       );
@@ -79,7 +81,7 @@ export const getAllFoldersRequest = () =>
         `${process.env.NEXT_PUBLIC_API_URL}/folder`,
         {
           method: "GET",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", ...authHeaders() },
           credentials: "include",
         }
       );
@@ -112,7 +114,7 @@ export const updateFolderStatusRequest = ({
         `${process.env.NEXT_PUBLIC_API_URL}/folder/${folderId}/status`,
         {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", ...authHeaders() },
           credentials: "include",
           body: JSON.stringify({ status }),
         }
@@ -132,7 +134,7 @@ export const deleteFolderRequest = (folderId: number) =>
         `${process.env.NEXT_PUBLIC_API_URL}/folder/${folderId}`,
         {
           method: "DELETE",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", ...authHeaders() },
           credentials: "include",
         }
       );

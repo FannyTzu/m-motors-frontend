@@ -140,6 +140,7 @@ describe("Token management", () => {
 describe("updateMeRequest", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    clearAccessToken();
   });
 
   it("returns updated user data if update succeeds", async () => {
@@ -161,9 +162,9 @@ describe("updateMeRequest", () => {
       expect.objectContaining({
         method: "PATCH",
         credentials: "include",
-        headers: {
+        headers: expect.objectContaining({
           "Content-Type": "application/json",
-        },
+        }),
         body: JSON.stringify(userData),
       })
     );
@@ -243,6 +244,9 @@ describe("deleteUserAccountRequest", () => {
       expect.objectContaining({
         method: "DELETE",
         credentials: "include",
+        headers: expect.objectContaining({
+          Authorization: "Bearer test-token",
+        }),
       })
     );
 

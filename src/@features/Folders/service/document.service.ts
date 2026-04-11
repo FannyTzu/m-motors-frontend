@@ -1,3 +1,4 @@
+import { authHeaders } from "@/@features/Auth/service/auth.service";
 import { catchAsync } from "@/@utils/catchAsync";
 
 export const uploadDocumentRequest = ({
@@ -21,6 +22,9 @@ export const uploadDocumentRequest = ({
         `${process.env.NEXT_PUBLIC_API_URL}/documents`,
         {
           method: "POST",
+          headers: {
+            ...authHeaders(),
+          },
           credentials: "include",
           body: formData,
         }
@@ -42,7 +46,7 @@ export const getDocumentsByIdRequest = (folderId: number) =>
         `${process.env.NEXT_PUBLIC_API_URL}/documents/folder/${folderId}`,
         {
           method: "GET",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", ...authHeaders() },
           credentials: "include",
         }
       );
@@ -63,7 +67,7 @@ export const deleteDocumentRequest = (documentId: number) =>
         `${process.env.NEXT_PUBLIC_API_URL}/documents/${documentId}`,
         {
           method: "DELETE",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", ...authHeaders() },
           credentials: "include",
         }
       );
