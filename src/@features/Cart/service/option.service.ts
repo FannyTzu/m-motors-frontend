@@ -1,3 +1,4 @@
+import { authHeaders } from "@/@features/Auth/service/auth.service";
 import { catchAsync } from "@/@utils/catchAsync";
 
 interface ApiOption {
@@ -21,6 +22,7 @@ export const fetchOptionsRequest = async (): Promise<Option[]> => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            ...authHeaders(),
           },
           credentials: "include",
         }

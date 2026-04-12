@@ -1,3 +1,4 @@
+import { authHeaders } from "@/@features/Auth/service/auth.service";
 import { catchAsync } from "@/@utils/catchAsync";
 
 export const createVehicles = async (vehicleData: {
@@ -23,6 +24,7 @@ export const createVehicles = async (vehicleData: {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            ...authHeaders(),
           },
           credentials: "include",
           body: JSON.stringify(vehicleData),
@@ -50,6 +52,9 @@ export const getVehicles = async () => {
         `${process.env.NEXT_PUBLIC_API_URL}/vehicle/`,
         {
           method: "GET",
+          headers: {
+            ...authHeaders(),
+          },
           credentials: "include",
         }
       );
@@ -76,6 +81,7 @@ export const getVehicleById = async (id: number) => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            ...authHeaders(),
           },
           credentials: "include",
         }
@@ -104,6 +110,7 @@ export const getVehiclesByType = async (type: "sale" | "rental") => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            ...authHeaders(),
           },
           credentials: "include",
         }
@@ -152,6 +159,7 @@ export const updateVehicle = async (
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            ...authHeaders(),
           },
           credentials: "include",
           body: JSON.stringify(vehicleData),
@@ -181,6 +189,7 @@ export const deleteVehicleById = async (id: number) => {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
+            ...authHeaders(),
           },
           credentials: "include",
         }
@@ -210,6 +219,9 @@ export const uploadVehicleImage = async (
         `${process.env.NEXT_PUBLIC_API_URL}/vehicle/${vehicleId}/image`,
         {
           method: "POST",
+          headers: {
+            ...authHeaders(),
+          },
           credentials: "include",
           body: formData,
         }

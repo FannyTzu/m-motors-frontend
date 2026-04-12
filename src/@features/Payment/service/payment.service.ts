@@ -1,3 +1,4 @@
+import { authHeaders } from "@/@features/Auth/service/auth.service";
 import { catchAsync } from "@/@utils/catchAsync";
 
 export interface CreatePaymentData {
@@ -34,6 +35,7 @@ export const createPaymentRequest = (data: CreatePaymentData) =>
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            ...authHeaders(),
           },
           credentials: "include",
           body: JSON.stringify(data),
@@ -65,6 +67,7 @@ export const updatePaymentStatusRequest = (
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            ...authHeaders(),
           },
           credentials: "include",
           body: JSON.stringify({ status }),

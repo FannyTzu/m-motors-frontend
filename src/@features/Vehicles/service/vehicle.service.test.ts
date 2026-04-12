@@ -105,10 +105,10 @@ describe("getVehicles", () => {
     expect(result).toEqual(mockResponse);
     expect(mockFetch).toHaveBeenCalledWith(
       `${process.env.NEXT_PUBLIC_API_URL}/vehicle/`,
-      {
+      expect.objectContaining({
         method: "GET",
         credentials: "include",
-      }
+      })
     );
   });
   it("throws an error if retrieval fails", async () => {
@@ -372,6 +372,6 @@ describe("uploadVehicleImage", () => {
     });
     await uploadVehicleImage(1, mockFile);
     const callOptions = mockFetch.mock.calls[0][1];
-    expect(callOptions.headers).toBeUndefined();
+    expect(callOptions.headers).not.toHaveProperty("Content-Type");
   });
 });

@@ -21,6 +21,11 @@ export const clearAccessToken = () => {
   accessToken = null;
 };
 
+export const authHeaders = (): Record<string, string> => {
+  const token = getAccessToken();
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
 export const registerRequest = async (email: string, password: string) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
@@ -79,6 +84,9 @@ export const loginRequest = async (email: string, password: string) => {
 
 export const getMeRequest = async (): Promise<User> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
+    headers: {
+      ...authHeaders(),
+    },
     credentials: "include",
   });
 
@@ -97,6 +105,7 @@ export const updateMeRequest = async (data: Partial<User>) => {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
+      ...authHeaders(),
     },
     credentials: "include",
     body: JSON.stringify(data),
@@ -144,6 +153,9 @@ export const refreshTokenRequest = async () => {
 export const deleteUserAccountRequest = async () => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
     method: "DELETE",
+    headers: {
+      ...authHeaders(),
+    },
     credentials: "include",
   });
 
