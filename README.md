@@ -144,6 +144,46 @@ Un workflow GitHub Actions (`ci.yml`) tourne sur les branches `develop` et `main
 
 ---
 
+# FLUX utilisateur / administrateur
+
+## Parcours utilisateur
+
+Un visiteur peut consulter des véhicules. Pour déposer un dossier, il doit d'abord s'inscrire et être connecté.
+
+Lors de la création du compte, les informations personnelles ne sont pas obligatoires. Cependant, pour déposer un dossier, l'utilisateur devra les compléter. S'il ne l'a pas fait, une fenêtre modale l'en informera et il sera redirigé vers son profil.
+
+Une fois le dossier créé, l'utilisateur doit télécharger les justificatifs dans son dossier :
+
+- Pièce d'identité
+- Permis de conduire
+- RIB
+
+Chaque document peut être supprimé et remplacé à tout moment. Une fois les trois justificatifs téléchargés, l'utilisateur peut valider la demande d'examen.
+
+## Processus de validation
+
+Les statuts du dossier changent au fil des actions et informent à la fois l'utilisateur et l'administrateur :
+
+- **Active** : en attente d'envoi des documents
+- **Submitted** : documents envoyés
+- **Accepted** : dossier approuvé
+- **Rejected** : dossier refusé
+- **Closed** : paiement effectué
+
+## Parcours administrateur
+
+L'administrateur peut consulter la liste des dossiers, visualiser les justificatifs et prendre une décision sur chacun : accepter ou refuser. Le statut du dossier sera mis à jour en conséquence.
+
+## Fin du processus
+
+Une fois un dossier accepté, un bouton "Payer" apparaît dans l'espace utilisateur. En cliquant dessus, l'utilisateur accède à son panier où il peut :
+
+- Consulter le véhicule sélectionné
+- Ajouter des options (pour les locations)
+- Valider le panier
+
+La validation du panier redirige vers la page de paiement (mockée). Vous pouvez entrer n'importe quel numéro de carte pour tester et finaliser l'achat.
+
 ⚠️ Avertissement
 
 Cette application est un projet fictif réalisé à des fins d’apprentissage et de démonstration.
